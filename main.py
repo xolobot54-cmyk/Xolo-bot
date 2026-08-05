@@ -108,4 +108,39 @@ function renderXolo(){
  document.getElementById('xpbar').style.width = pct+'%';
  document.getElementById('xpbar').innerText = Math.floor(pct)+'%';
  let svg = '';
- if(xp<100){svg=`<svg viewBox="0 0 200 280" width="100%" height="100%"><ellipse cx="100" cy="250" rx="70" ry="15" fill="#111"/><path d="M60 200 Q100 120 140 200" fill="#1a1a1a"/><circle cx="75" cy="90" r="18" fill="#1a1a1a"/><circle cx="125" cy="90" r="18" fill="#1a1a1a"/><circle cx="75" cy="92" r="6" fill="#ffb86c"/><circle cx="125" cy
+ if(xp<100){svg=`<svg viewBox="0 0 200 280" width="100%" height="100%"><ellipse cx="100" cy="250" rx="70" ry="15" fill="#111"/><path d="M60 200 Q100 120 140 200" fill="#1a1a1a"/><circle cx="75" cy="90" r="18" fill="#1a1a1a"/><circle cx="125" cy="90" r="18" fill="#1a1a1a"/><circle cx="75" cy="92" r="6" fill="#ffb86c"/><circle cx="125" cy="92" r="6" fill="#ffb86c"/><path d="M40 70 L30 30 L65 55" fill="#1a1a1a"/><path d="M160 70 L170 30 L135 55" fill="#1a1a1a"/></svg>`;}
+ else if(xp<300){svg=`<svg viewBox="0 0 200 300" width="100%" height="100%"><ellipse cx="100" cy="270" rx="75" ry="15" fill="#111"/><path d="M55 220 Q100 90 145 220" fill="#151515"/><circle cx="72" cy="85" r="20" fill="#151515"/><circle cx="128" cy="85" r="20" fill="#151515"/><circle cx="72" cy="88" r="7" fill="#ffcc66"/><circle cx="128" cy="88" r="7" fill="#ffcc66"/></svg>`;}
+ else if(xp<600){svg=`<svg viewBox="0 0 200 320" width="100%" height="100%"><ellipse cx="100" cy="290" rx="80" ry="18" fill="#111"/><path d="M50 230 Q100 70 150 230" fill="#111"/><circle cx="70" cy="80" r="22" fill="#111"/><circle cx="130" cy="80" r="22" fill="#111"/><circle cx="70" cy="84" r="8" fill="#FFD700"/><circle cx="130" cy="84" r="8" fill="#FFD700"/></svg>`;}
+ else{svg=`<svg viewBox="0 0 200 340" width="100%" height="100%"><g class="aura"><circle cx="100" cy="160" r="110" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.4"/></g><ellipse cx="100" cy="310" rx="85" ry="20" fill="#221a00"/><path d="M45 250 Q100 50 155 250" fill="#0d0d0d" stroke="#FFD700" stroke-width="2"/><circle cx="68" cy="75" r="24" fill="#0d0d0d" stroke="#FFD700"/><circle cx="132" cy="75" r="24" fill="#0d0d0d" stroke="#FFD700"/><circle cx="68" cy="80" r="10" fill="#FFD700"/><circle cx="132" cy="80" r="10" fill="#FFD700"/><path d="M60 30 L100 5 L140 30 L100 15 Z" fill="#FFD700"/><circle cx="100" cy="180" r="18" fill="#111" stroke="#FFD700" stroke-width="2"/><circle cx="100" cy="180" r="6" fill="#FFD700"/></svg>`;}
+ document.getElementById('xolo').innerHTML = svg;
+}
+function analizar(){
+ const val = document.getElementById('inputFraude').value.trim();
+ if(!val){alert('Pega un mensaje');return}
+ const result = document.getElementById('result');
+ result.style.display='block';
+ const sospechoso = ['ganaste','premio','urgente','bitcoin','inversion','transferencia','banco','verifica','http://','.xyz'];
+ let score = sospechoso.filter(w=>val.toLowerCase().includes(w)).length;
+ if(score>=2 || val.includes('http://')){
+   result.className='result danger'; result.innerText='🚨 ¡ALERTA! XOLO DETECTA FRAUDE';
+   xp+=10;
+ } else {
+   result.className='result safe'; result.innerText='✅ Parece seguro, Xolo vigila.';
+   xp+=25;
+ }
+ let oldStage = getStage(xp-25).name; let newStage = getStage(xp).name;
+ if(oldStage!==newStage){document.getElementById('evolving').style.display='flex'; setTimeout(()=>{document.getElementById('evolving').style.display='none'},2000)}
+ localStorage.setItem('xolo_xp',xp); renderXolo();
+}
+renderXolo();
+</script>
+</body>
+</html>
+"""
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    return HTML_PAGE
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
