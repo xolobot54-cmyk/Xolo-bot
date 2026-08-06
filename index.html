@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XOLO-BOT</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<style>
+body{margin:0;background:#000;color:#00ff88;font-family:system-ui;text-align:center;padding:20px}
+h1{font-size:2.5em;margin:10px}
+.card{background:#111;border:1px solid #333;border-radius:20px;padding:20px;margin:20px auto;max-width:400px}
+button{background:#00ff88;color:#000;border:0;padding:15px 25px;border-radius:30px;font-weight:bold;font-size:18px;width:100%;margin-top:10px}
+#installBtn{background:#fff;display:none}
+</style>
+</head>
+<body>
+<h1>🐶 XOLO-BOT</h1>
+<p>Tu guardián ancestral - Instalable</p>
+
+<div class="card">
+<p>¡Tu app ya está VIVA en internet!</p>
+<button id="installBtn">📲 INSTALAR APP</button>
+<button onclick="alert('¡Guau! Soy Xolo, tu guía')">HABLAR CON XOLO</button>
+</div>
+
+<script>
+// PWA Install
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',(e)=>{
+ e.preventDefault(); deferredPrompt=e; installBtn.style.display='block';
+});
+installBtn.addEventListener('click',()=>{
+ if(deferredPrompt){ deferredPrompt.prompt(); }
+});
+
+// Service Worker
+if('serviceWorker' in navigator){
+ navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
