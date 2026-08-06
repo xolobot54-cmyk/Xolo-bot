@@ -137,6 +137,20 @@ renderXolo();
 </body>
 </html>
 """
+@app.post("/analizar-zip")
+async def analizar_zip_endpoint(file: UploadFile = File(...)):
+    import zipfile, io
+    data = await file.read()
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as z:
+            lista = z.namelist()
+            for n in lista:
+                if n.lower().endswith((".exe",".bat",".apk")):
+                    return {"resultado": "🔴 PELIGRO: trae "+n}
+            return {"resultado": "🟢 ZIP limpio, trae "+str(len(lista))+" archivos"}
+    except:
+        return {"resultado": "🟡 No pude abrirlo"}
+
 
 @app.get("/", response_class=HTMLResponse)
 def home():
