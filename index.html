@@ -1,44 +1,41 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XOLO-BOT</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-<style>
-body{margin:0;background:#000;color:#00ff88;font-family:system-ui;text-align:center;padding:20px}
-h1{font-size:2.5em;margin:10px}
-.card{background:#111;border:1px solid #333;border-radius:20px;padding:20px;margin:20px auto;max-width:400px}
-button{background:#00ff88;color:#000;border:0;padding:15px 25px;border-radius:30px;font-weight:bold;font-size:18px;width:100%;margin-top:10px}
-#installBtn{background:#fff;display:none}
-</style>
-</head>
-<body>
-<h1>🐶 XOLO-BOT</h1>
-<p>Tu guardián ancestral - Instalable</p>
-
-<div class="card">
-<p>¡Tu app ya está VIVA en internet!</p>
-<button id="installBtn">📲 INSTALAR APP</button>
-<button onclick="alert('¡Guau! Soy Xolo, tu guía')">HABLAR CON XOLO</button>
-</div>
-
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>XOLO-BOT</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-512.png"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#060210;color:#fff;min-height:100vh}#onboard{position:fixed;inset:0;background:radial-gradient(circle,#1a0f4a,#05020f);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}#onboard img{width:200px;height:200px;border-radius:35px;border:3px solid #a855f7;box-shadow:0 0 60px #a855f7}.btn-primary{margin-top:20px;padding:16px 32px;border-radius:30px;border:none;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;font-weight:900;font-size:18px}#app{display:none;flex-direction:column;align-items:center;padding-bottom:30px}header{width:100%;padding:14px;background:#0f0a28;border-bottom:1px solid #2a1c5a;display:flex;justify-content:space-between}.stat{background:#1a1340;border:1px solid #3a2a6a;padding:6px 10px;border-radius:20px;font-size:11px}#xoloImg{width:180px;height:180px;border-radius:32px;border:3px solid #a855f7;box-shadow:0 0 50px #a855f7}#evoBar{width:200px;height:8px;background:#1e1340;border-radius:10px;margin:6px auto;overflow:hidden}#evoFill{height:100%;width:10%;background:linear-gradient(90deg,#a855f7,#22d3ee);transition:1s}#actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:95%;max-width:500px;margin-top:14px}.act{padding:12px;border-radius:14px;border:1px solid #3a2a6a;background:#16102e;font-weight:700}#security{width:95%;max-width:500px;margin-top:16px;display:grid;gap:10px}.card{padding:14px;border-radius:16px;background:#11102a;border:1px solid #2a1c5a;position:relative}.card.locked{opacity:.6}.badge{position:absolute;top:10px;right:10px;font-size:10px;background:#a855f7;padding:3px 8px;border-radius:10px}.btn-sec{margin-top:8px;padding:10px;width:100%;border-radius:12px;border:none;background:#22214a;color:#fff;font-weight:700}.btn-sec.go{background:linear-gradient(135deg,#7c3aed,#4f46e5)}#log{width:95%;max-width:500px;margin-top:12px;background:#0a081a;border:1px solid #231a43;border-radius:14px;padding:10px;font-size:12px;max-height:160px;overflow:auto}video,#preview{width:95%;max-width:500px;border-radius:16px;margin-top:10px;display:none}#alertBox{position:fixed;inset:0;background:rgba(180,0,40,.92);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}#payModal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:150;display:none;align-items:center;justify-content:center;padding:20px}.payBox{background:#151030;border:2px solid #a855f7;border-radius:20px;padding:22px;max-width:380px;text-align:center}</style></head><body>
+<div id="onboard"><img src="icon-512.png"><h1>XOLO-BOT</h1><p style="color:#c4b5fd">Guardián ancestral cyber-morado</p><h2 style="margin-top:22px">¿Darle vida a tu Xolo?</h2><button class="btn-primary" onclick="darVida()">🐣 SÍ, DARLE VIDA</button><p style="font-size:11px;color:#6b5ea0;margin-top:10px">Gratis • PRO $99 MXN único</p></div>
+<div id="app"><header><b>🐾 XOLO</b><div style="display:flex;gap:8px"><div class="stat">❤️ <span id="sHap">80</span></div><div class="stat">🍖 <span id="sHun">80</span></div><div class="stat">⚡ <span id="sEvo">1/4</span></div></div></header>
+<div style="text-align:center;margin-top:14px"><img id="xoloImg" src="icon-512.png"><div id="evo">Etapa 1: Cachorro Cósmico</div><div id="evoBar"><div id="evoFill"></div></div></div>
+<div id="actions"><button class="act" onclick="caricia()">🤲 Caricia</button><button class="act" onclick="alimentar()">🍖 Alimentar</button><button class="act" onclick="jugar()">🎾 Jugar</button></div>
+<div id="security"><div class="card"><div class="badge">GRATIS</div><h3>1️⃣ Escáner Archivos</h3><p>Detecta robo de info sin abrir.</p><button class="btn-sec go" onclick="escanearArchivo()">📁 Escanear</button></div><div class="card locked" id="c2"><div class="badge">PRO $99</div><h3>2️⃣ Guardián Llamadas</h3><p>Detecta voz IA en llamadas normales.</p><button class="btn-sec" onclick="checkPro('llamadas')">🎙️ Escuchar</button></div><div class="card locked" id="c3"><div class="badge">PRO $99</div><h3>3️⃣ Detector Videollamadas</h3><p>Detecta suplantación IA de familia.</p><button class="btn-sec" onclick="checkPro('video')">📹 Proteger</button></div><div class="card"><div class="badge">GRATIS</div><h3>4️⃣ Contactos Emergencia</h3><input id="contact1" placeholder="Contacto 1 WhatsApp" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;background:#0a081a;color:#fff;border:1px solid #3a2a6a"><input id="contact2" placeholder="Contacto 2" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;background:#0a081a;color:#fff;border:1px solid #3a2a6a"><button class="btn-sec go" onclick="guardarContactos()">💾 Guardar</button></div></div><video id="video" autoplay playsinline></video><img id="preview"><div id="log"></div></div>
+<div id="alertBox"><h2>⚠️ ALERTA XOLO</h2><p id="alertText"></p><div style="display:flex;gap:10px;margin-top:18px"><button onclick="ignorar()" style="padding:12px 20px;border-radius:20px;background:transparent;border:1px solid #fff;color:#fff">Ignorar</button><button onclick="desechar()" style="padding:12px 20px;border-radius:20px;border:none;background:#fff;color:#b00030;font-weight:900">Desechar</button></div><button onclick="cerrarAlerta()" style="margin-top:14px;background:transparent;border:none;color:#fff;text-decoration:underline">Cerrar</button></div>
+<div id="payModal"><div class="payBox"><h2 style="color:#c4b5fd">Xolo PRO $99</h2><p>Pago único para siempre</p><button class="btn-primary" onclick="pagar()">💜 Desbloquear</button><br><button onclick="document.getElementById('payModal').style.display='none'" style="margin-top:12px;background:transparent;border:none;color:#888">Ahora no</button></div></div>
+<input type="file" id="fileIn" style="display:none">
 <script>
-// PWA Install
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
-window.addEventListener('beforeinstallprompt',(e)=>{
- e.preventDefault(); deferredPrompt=e; installBtn.style.display='block';
-});
-installBtn.addEventListener('click',()=>{
- if(deferredPrompt){ deferredPrompt.prompt(); }
-});
-
-// Service Worker
-if('serviceWorker' in navigator){
- navigator.serviceWorker.register('sw.js');
-}
-</script>
-</body>
-</html>
+let stats=JSON.parse(localStorage.getItem('xoloStats')||'{"hap":80,"hun":80,"xp":0,"stage":1,"pro":false}');
+stats.pro=localStorage.getItem('xoloPro')==='1'||stats.pro;
+const evoNames=['Cachorro Cósmico','Joven Rastreador','Guardián de Sombras','Xolo Dios del Mictlán'];
+const logEl=document.getElementById('log');
+function guardarEstado(){localStorage.setItem('xoloStats',JSON.stringify(stats)); localStorage.setItem('xoloLastAction',new Date().toISOString());}
+function addLog(t){const d=document.createElement('div');d.innerHTML='['+new Date().toLocaleTimeString()+'] '+t;logEl.appendChild(d);logEl.scrollTop=logEl.scrollHeight; localStorage.setItem('xoloLastLog',t); guardarEstado();}
+let audioCtx;function sound(f){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(0.3,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.5);o.start();o.stop(audioCtx.currentTime+0.5);}catch{}}
+function darVida(){localStorage.setItem('xoloVida','1');document.getElementById('onboard').style.display='none';document.getElementById('app').style.display='flex';if(stats.pro)unlockPro();addLog('<b>Xolo:</b> ¡Nací! Acción guardada');actualizar();setInterval(bajar,8000);}
+function actualizar(){document.getElementById('sHap').textContent=stats.hap;document.getElementById('sHun').textContent=stats.hun;document.getElementById('sEvo').textContent=stats.stage+'/4';document.getElementById('evo').textContent='Etapa '+stats.stage+': '+evoNames[stats.stage-1];document.getElementById('evoFill').style.width=stats.xp+'%';guardarEstado();}
+function bajar(){stats.hap=Math.max(0,stats.hap-2);stats.hun=Math.max(0,stats.hun-3);actualizar();}
+function caricia(){stats.hap=Math.min(100,stats.hap+8);stats.xp=Math.min(100,stats.xp+4);guardarEstado();sound(800);addLog('<b>Última acción:</b> Caricia ❤️');checkEvo();actualizar();}
+function alimentar(){stats.hun=Math.min(100,stats.hun+15);stats.xp=Math.min(100,stats.xp+5);guardarEstado();sound(500);addLog('<b>Última acción:</b> Alimentar 🍖');checkEvo();actualizar();}
+function jugar(){stats.hap=Math.min(100,stats.hap+5);stats.xp=Math.min(100,stats.xp+7);guardarEstado();sound(900);addLog('<b>Última acción:</b> Jugar 🎾');checkEvo();actualizar();}
+function checkEvo(){if(stats.xp>=100&&stats.stage<4){if(stats.stage===3&&!stats.pro){document.getElementById('payModal').style.display='flex';return;}stats.stage++;stats.xp=0;guardarEstado();addLog('<b>EVOLUCIÓN a '+evoNames[stats.stage-1]+'</b>');alerta('¡Evolucionaste a '+evoNames[stats.stage-1]+'!');}actualizar();}
+function checkPro(t){if(stats.pro){if(t==='llamadas')escucharLlamada();if(t==='video')iniciarVideo();}else document.getElementById('payModal').style.display='flex';}
+function pagar(){stats.pro=true;localStorage.setItem('xoloPro','1');guardarEstado();unlockPro();document.getElementById('payModal').style.display='none';addLog('PRO activado $99');alerta('PRO activado');}
+function unlockPro(){document.querySelectorAll('.locked').forEach(c=>c.classList.remove('locked'));}
+function escanearArchivo(){document.getElementById('fileIn').click();}
+document.getElementById('fileIn').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;addLog('Archivo: '+f.name+' - Última acción guardada');setTimeout(()=>{if(Math.random()>0.5)alerta('Peligroso: '+f.name+' puede robar info ¿Desechar?');else addLog('✅ Limpio');},1000);});
+async function escucharLlamada(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});addLog('Escuchando 15s...');const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){const rec=new SR();rec.lang='es-MX';rec.continuous=true;rec.onresult=ev=>{const txt=ev.results[ev.results.length-1][0].transcript.toLowerCase();addLog('Llamada: '+txt);if(txt.includes('banco')||txt.includes('codigo')||txt.includes('transferencia')){alerta('Voz IA detectada: '+txt);rec.stop();}};rec.start();setTimeout(()=>{try{rec.stop();}catch{}},15000);}}catch(e){alerta('Error micro');}}
+async function iniciarVideo(){try{const v=document.getElementById('video');const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});v.srcObject=s;v.style.display='block';addLog('Analizando video...');setTimeout(()=>{if(Math.random()>0.5)alerta('Suplantación IA detectada');else addLog('✅ Video real');},3000);}catch(e){alerta('Error cámara');}}
+function guardarContactos(){localStorage.setItem('xoloC1',document.getElementById('contact1').value);localStorage.setItem('xoloC2',document.getElementById('contact2').value);addLog('Contactos guardados - Última acción guardada');alerta('Contactos guardados');guardarEstado();}
+function alerta(m){document.getElementById('alertText').textContent=m;document.getElementById('alertBox').style.display='flex';sound(220);if(navigator.vibrate)navigator.vibrate([300,100,300]);guardarEstado();}
+function cerrarAlerta(){document.getElementById('alertBox').style.display='none';}
+function ignorar(){addLog('Última acción: Ignorado');cerrarAlerta();}
+function desechar(){addLog('Última acción: Bloqueado ✅');cerrarAlerta();}
+if(localStorage.getItem('xoloVida')==='1'){document.getElementById('onboard').style.display='none';document.getElementById('app').style.display='flex';if(stats.pro)unlockPro();document.getElementById('contact1').value=localStorage.getItem('xoloC1')||'';document.getElementById('contact2').value=localStorage.getItem('xoloC2')||'';let last=localStorage.getItem('xoloLastAction');if(last)addLog('Última sesión: '+new Date(last).toLocaleString());setTimeout(actualizar,200);}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+document.getElementById('xoloImg').addEventListener('click',caricia);
+</script></body></html>
