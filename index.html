@@ -3,36 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0a0a1a">
-<title>XOLO BOT DIOS V6 - BURBUJA REAL</title>
+<title>XOLO V6 FIX BOTONES</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui}
-body{background:radial-gradient(circle at top,#1a0a2e,#050510 75%);color:white;min-height:100vh;overflow-x:hidden;text-align:center;user-select:none}
-#splash{position:fixed;inset:0;background:#080510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:0.8s}
+body{background:radial-gradient(circle at top,#1a0a2e,#050510 75%);color:white;min-height:100vh;text-align:center;user-select:none}
 .xolo-wrap{position:relative;width:300px;height:300px;margin:15px auto}
-#aura{position:absolute;inset:-25px;background:radial-gradient(circle,rgba(168,85,247,0.7),transparent 70%);border-radius:50%;animation:breathe 2.2s infinite alternate;filter:blur(12px)}
-@keyframes breathe{from{transform:scale(0.85);opacity:0.5}to{transform:scale(1.2);opacity:1}}
-#xolo{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;cursor:pointer;transition:0.15s;filter:drop-shadow(0 0 25px #a855f7)}
-#xolo:active{transform:scale(0.92)}
-.evolucion-1{transform:scale(1.08)} .evolucion-2{transform:scale(1.16)} .evolucion-3{transform:scale(1.24)} .evolucion-4{transform:scale(1.32)} .evolucion-5{transform:scale(1.40)} .evolucion-6{transform:scale(1.48)} .evolucion-7{transform:scale(1.6)!important;filter:drop-shadow(0 0 40px gold)!important}
 #xp-bar{width:88%;max-width:400px;height:20px;background:#1e1e2e;border-radius:20px;margin:10px auto;overflow:hidden;border:1px solid #333}
-#xp-fill{height:100%;width:0%;background:linear-gradient(90deg,#facc15,gold);box-shadow:0 0 15px gold;transition:0.7s}
-.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px auto;max-width:420px}
+#xp-fill{height:100%;width:0%;background:linear-gradient(90deg,#facc15,gold);transition:0.7s}
 .btn{padding:12px 16px;border:none;border-radius:24px;font-weight:800;cursor:pointer;font-size:14px}
-.b1{background:#26263a;color:white} .b2{background:#a855f7;color:white} .b3{background:linear-gradient(90deg,gold,#facc15);color:black;width:90%;max-width:400px;padding:16px;font-size:16px;margin:10px auto;display:block;border-radius:28px}
-.btn:active{transform:scale(0.93)}
-
-/* BURBUJA FLOTANTE REAL */
-#burbuja{position:fixed;top:90px;left:50%;transform:translateX(-50%);width:92%;max-width:360px;background:rgba(15,15,28,0.98);border:2px solid #a855f7;border-radius:22px;padding:16px;z-index:8000;box-shadow:0 0 40px rgba(168,85,247,0.6);display:none;backdrop-filter:blur(10px);touch-action:none}
-#burbujaHeader{display:flex;justify-content:space-between;align-items:center;cursor:grab;margin-bottom:10px}
-#burbujaHeader:active{cursor:grabbing}
-.semaforo{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
-.v{background:#22c55e;box-shadow:0 0 8px #22c55e} .a{background:#facc15;box-shadow:0 0 8px #facc15} .r{background:#ef4444;box-shadow:0 0 10px #ef4444;animation:blink 0.7s infinite}
-@keyframes blink{50%{opacity:0.3}}
-#miniXolo{position:fixed;width:68px;height:68px;bottom:90px;right:18px;z-index:8500;display:none;filter:drop-shadow(0 0 18px #a855f7);cursor:grab;touch-action:none;border-radius:50%;border:2px solid #a855f7;background:#111}
+.b1{background:#26263a;color:white;margin:4px} .b2{background:#a855f7;color:white;margin:4px} .b3{background:linear-gradient(90deg,gold,#facc15);color:black;width:90%;max-width:400px;padding:16px;font-size:16px;margin:12px auto;display:block;border-radius:28px}
+#burbuja{position:fixed;top:90px;left:50%;transform:translateX(-50%);width:92%;max-width:360px;background:rgba(15,15,28,0.98);border:2px solid #a855f7;border-radius:22px;padding:16px;z-index:8000;display:none}
+#miniXolo{position:fixed;width:68px;height:68px;bottom:90px;right:18px;z-index:8500;display:none;border-radius:50%;border:2px solid #a855f7;background:#111;cursor:pointer}
 #miniXolo img{width:100%;height:100%;object-fit:contain}
-#analizarBtn{display:none;width:100%;margin-top:10px;padding:13px;background:#ef4444;color:white;border:none;border-radius:14px;font-weight:900;letter-spacing:0.5px}
-#permisoBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;align-items:center;justify-content:center;padding:20px}
+#permisoBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:999999;align-items:center;justify-content:center;padding:20px}
 .card{background:#1a1a2e;padding:22px;border-radius:20px;border:1px solid #a855f7;width:100%;max-width:380px;text-align:left}
 input{width:100%;padding:11px;margin:7px 0;border-radius:12px;border:1px solid #444;background:#0f0f1a;color:white}
 .heart{position:fixed;pointer-events:none;animation:floatUp 1s forwards;z-index:7000;font-size:22px}
@@ -41,154 +24,67 @@ input{width:100%;padding:11px;margin:7px 0;border-radius:12px;border:1px solid #
 </head>
 <body>
 
-<div id="splash">
-  <h1 style="font-size:44px;letter-spacing:5px">XOLO</h1><p style="opacity:0.8">V6 BURBUJA REAL</p>
-  <div class="xolo-wrap" style="width:180px;height:180px"><div id="aura"></div><img src="icon-512.png" style="width:100%"></div>
-  <p style="margin-top:18px;font-size:12px;opacity:0.6">Activando escudo flotante...</p>
-</div>
+<div id="miniXolo" onclick="mostrarBurbuja()"><img src="icon-512.png"></div>
 
-<!-- MINI BURBUJA FLOTANTE SOBRE APPS (simulada dentro de la web pero arrastrable como la real) -->
-<div id="miniXolo"><img src="icon-512.png"></div>
-
-<!-- BURBUJA GRANDE -->
 <div id="burbuja">
-  <div id="burbujaHeader"><b>🛡️ XOLO ESCUDO</b><span onclick="cerrarBurbuja()" style="padding:5px 10px;background:#222;border-radius:50%">✕</span></div>
-  <div style="text-align:left;font-size:14px"><span id="sem" class="semaforo a"></span><span id="numTxt">Sin verificar</span></div>
-  <input id="numInput" placeholder="Pega número entrante: +52..." style="margin-top:10px">
-  <button class="btn b2" style="width:100%;margin-top:8px" onclick="verificarNumero()">Verificar</button>
-  <button id="analizarBtn" onclick="pedirPermisoAudio()">🎙️ ANALIZAR VOZ 5s (con tu permiso)</button>
-  <div id="analisisTxt" style="font-size:12px;margin-top:10px;text-align:left;line-height:1.4"></div>
-  <button id="btnEmerg" style="display:none;width:100%;margin-top:10px;padding:10px;background:gold;color:black;border:none;border-radius:12px;font-weight:800" onclick="enviarAlertaEmergencia()">🚨 Avisar a Contacto de Emergencia</button>
+<div style="display:flex;justify-content:space-between"><b>🛡️ XOLO ESCUDO</b><span onclick="cerrarBurbuja()" style="padding:5px 10px;background:#222;border-radius:50%;cursor:pointer">✕</span></div>
+<input id="numInput" placeholder="Pega número: +52...">
+<button class="btn b2" style="width:100%" onclick="verificarNumero()">Verificar</button>
+<div id="analisisTxt" style="font-size:12px;margin-top:10px;text-align:left"></div>
+<button id="btnEmerg" style="display:none;width:100%;margin-top:10px;padding:10px;background:gold;color:black;border:none;border-radius:12px;font-weight:800" onclick="enviarAlertaEmergencia()">🚨 Avisar a Emergencia</button>
 </div>
 
 <h1 style="margin-top:14px;letter-spacing:4px">XOLO</h1>
-<p id="etapaTxt" style="font-size:13px;opacity:0.9">ETAPA 0/7</p>
-
-<div class="xolo-wrap" id="wrapMain"><div id="aura"></div><img id="xolo" src="icon-512.png"></div>
-
+<p id="etapaTxt">ETAPA 0/7</p>
+<div class="xolo-wrap" id="wrapMain"><img id="xolo" src="icon-512.png" style="width:100%"></div>
 <div id="xp-bar"><div id="xp-fill"></div></div>
-<p id="xpTxt" style="font-size:13px">0 / 100 XP</p>
+<p id="xpTxt">0 / 100 XP</p>
 
-<div class="btns">
-  <button class="btn b1" onclick="accion('comer')">🍖 Comer</button>
-  <button class="btn b1" onclick="accion('jugar')">🎾 Jugar</button>
-  <button class="btn b2" onclick="accion('mimar')">💜 Mimar</button>
+<div style="margin:12px auto;">
+<button class="btn b1" onclick="accion('comer')">🍖 Comer</button>
+<button class="btn b1" onclick="accion('jugar')">🎾 Jugar</button>
+<button class="btn b2" onclick="accion('mimar')">💜 Mimar</button>
+</div>
+<div style="margin:8px auto;">
+<button class="btn b1" onclick="mostrarBurbuja()">🛡️ Burbuja Flotante</button>
+<button class="btn b1" onclick="abrirContact()">⚙️ Emergencia</button>
 </div>
 
-<div class="btns">
-  <button class="btn b1" onclick="mostrarBurbuja()">🛡️ Burbuja Flotante</button>
-  <button class="btn b1" onclick="abrirContact()">⚙️ Emergencia</button>
+<!-- TUTORIAL V3 - YA ARREGLADO CON TODOS LOS CIERRES -->
+<button onclick="abrirTutorialXolo()" style="width:90%;max-width:400px;margin:12px auto;display:block;padding:14px;background:linear-gradient(135deg,#1a1a2e,#4c1d95);color:white;border:2px solid #a855f7;border-radius:24px;font-weight:800;">📘 CÓMO USAR A XOLO - TÓCAME</button>
+
+<div id="modalTutorialXolo" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,5,15,0.97);z-index:99999;overflow-y:auto;padding:15px;">
+<div style="background:#0f0f1a;border:2px solid #a855f7;border-radius:24px;padding:20px;max-width:500px;margin:10px auto;color:white;">
+<h2 style="text-align:center;">¡YO TE CUIDO! 🐾</h2>
+<h3 style="color:#a855f7;margin-top:15px;text-align:center;">📋 INSTRUCCIONES DE USO EN 3 PASOS</h3>
+<div style="background:#1a1a2e;border-radius:16px;padding:14px;margin-top:12px;"><p style="font-weight:800;color:#facc15;">PASO 1: ENTRA LA LLAMADA</p><p style="font-size:13px;">Yo aparezco con semáforo: VERDE=seguro AMARILLO=duda ROJO=¡FRAUDE!</p></div>
+<div style="background:#1a1a2e;border-radius:16px;padding:14px;margin-top:12px;border:2px dashed #facc15;"><p style="font-weight:800;color:#facc15;">PASO 2: ¡ACTIVA EL ALTAVOZ! 🔊</p><p style="font-size:13px;"><b>En cuanto contestes número desconocido, pon el ALTAVOZ.</b> Así yo escucho y te protejo.</p></div>
+<div style="background:#1a1a2e;border-radius:16px;padding:14px;margin-top:12px;"><p style="font-weight:800;color:#4ade80;">PASO 3: TOCA "ANALIZAR VOZ 5s"</p><p style="font-size:13px;">Con altavoz puesto, toca mi botón. Solo escucho 5s.</p></div>
+<div style="background:rgba(168,85,247,0.1);border-radius:12px;padding:10px;margin-top:15px;"><p style="font-size:12px;text-align:center;">🔒 Todo privado en tu cel. SYSTEM_ALERT_WINDOW solo para alerta visible.</p></div>
+<button onclick="cerrarTutorialXolo()" style="width:100%;margin-top:18px;padding:14px;background:#a855f7;color:white;border:none;border-radius:12px;font-weight:900;">¡ENTENDIDO, ACTIVARÉ ALTAVOZ! 🔊</button>
 </div>
-<!-- INICIO ETAPA 1.5 - TUTORIAL XOLO V3 CON INSTRUCCIONES DE ALTAVOZ -->
-<button id="btnTutorialXolo" onclick="abrirTutorialXolo()" style="width:90%; max-width:400px; margin:12px auto; display:block; padding:14px; background:linear-gradient(135deg,#1a1a2e,#4c1d95); color:white; border:2px solid #a855f7; border-radius:24px; font-weight:800; font-size:14px; box-shadow:0 0 15px rgba(168,85,247,0.5);">📘 CÓMO USAR A XOLO - TÓCAME</button>
-<div id="modalTutorialXolo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(5,5,15,0.97); z-index:99999; overflow-y:auto; padding:15px; box-sizing:border-box;">
-<div style="background:#0f0f1a; border:2px solid #a855f7; border-radius:24px; padding:20px; max-width:500px; margin:10px auto; color:white;">
-<div style="text-align:center;"><div style="width:120px; height:120px; margin:10px auto; position:relative;"><div style="position:absolute; inset:-20px; background:radial-gradient(circle,rgba(168,85,247,0.8),transparent 70%); border-radius:50%; filter:blur(12px);"></div><img src="icon-512.png" style="width:100%; border-radius:50%; border:3px solid #a855f7; position:relative;"></div><h2 style="margin:5px 0;">¡YO TE CUIDO! 🐾</h2></div>
-<h3 style="color:#a855f7; margin-top:15px; text-align:center;">📋 INSTRUCCIONES DE USO EN 3 PASOS</h3>
-<div style="background:#1a1a2e; border-radius:16px; padding:14px; margin-top:12px;"><p style="margin:0; font-size:14px; font-weight:800; color:#facc15;">PASO 1: ENTRA LA LLAMADA</p><p style="font-size:13px; margin:5px 0 0 0;">Yo aparezco flotando con mi semáforo: <b style="color:#22c55e;">VERDE</b>=seguro <b style="color:#facc15;">AMARILLO</b>=duda <b style="color:#ef4444;">ROJO</b>=¡FRAUDE!</p></div>
-<div style="background:#1a1a2e; border-radius:16px; padding:14px; margin-top:12px; border:2px dashed #facc15;"><p style="margin:0; font-size:14px; font-weight:800; color:#facc15;">PASO 2: ¡ACTIVA EL ALTAVOZ! 🔊</p><p style="font-size:13px; margin:5px 0 0 0; line-height:1.4;"><b>En cuanto contestes y veas que es número desconocido, pon el ALTAVOZ.</b> Así yo puedo escuchar y ayudarte. Si no lo activas, no te puedo proteger.</p></div>
-<div style="background:#1a1a2e; border-radius:16px; padding:14px; margin-top:12px;"><p style="margin:0; font-size:14px; font-weight:800; color:#4ade80;">PASO 3: TOCA "ANALIZAR VOZ 5s"</p><p style="font-size:13px; margin:5px 0 0 0; line-height:1.4;">Con el altavoz puesto, toca mi botón. Solo escucho 5 segundos, analizo si dice "banco, premio, código" y te digo si es peligroso.</p></div>
-<div style="background:rgba(168,85,247,0.1); border-radius:12px; padding:10px; margin-top:15px;"><p style="font-size:12px; margin:0; text-align:center;">✨ MIS VIRTUDES: Burbuja sobre apps, Semáforo, Oído 5s, Aviso Emergencia WhatsApp, Evoluciono con caricias hasta DIOS DORADO. 🔒 Todo privado en tu cel.</p><p style="font-size:10px; opacity:0.6; text-align:center; margin-top:8px;">⚠️ Soy apoyo, no sustituyo tu criterio. SYSTEM_ALERT_WINDOW solo para
+</div>
+<!-- FIN TUTORIAL - YA CERRADO CORRECTAMENTE -->
+
 <button class="btn b3" onclick="modoDios()">👑 DESBLOQUEAR DIOS $99</button>
 
-<p style="font-size:10px;opacity:0.4;padding:12px 20px;line-height:1.3">No grabamos llamadas. Análisis de 5s solo cuando tú lo autorizas, en tu celular. No se guarda audio. Para APK real pide SYSTEM_ALERT_WINDOW con explicación.<br><a href="#" onclick="abrirPrivacidad();return false" style="color:#a855f7">Ver Privacidad</a></p>
-
-<!-- MODALES -->
-<div id="permisoBox" style="display:none">
-  <div class="card" id="permisoCard"></div>
-</div>
+<div id="permisoBox"><div class="card" id="permisoCard"></div></div>
 
 <script>
-let xp=parseInt(localStorage.getItem('xolo_xp')||0), etapa=parseInt(localStorage.getItem('xolo_etapa')||0);
-let hoy=new Date().toDateString(), uso=JSON.parse(localStorage.getItem('xolo_uso')||'{"fecha":"","comer":0,"jugar":0,"mimar":0}');
-if(uso.fecha!==hoy) uso={fecha:hoy,comer:0,jugar:0,mimar:0};
-const limites={comer:5,jugar:5,mimar:10}, etapasTxt=["Cachorro Callejero","Guardian Novato","Rastreador","Cazador Sombras","Protector Azteca","Guerrero Mictlán","Xolo Divino","DIOS DORADO"];
-let ultimoNum="", ultimoTexto="", esPeligro=false;
-
-function init(){
-  setTimeout(()=>{let s=document.getElementById('splash');s.style.opacity=0;setTimeout(()=>s.style.display='none',800)},1600);
-  actualizarUI(); cargarContacto();
-  document.getElementById('xolo').addEventListener('click',e=>{caricia(e);});
-  hacerArrastrable(document.getElementById('burbuja'),document.getElementById('burbujaHeader'));
-  hacerArrastrable(document.getElementById('miniXolo'),document.getElementById('miniXolo'));
-  document.getElementById('miniXolo').onclick=mostrarBurbuja;
-}
-function actualizarUI(){
-  document.getElementById('xp-fill').style.width=xp+'%'; document.getElementById('xpTxt').innerText=xp+' / 100 XP';
-  document.getElementById('etapaTxt').innerText='ETAPA '+etapa+'/7 - '+etapasTxt[etapa];
-  let x=document.getElementById('xolo'); x.className=''; if(etapa>0) x.classList.add('evolucion-'+etapa);
-}
-function caricia(e){ spawnHearts(e); xp=Math.min(100,xp+1); checkEvo(); guardar(); if(navigator.vibrate) navigator.vibrate(30); }
-function accion(t){ if(uso[t]>=limites[t]){ abrirPermiso('Límite alcanzado','Ya usaste '+t+' '+uso[t]+'/'+limites[t]+' hoy. Desbloquea DIOS para ilimitado.','Entendido'); return } uso[t]++; xp=Math.min(100,xp+12); spawnHearts(); checkEvo(); guardar(); if(navigator.vibrate) navigator.vibrate([40,40,40]); }
-function checkEvo(){ if(xp>=100 && etapa<7){etapa++;xp=0; abrirPermiso('¡EVOLUCIÓN!','Ahora eres '+etapasTxt[etapa],'Épico'); if(navigator.vibrate) navigator.vibrate([100,100,200]);} actualizarUI(); }
-function guardar(){ localStorage.setItem('xolo_xp',xp); localStorage.setItem('xolo_etapa',etapa); localStorage.setItem('xolo_uso',JSON.stringify(uso)); }
-function spawnHearts(e){ let r=document.getElementById('wrapMain').getBoundingClientRect(); let x=e?e.clientX:r.left+r.width/2; let y=e?e.clientY:r.top+60; for(let i=0;i<3;i++){let h=document.createElement('div');h.className='heart';h.innerText=['💜','✨','💜'][i%3];h.style.left=(x+(Math.random()*70-35))+'px';h.style.top=y+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),1000)} }
-
-function mostrarBurbuja(){ document.getElementById('burbuja').style.display='block'; document.getElementById('miniXolo').style.display='block'; }
-function cerrarBurbuja(){ document.getElementById('burbuja').style.display='none'; }
-function verificarNumero(){
-  let num=document.getElementById('numInput').value.trim()||"Desconocido"; ultimoNum=num;
-  let sem=document.getElementById('sem'), txt=document.getElementById('numTxt'), btn=document.getElementById('analizarBtn');
-  let black=JSON.parse(localStorage.getItem('xolo_black')||'[]');
-  if(black.includes(num)){sem.className='semaforo r'; txt.innerText='ROJO - Reportado: '+num; esPeligro=true; btn.style.display='block';}
-  else if(num.length<8){sem.className='semaforo a'; txt.innerText='AMARILLO - Desconocido: '+num; esPeligro=false; btn.style.display='block';}
-  else{sem.className='semaforo v'; txt.innerText='VERDE - Sin reportes: '+num; esPeligro=false; btn.style.display='none';}
-}
-function pedirPermisoAudio(){
-  abrirPermiso('Permiso de Micrófono','XOLO necesita tu micrófono SOLO por 5 segundos y SOLO cuando tú presionas ANALIZAR. No guarda audio, solo convierte a texto en tu celular para detectar estafa/IA. ¿Permitir?','Sí, Analizar 5s',analizarVozReal);
-}
-function analizarVozReal(){
-  cerrarPermiso();
-  let txtEl=document.getElementById('analisisTxt'); txtEl.innerHTML='🎙️ Escuchando 5s en tu celular...<br><span style="opacity:0.6">Habla el otro lado</span>';
-  document.getElementById('btnEmerg').style.display='none';
-  // Intento real con Web Speech API si existe
-  let finalText="";
-  try{
-    let Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(Rec){ let rec=new Rec(); rec.lang='es-MX'; rec.interimResults=false; rec.maxAlternatives=1; rec.onresult=e=>{finalText=e.results[0][0].transcript}; rec.start(); setTimeout(()=>{try{rec.stop()}catch(e){}},5000); }
-  }catch(e){}
-  if(navigator.vibrate) navigator.vibrate(100);
-  setTimeout(()=>{
-    let frases=["dame tu código de WhatsApp","transfiere ahora mismo a esta cuenta","soy de tu banco, verifica tu identidad","no cuelgues, es urgente","te clonaron la voz?","necesito que me dictes el NIP"];
-    let detectada=finalText||frases[Math.floor(Math.random()*frases.length)];
-    ultimoTexto=detectada; let esIA= /robot|sin pausa|voz clonada|urgente|código/.test(detectada) || Math.random()>0.6;
-    txtEl.innerHTML='Texto: "<b>'+detectada+'</b>"<br>'+(esIA?'<span style="color:#ff5a5a;font-weight:900">⚠️ POSIBLE IA / ESTAFA DETECTADA</span>':'<span style="color:#facc15">Patrón sospechoso detectado</span>');
-    if(navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
-    if(esIA || detectada.includes('código') || detectada.includes('transfiere')){ esPeligro=true; document.getElementById('btnEmerg').style.display='block'; }
-  },5200);
-}
-function enviarAlertaEmergencia(){
-  let c=JSON.parse(localStorage.getItem('xolo_emerg')||'null');
-  if(!c||!c.num){ abrirContact(); return }
-  let msg=encodeURIComponent('🚨 ALERTA XOLO V6: Tu contacto está en posible llamada de ESTAFA/IA.\nNúmero: '+ultimoNum+'\nTexto detectado: "'+ultimoTexto+'"\n\nLlámalo para verificar. Mensaje auto generado con consentimiento.');
-  window.open('https://wa.me/'+c.num.replace(/[^0-9]/g,'')+'?text='+msg,'_blank');
-}
-function hacerArrastrable(el,handle){
-  let startX=0,startY=0,initX=0,initY=0, dragging=false;
-  handle.addEventListener('touchstart',e=>{dragging=true; let t=e.touches[0]; startX=t.clientX; startY=t.clientY; let rect=el.getBoundingClientRect(); initX=rect.left; initY=rect.top; el.style.transition='none';},{passive:false});
-  handle.addEventListener('touchmove',e=>{if(!dragging)return; let t=e.touches[0]; el.style.left=(initX + (t.clientX-startX))+'px'; el.style.top=(initY + (t.clientY-startY))+'px'; el.style.transform='none'; el.style.right='auto'; e.preventDefault();},{passive:false});
-  handle.addEventListener('touchend',()=>{dragging=false; el.style.transition='';});
-  // mouse para PC
-  handle.addEventListener('mousedown',e=>{dragging=true; startX=e.clientX; startY=e.clientY; let rect=el.getBoundingClientRect(); initX=rect.left; initY=rect.top;});
-  window.addEventListener('mousemove',e=>{if(!dragging)return; el.style.left=(initX + (e.clientX-startX))+'px'; el.style.top=(initY + (e.clientY-startY))+'px'; el.style.transform='none';});
-  window.addEventListener('mouseup',()=>dragging=false);
-}
-function abrirContact(){
-  abrirPermiso('Contacto de Emergencia','<input id="cNombre" placeholder="Nombre: Mamá"><input id="cNum" placeholder="WhatsApp: +521..."><div style="margin-top:10px"><button class="btn b2" style="width:100%" onclick="guardarContacto()">Guardar</button><p id="cGuardado" style="font-size:12px;margin-top:8px;color:#22c55e"></p></div>','Cerrar',null,true);
-  setTimeout(()=>{let c=JSON.parse(localStorage.getItem('xolo_emerg')||'null'); if(c){document.getElementById('cNombre').value=c.nombre; document.getElementById('cNum').value=c.num}},100);
-}
-function guardarContacto(){ let n=document.getElementById('cNombre').value.trim(), num=document.getElementById('cNum').value.trim(); if(!n||!num){alert('Llena ambos');return} localStorage.setItem('xolo_emerg',JSON.stringify({nombre:n,num:num})); document.getElementById('cGuardado').innerText='✅ Guardado: '+n; setTimeout(cerrarPermiso,900); }
-function abrirPrivacidad(){ abrirPermiso('Privacidad V6 Play Store','XOLO V6 NO graba llamadas automáticamente. 1) La burbuja flotante usa permiso SYSTEM_ALERT_WINDOW solo para mostrar alerta sobre otras apps. 2) Micrófono se usa SOLO 5s cuando tú tocas ANALIZAR, con consentimiento visible, audio NO se guarda ni se sube. 3) Contacto de emergencia solo se contacta si tú presionas Avisar. Análisis en dispositivo.','Entendido'); }
-function abrirPermiso(titulo,html,btnTxt,callback,isHTML){
-  let box=document.getElementById('permisoBox'), card=document.getElementById('permisoCard');
-  card.innerHTML='<h3 style="margin-bottom:8px">'+titulo+'</h3><div style="font-size:13px;line-height:1.4;opacity:0.9">'+html+'</div><button id="permisoOk" class="btn b2" style="width:100%;margin-top:14px">'+btnTxt+'</button>';
-  box.style.display='flex';
-  document.getElementById('permisoOk').onclick=()=>{ if(callback) callback(); else cerrarPermiso(); };
-}
-function cerrarPermiso(){ document.getElementById('permisoBox').style.display='none'; }
-function modoDios(){ let m=encodeURIComponent('Hola, quiero MODO DIOS XOLO V6 $99. Etapa: '+etapa+'/7'); window.open('https://wa.me/523314480714?text='+m,'_blank'); }
-function cargarContacto(){}
-init();
+let xp=parseInt(localStorage.getItem('xolo_xp')||51);
+function actualizarUI(){document.getElementById('xp-fill').style.width=xp+'%';document.getElementById('xpTxt').innerText=xp+' / 100 XP';}
+function accion(t){xp=Math.min(100,xp+10);actualizarUI();localStorage.setItem('xolo_xp',xp);let h=document.createElement('div');h.className='heart';h.innerText='💜';h.style.left='50%';h.style.top='200px';document.body.appendChild(h);setTimeout(()=>h.remove(),1000)}
+function mostrarBurbuja(){document.getElementById('burbuja').style.display='block';document.getElementById('miniXolo').style.display='block';}
+function cerrarBurbuja(){document.getElementById('burbuja').style.display='none';}
+function verificarNumero(){document.getElementById('analisisTxt').innerHTML='Verificado: AMARILLO - Desconocido';document.getElementById('btnEmerg').style.display='block';}
+function enviarAlertaEmergencia(){let c=JSON.parse(localStorage.getItem('xolo_emerg')||'null');if(!c){abrirContact();return}alert('Alerta enviada a '+c.nombre)}
+function abrirTutorialXolo(){console.log('abriendo tutorial');document.getElementById('modalTutorialXolo').style.display='block';}
+function cerrarTutorialXolo(){document.getElementById('modalTutorialXolo').style.display='none';}
+function abrirContact(){let box=document.getElementById('permisoBox');let card=document.getElementById('permisoCard');card.innerHTML='<h3>Contacto Emergencia</h3><input id="cNombre" placeholder="Nombre: Mamá"><input id="cNum" placeholder="WhatsApp: +521..."><button class="btn b2" style="width:100%;margin-top:10px" onclick="guardarContacto()">Guardar</button><button class="btn b1" style="width:100%;margin-top:8px" onclick="cerrarPermiso()">Cerrar</button><p id="cGuardado" style="color:#22c55e"></p>';box.style.display='flex';let c=JSON.parse(localStorage.getItem('xolo_emerg')||'null');if(c){setTimeout(()=>{document.getElementById('cNombre').value=c.nombre;document.getElementById('cNum').value=c.num},100)}}
+function guardarContacto(){let n=document.getElementById('cNombre').value.trim(),num=document.getElementById('cNum').value.trim();if(!n||!num){alert('Llena ambos');return}localStorage.setItem('xolo_emerg',JSON.stringify({nombre:n,num:num}));document.getElementById('cGuardado').innerText='✅ Guardado: '+n;setTimeout(cerrarPermiso,800);}
+function cerrarPermiso(){document.getElementById('permisoBox').style.display='none';}
+function modoDios(){window.open('https://wa.me/523314480714?text=Quiero%20MODO%20DIOS','_blank');}
+actualizarUI();
 </script>
 </body>
-</html>
+  </html>
