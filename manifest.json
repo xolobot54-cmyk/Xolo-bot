@@ -1,21 +1,17 @@
 {
-  "name": "XOLO - DIOS XOLOTL CACHORRO",
-  "short_name": "XOLO",
-  "description": "Tu guardián digital antivirus",
-  "start_url": "/",
+  "name": "XOLO ANTI-IA Protector",
+  "short_name": "XOLO Protector",
+  "description": "Detecta fraudes con voz e imagen IA en llamadas y videollamadas. Alerta a tus contactos.",
+  "start_url": "./index.html?v=9",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#8a2be2",
+  "background_color": "#0a0a0f",
+  "theme_color": "#ffcc00",
   "icons": [
     {
-      "src": "/static/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/static/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
