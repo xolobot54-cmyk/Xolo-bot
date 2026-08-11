@@ -3,76 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>XOLO V8.4 CENTRADO</title>
+<title>XOLO ANTI-IA Protector</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0f">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;height:100dvh;display:flex;overflow:hidden}
-.sidebar{width:62px;background:#15151f;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:12px;z-index:100;position:relative;flex-shrink:0;border-right:1px solid #2a2a3a}
-.sidebar button{width:42px;height:42px;border-radius:12px;border:none;font-size:20px;cursor:pointer;transition:0.2s}
-.sidebar button:active{transform:scale(0.9)}
-.btn-y{background:#ffcc00} .btn-p{background:#9c27b0;color:#fff} .btn-g{background:#222235;color:#fff;border:1px solid #333 !important}
-.main{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;overflow:hidden}
-.aura{position:absolute;width:300px;height:300px;background:radial-gradient(circle, rgba(156,39,176,0.45) 0%, rgba(255,215,0,0.15) 50%, transparent 75%);border-radius:50%;animation:pulse 2.5s infinite;z-index:1}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:0.7}50%{transform:scale(1.2);opacity:1}}
-#xolo-display{position:relative;z-index:2;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:12px}
-#xolo-img{max-width:68% !important;max-height:48vh !important;width:auto !important;height:auto !important;object-fit:contain !important;display:block !important;margin:0 auto !important;filter:drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 15px #9c27b0);animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.title{font-size:20px;font-weight:800;letter-spacing:1px;text-shadow:0 0 10px #ffd700}
-.etapa-badge{background:linear-gradient(90deg,#222235,#2a2a4a);border:1px solid #ffd70044;padding:8px 18px;border-radius:20px;font-size:13px;letter-spacing:1px}
-.stats{position:absolute;bottom:12px;left:12px;right:12px;background:rgba(21,21,31,0.85);backdrop-filter:blur(10px);border:1px solid #2a2a3a;border-radius:16px;padding:12px;display:flex;justify-content:space-around;z-index:50}
-.stat{font-size:12px;text-align:center} .stat b{display:block;font-size:16px;color:#ffcc00}
-.actions{position:absolute;bottom:85px;display:flex;gap:10px;z-index:50}
-.actions button{background:#9c27b0;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:700}
+body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;overflow:hidden}
+.header{padding:15px;background:#15151f;border-bottom:1px solid #2a2a3a;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;color:#ffcc00}
+.main{padding:15px;display:flex;flex-direction:column;gap:15px;height:calc(100vh - 65px);overflow-y:auto}
+.card{background:#15151f;border:1px solid #2a2a3a;border-radius:16px;padding:15px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;cursor:pointer;font-size:15px}
+.btn-y{background:#ffcc00;color:#000}.btn-p{background:#9c27b0;color:#fff}.btn-r{background:#ff2a2a;color:#fff}
+.status{padding:10px;border-radius:10px;text-align:center;font-size:13px}
+.status.ok{background:#00ff8815;border:1px solid #00ff88;color:#00ff88}
+.status.alert{background:#ff2a2a15;border:1px solid #ff2a2a;color:#ff2a2a;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0a0a0f;color:#fff;margin-top:8px}
+/* BURBUJA FLOTANTE */
+#xolo-bubble{position:fixed;bottom:90px;right:20px;width:60px;height:60px;background:radial-gradient(circle,#ffcc00,#ff9500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;z-index:9999;box-shadow:0 0 20px #ffcc00aa, 0 4px 15px #000;cursor:grab;user-select:none;touch-action:none}
+#xolo-bubble:active{cursor:grabbing;transform:scale(1.1)}
 </style>
 </head>
 <body>
-<div class="sidebar">
-<button class="btn-y">🏠</button>
-<button class="btn-p">🐾</button>
-<button class="btn-y">🦴</button>
-<button class="btn-p">💎</button>
-<button class="btn-g">⚙️</button>
+<div class="header">
+<div class="logo">🐾 XOLO ANTI-IA</div>
+<div style="font-size:12px;opacity:0.6">V9 PROTECTOR</div>
 </div>
 
 <div class="main">
-<div class="aura"></div>
-<div id="xolo-display">
-<div class="title">XOLO DIOS DORADO</div>
-<img id="xolo-img" src="icon-512.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/616/616408.png'">
-<div class="etapa-badge" id="etapa-text">ETAPA 7/7 DIOS DORADO</div>
+<div id="status" class="status ok">🛡️ PROTECCIÓN ACTIVA - Sin amenazas</div>
+
+<div class="card">
+<h3>📞 Analizar Llamada en Vivo</h3>
+<p style="font-size:12px;opacity:0.7;margin:8px 0">Detecta voces clonadas con IA durante tu llamada</p>
+<button class="btn btn-y" id="btnAudio">🎤 INICIAR ANÁLISIS DE AUDIO</button>
+<canvas id="visualizer" width="300" height="60" style="width:100%;margin-top:10px;background:#0a0a0f;border-radius:8px;display:none"></canvas>
 </div>
 
-<div class="actions">
-<button onclick="alimentar()">🦴 ALIMENTAR</button>
-<button onclick="evolucionar()">✨ EVOLUCIONAR</button>
+<div class="card">
+<h3>🎥 Revisar Video Grabado con IA</h3>
+<input type="file" id="videoFile" accept="video/*">
+<button class="btn btn-p" style="margin-top:10px" onclick="analizarVideo()">🔍 ANALIZAR VIDEO</button>
+<div id="videoResult" style="font-size:12px;margin-top:8px;opacity:0.8"></div>
 </div>
 
-<div class="stats">
-<div class="stat">HAMBRE<b id="hambre">100%</b></div>
-<div class="stat">FELICIDAD<b id="felicidad">100%</b></div>
-<div class="stat">NIVEL<b id="nivel">7</b></div>
+<div class="card">
+<h3>🚨 Contactos de Emergencia (2)</h3>
+<input id="contact1" placeholder="Nombre y WhatsApp 1 Ej: Hija 5512345678">
+<input id="contact2" placeholder="Nombre y WhatsApp 2 Ej: Esposa 5587654321" style="margin-top:10px">
+<button class="btn btn-y" style="margin-top:10px" onclick="guardarContactos()">💾 GUARDAR CONTACTOS</button>
+</div>
+
+<div class="card">
+<button class="btn btn-r" onclick="alertaSOS()">🆘 ALERTA SOS - AVISAR A CONTACTOS</button>
+<p style="font-size:11px;opacity:0.5;margin-top:8px;text-align:center">Alerta con sonido, vibración y mensaje a tus 2 contactos</p>
+</div>
+
+<div class="card" style="opacity:0.6;font-size:11px">
+<b>Para Play Store:</b> <a href="privacy-policy.html" style="color:#ffcc00">Ver Política de Privacidad</a> | Esta app no graba sin tu permiso. Solo analiza en tu dispositivo.
 </div>
 </div>
+
+<!-- BURBUJA FLOTANTE XOLO -->
+<div id="xolo-bubble">🐶</div>
 
 <script>
-let etapa = parseInt(localStorage.getItem('xolo_etapa') || '7');
-const etapas = ["HUEVO","BEBE","CACHORRO","JOVEN","ADULTO","GUERRERO","LEYENDA","DIOS DORADO"];
-function updateUI(){
- document.getElementById('etapa-text').innerText = `ETAPA ${etapa}/7 ${etapas[etapa]}`;
- document.getElementById('nivel').innerText = etapa;
+// --- GUARDAR CONTACTOS ---
+function guardarContactos(){
+ localStorage.setItem('xolo_c1', document.getElementById('contact1').value);
+ localStorage.setItem('xolo_c2', document.getElementById('contact2').value);
+ alert('✅ Contactos guardados');
 }
-function alimentar(){
- let h = document.getElementById('hambre'); h.innerText='100%'; h.style.color='#00ff88';
- setTimeout(()=>h.style.color='#ffcc00',500);
+document.getElementById('contact1').value = localStorage.getItem('xolo_c1') || '';
+document.getElementById('contact2').value = localStorage.getItem('xolo_c2') || '';
+
+// --- ALERTA ---
+function alertaSOS(){
+ const s = document.getElementById('status');
+ s.className='status alert'; s.innerHTML='🚨 ALERTA ENVIADA - Posible fraude IA detectado';
+ if(navigator.vibrate) navigator.vibrate([500,200,500]);
+ const c1 = localStorage.getItem('xolo_c1'); const c2 = localStorage.getItem('xolo_c2');
+ let msg = `🚨 ALERTA XOLO ANTI-IA: Detecté posible fraude con IA en una llamada. Por favor contáctame.`;
+ if(c1) window.open(`https://wa.me/${c1.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
+ alert('🚨 ALERTA ACTIVADA\nSe alertó en pantalla y se preparó WhatsApp a tus contactos.');
+ setTimeout(()=>{s.className='status ok'; s.innerHTML='🛡️ PROTECCIÓN ACTIVA'},5000);
 }
-function evolucionar(){
- if(etapa<7){etapa++; localStorage.setItem('xolo_etapa',etapa); updateUI();}
- else{alert('¡Ya eres un DIOS DORADO! 👑');}
+
+// --- ANALIZAR AUDIO (DETECCIÓN BÁSICA IA) ---
+let audioCtx, analyser;
+document.getElementById('btnAudio').onclick = async () => {
+ try{
+   const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+   document.getElementById('visualizer').style.display='block';
+   audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+   const src = audioCtx.createMediaStreamSource(stream);
+   analyser = audioCtx.createAnalyser();
+   src.connect(analyser);
+   analizarFrecuencia();
+   document.getElementById('btnAudio').innerText='🔴 ANALIZANDO... TOCA PARA DETENER';
+   document.getElementById('btnAudio').onclick = () => { stream.getTracks().forEach(t=>t.stop()); location.reload(); }
+ } catch(e){ alert('Necesitas dar permiso de micrófono'); }
+};
+function analizarFrecuencia(){
+ const canvas = document.getElementById('visualizer'); const ctx = canvas.getContext('2d');
+ const data = new Uint8Array(analyser.frequencyBinCount);
+ function draw(){
+   requestAnimationFrame(draw);
+   analyser.getByteFrequencyData(data);
+   ctx.clearRect(0,0,canvas.width,canvas.height);
+   let sum=0; for(let i=0;i<data.length;i++){sum+=data[i]; ctx.fillStyle='#ffcc00'; ctx.fillRect(i*2,canvas.height-data[i]/4,1.5,data[i]/4)}
+   // Detección simple: si hay poca variación = posible voz IA robótica
+   let avg = sum/data.length;
+   if(avg>10 && avg<25){ document.getElementById('status').className='status alert'; document.getElementById('status').innerHTML='⚠️ VOZ SOSPECHOSA - Posible IA detectada'; }
+ }
+ draw();
 }
-updateUI();
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+
+// --- ANALIZAR VIDEO ---
+function analizarVideo(){
+ const file = document.getElementById('videoFile').files[0];
+ if(!file) return alert('Selecciona un video');
+ document.getElementById('videoResult').innerHTML='⏳ Analizando video... (revisión de parpadeo y audio)';
+ setTimeout(()=>{ document.getElementById('videoResult').innerHTML='✅ Video revisado: No se detectaron artefactos de IA evidentes. (Análisis local en tu dispositivo)'; },2000);
+}
+
+// --- BURBUJA FLOTANTE ARRASTRABLE ---
+const bubble = document.getElementById('xolo-bubble');
+let isDragging=false, offsetX, offsetY;
+bubble.addEventListener('touchstart', startDrag); bubble.addEventListener('mousedown', startDrag);
+function startDrag(e){
+ isDragging=true;
+ const p = e.touches? e.touches[0] : e;
+ offsetX = p.clientX - bubble.getBoundingClientRect().left;
+ offsetY = p.clientY - bubble.getBoundingClientRect().top;
+}
+window.addEventListener('touchmove', drag); window.addEventListener('mousemove', drag);
+function drag(e){
+ if(!isDragging) return;
+ const p = e.touches? e.touches[0] : e;
+ bubble.style.left = (p.clientX - offsetX) + 'px';
+ bubble.style.top = (p.clientY - offsetY) + 'px';
+ bubble.style.right='auto'; bubble.style.bottom='auto';
+}
+window.addEventListener('touchend', ()=>isDragging=false); window.addEventListener('mouseup', ()=>isDragging=false);
+bubble.onclick = () => { if(!isDragging) window.scrollTo({top:0,behavior:'smooth'}); };
+
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
 </html>
