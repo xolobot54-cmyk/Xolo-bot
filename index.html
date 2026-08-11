@@ -1,42 +1,34 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>XOLO V8.2 FINAL</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI'}body{background:#0a0a1a;color:white;text-align:center;padding-bottom:30px}#onboarding{position:fixed;inset:0;background:#0a0a1a;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center}#onboarding.hide{display:none}.xolo-wrap{position:relative;width:220px;height:220px;margin:10px auto}.aura{position:absolute;inset:-12px;background:radial-gradient(circle,rgba(168,85,247,.5),transparent 70%);border-radius:50%}#xp-bar{width:86%;max-width:380px;height:18px;background:#1e1e2e;border-radius:20px;margin:8px auto;overflow:hidden}#xp-fill{height:100%;width:0%;background:gold;transition:.7s}.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px auto;max-width:400px}.btn{padding:12px 14px;border:none;border-radius:22px;font-weight:800;cursor:pointer}.b1{background:#26263a;color:white}.b2{background:#a855f7;color:white}.b3{background:gold;color:black;width:92%;max-width:400px;padding:15px;margin:10px auto;display:block;border-radius:26px;font-weight:900}#burbuja{position:fixed;top:80px;left:50%;transform:translateX(-50%);width:92%;max-width:360px;background:#151528;border:2px solid #a855f7;border-radius:22px;padding:16px;z-index:8000;display:none;touch-action:none;cursor:grab}#miniXolo{position:fixed;width:62px;height:62px;bottom:85px;right:14px;z-index:8500;display:none;border-radius:50%;border:2px solid #a855f7;background:#111;overflow:hidden;touch-action:none}.semaforo{width:12px;height:12px;border-radius:50%;display:inline-block}.v{background:#22c55e}.a{background:#facc15}#permisoBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:90000;align-items:center;justify-content:center;padding:20px}.card{background:#1a1a2e;padding:20px;border-radius:20px;border:1px solid #a855f7;width:100%;max-width:380px;text-align:left}input{width:100%;padding:11px;margin:7px 0;border-radius:12px;border:1px solid #444;background:#0f0f1a;color:white}#modalTutorialXolo{display:none;position:fixed;inset:0;background:rgba(5,5,15,.97);z-index:99999;padding:15px}.paso{display:none}.paso.activo{display:block}.progTutorial{width:100%;height:8px;background:#222;border-radius:10px;overflow:hidden;margin:10px 0}.progFill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,gold)}.btnNext{width:100%;padding:13px;background:#a855f7;color:white;border:none;border-radius:14px;font-weight:900;margin-top:12px}.xpPopup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:gold;color:black;padding:18px 26px;border-radius:20px;font-weight:900;z-index:9999999;display:none}.heart{position:fixed;animation:floatUp 1s forwards}@keyframes floatUp{to{transform:translateY(-100px);opacity:0}}</style></head><body>
-<div id="onboarding"><h1>XOLO</h1><div class="xolo-wrap"><div class="aura"></div><img src="icon-512.png" style="width:100%;height:100%"></div><button onclick="despertarXolo()" style="padding:17px;background:gold;color:black;border:none;border-radius:28px;font-weight:900;width:90%;max-width:340px;margin-top:18px">✨ SI, DESPIERTA A XOLO</button></div>
-<div id="miniXolo"><img src="icon-512.png" style="width:100%;height:100%"></div>
-<div id="burbuja"><div style="display:flex;justify-content:space-between"><b>🛡️ XOLO ESCUDO</b><span onclick="cerrarBurbuja()">✕</span></div><div style="text-align:left"><span id="sem" class="semaforo a"></span><span id="numTxt">Sin verificar</span></div><input id="numInput" placeholder="+52..."><button class="btn b2" style="width:100%;margin-top:8px" onclick="verificarNumero()">Verificar</button><button id="analizarBtn" onclick="pedirPermisoAudio()" style="display:none;width:100%;margin-top:10px;padding:12px;background:#ef4444;color:white;border:none;border-radius:12px;font-weight:900">🎙️ ANALIZAR VOZ 5s</button><div id="analisisTxt" style="font-size:11px;margin-top:8px;text-align:left"></div><button id="btnEmerg" style="display:none;width:100%;margin-top:10px;padding:10px;background:gold;color:black;border:none;border-radius:12px;font-weight:800" onclick="enviarAlertaEmergencia()">🚨 Avisar</button></div>
-<h1 style="margin-top:12px">XOLO</h1><p id="etapaTxt">ETAPA 0/7</p><div class="xolo-wrap" id="wrapMain"><div class="aura"></div><img id="xolo" src="icon-512.png"></div><div id="xp-bar"><div id="xp-fill"></div></div><p id="xpTxt">0 / 100 XP</p><div class="btns"><button class="btn b1" onclick="accion('comer')">🍖 Comer</button><button class="btn b1" onclick="accion('jugar')">🎾 Jugar</button><button class="btn b2" onclick="accion('mimar')">💜 Mimar</button></div><div class="btns"><button class="btn b1" onclick="mostrarBurbuja()">🛡️ Burbuja</button><button class="btn b1" onclick="abrirContact()">⚙️ Emergencia</button></div><button onclick="abrirTutorialXolo()" style="width:92%;max-width:400px;margin:12px auto;display:block;padding:13px;background:#1a1a2e;color:white;border:2px solid #a855f7;border-radius:22px;font-weight:800">📘 COMO USAR A XOLO - TUTORIAL</button><div id="xpPopup" class="xpPopup">+50 XP</div><div id="modalTutorialXolo"><div style="background:#0f0f1a;border:2px solid #a855f7;border-radius:20px;padding:16px;max-width:480px;margin:10px auto;text-align:left"><div style="display:flex;justify-content:space-between"><b>PASO</b><span onclick="cerrarTutorialXolo()">✕</span></div><div class="progTutorial"><div id="progFill" class="progFill" style="width:25%"></div></div><div id="paso1" class="paso activo" style="text-align:center"><h3>📞 ¡ENTRA LLAMADA!</h3><button class="btnNext" onclick="siguientePaso(2)">YA VI →</button></div><div id="paso2" class="paso" style="text-align:center"><h3>🔊 ¡ALTAVOZ!</h3><button class="btnNext" onclick="siguientePaso(3)">ACTIVE 🔊</button></div><div id="paso3" class="paso" style="text-align:center"><h3>🎙️ PRACTICA</h3><button style="width:100%;padding:11px;background:#ef4444;color:white;border:none;border-radius:10px;font-weight:900" onclick="simularAnalisis()">🎙️ ANALIZAR 5s</button><p id="resultadoSim" style="margin-top:10px;display:none"></p><button id="btnPaso3Next" class="btnNext" style="display:none" onclick="siguientePaso(4)">ENTENDI! →</button></div><div id="paso4" class="paso" style="text-align:center"><h3>🎉 ¡LO SALVASTE!</h3><button class="btnNext" style="background:gold;color:black" onclick="reclamarXP()">🎁 RECLAMAR +50 XP</button></div></div></div><button class="btn b3" onclick="modoDios()">👑 DESBLOQUEAR DIOS $99</button><div id="permisoBox"><div class="card" id="permisoCard"></div></div>
-<script>
-let xp=0,etapa=0,uso={fecha:'',comer:0,jugar:0,mimar:0},ultimoNum="",ultimoTexto="";
-const limites={comer:5,jugar:5,mimar:10};
-const etapasTxt=["Cachorro","Guardian Novato","Rastreador","Cazador Sombras","Protector Azteca","Guerrero Mictlan","Xolo Divino","DIOS DORADO"];
-function safeGet(k,d){try{return localStorage.getItem(k)||d}catch{return d}}
-function safeSet(k,v){try{localStorage.setItem(k,v)}catch{}}
-function safeJson(k,d){try{let v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
-function initStorage(){xp=parseInt(safeGet('xolo_xp','0'))||0;etapa=parseInt(safeGet('xolo_etapa','0'))||0;let hoy=new Date().toDateString();uso=safeJson('xolo_uso',{fecha:hoy,comer:0,jugar:0,mimar:0});if(uso.fecha!==hoy) uso={fecha:hoy,comer:0,jugar:0,mimar:0};actualizarUI();if(safeGet('xolo_desperto','')==='si'){let o=document.getElementById('onboarding');if(o) o.style.display='none';}}
-function despertarXolo(){safeSet('xolo_desperto','si');document.getElementById('onboarding').style.display='none';xp=Math.min(100,xp+5);guardar();spawnHearts();}
-function actualizarUI(){document.getElementById('xp-fill').style.width=xp+'%';document.getElementById('xpTxt').innerText=xp+' / 100 XP';document.getElementById('etapaTxt').innerText='ETAPA '+etapa+'/7 - '+etapasTxt[etapa];}
-function accion(t){if(uso[t]>=limites[t]){abrirPermiso('Limite','Ya usaste '+t+' hoy','Ok');return}uso[t]++;xp=Math.min(100,xp+12);spawnHearts();checkEvo();guardar();}
-function checkEvo(){if(xp>=100&&etapa<7){etapa++;xp=0;abrirPermiso('¡EVOLUCION!','Ahora eres '+etapasTxt[etapa],'Epico');}actualizarUI();}
-function guardar(){safeSet('xolo_xp',String(xp));safeSet('xolo_etapa',String(etapa));try{localStorage.setItem('xolo_uso',JSON.stringify(uso));}catch{}}
-function spawnHearts(){let r=document.getElementById('wrapMain');let rect=r.getBoundingClientRect();for(let i=0;i<3;i++){let h=document.createElement('div');h.className='heart';h.innerText='💜';h.style.left=(rect.left+rect.width/2+Math.random()*60-30)+'px';h.style.top=(rect.top+60)+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),1000);}}
-function mostrarBurbuja(){let b=document.getElementById('burbuja'),m=document.getElementById('miniXolo');b.style.display='block';m.style.display='block';if(!b.dataset.drag){hacerArrastrable(b);b.dataset.drag='1'}if(!m.dataset.drag){hacerArrastrable(m);m.dataset.drag='1'}}
-function cerrarBurbuja(){document.getElementById('burbuja').style.display='none';}
-function verificarNumero(){let num=document.getElementById('numInput').value.trim();ultimoNum=num;let sem=document.getElementById('sem'),txt=document.getElementById('numTxt'),btn=document.getElementById('analizarBtn');if(num.length<8){sem.className='semaforo a';txt.innerText='🟡 AMARILLO: '+num;btn.style.display='block';}else{sem.className='semaforo v';txt.innerText='🟢 VERDE: '+num;}}
-function pedirPermisoAudio(){abrirPermiso('Microfono','XOLO usa microfono SOLO 5s','Analizar 5s',analizarVozReal);}
-function analizarVozReal(){cerrarPermiso();let t=document.getElementById('analisisTxt');t.innerHTML='🎙️ Escuchando 5s...';setTimeout(()=>{t.innerHTML='Texto: "dame tu codigo"<br><span style="color:#ff5a5a">⚠️ FRASE PELIGROSA</span>';ultimoTexto='dame tu codigo';document.getElementById('btnEmerg').style.display='block';},2000);}
-function enviarAlertaEmergencia(){let c=safeJson('xolo_emerg',null);if(!c||!c.num){abrirContact();return}let msg=encodeURIComponent('🚨 ALERTA XOLO: '+ultimoNum+' Frase:'+ultimoTexto);window.open('https://wa.me/'+c.num.replace(/[^0-9]/g,'')+'?text='+msg,'_blank');}
-function abrirContact(){abrirPermiso('Contacto','<input id="cNombre" placeholder="Nombre"><input id="cNum" placeholder="+521..."><button class="btn b2" style="width:100%;margin-top:8px" onclick="guardarContacto()">Guardar</button><p id="cGuardado" style="color:#22c55e"></p>','Cerrar');}
-function guardarContacto(){let n=document.getElementById('cNombre').value,num=document.getElementById('cNum').value;if(!n||!num){alert('Llena ambos');return}localStorage.setItem('xolo_emerg',JSON.stringify({nombre:n,num:num}));document.getElementById('cGuardado').innerText='✅ '+n;setTimeout(cerrarPermiso,800);}
-function abrirPermiso(ti,ht,bt,cb){let b=document.getElementById('permisoBox'),c=document.getElementById('permisoCard');c.innerHTML='<h3>'+ti+'</h3><div style="margin-top:6px">'+ht+'</div><button id="permisoOk" class="btn b2" style="width:100%;margin-top:12px">'+bt+'</button>';b.style.display='flex';document.getElementById('permisoOk').onclick=()=>{if(cb) cb();else cerrarPermiso();};}
-function cerrarPermiso(){document.getElementById('permisoBox').style.display='none';}
-function modoDios(){window.open('https://wa.me/523314480714?text=Quiero+MODO+DIOS+XOLO','_blank');}
-function hacerArrastrable(el){let isDragging=false,sx,sy,lx,ly;function getPos(e){return e.touches?{x:e.touches[0].clientX,y:e.touches[0].clientY}:{x:e.clientX,y:e.clientY}}function start(e){isDragging=true;let p=getPos(e);sx=p.x;sy=p.y;let r=el.getBoundingClientRect();lx=r.left;ly=r.top;el.style.transform='none';el.style.left=lx+'px';el.style.top=ly+'px';el.style.right='auto';el.style.bottom='auto';}function move(e){if(!isDragging)return;e.preventDefault();let p=getPos(e);el.style.left=(lx+(p.x-sx))+'px';el.style.top=(ly+(p.y-sy))+'px';}function end(){isDragging=false;}el.addEventListener('mousedown',start);document.addEventListener('mousemove',move);document.addEventListener('mouseup',end);el.addEventListener('touchstart',start,{passive:false});document.addEventListener('touchmove',move,{passive:false});document.addEventListener('touchend',end);}
-function abrirTutorialXolo(){document.getElementById('modalTutorialXolo').style.display='block';mostrarPaso(1);actualizarProg(1);}
-function cerrarTutorialXolo(){document.getElementById('modalTutorialXolo').style.display='none';}
-function mostrarPaso(n){let pasos=document.querySelectorAll('#modalTutorialXolo .paso');pasos.forEach(p=>p.classList.remove('activo'));let el=document.getElementById('paso'+n);if(el) el.classList.add('activo');}
-function siguientePaso(n){mostrarPaso(n);actualizarProg(n);}
-function actualizarProg(n){document.getElementById('progFill').style.width=(n*25)+'%';}
-function simularAnalisis(){let r=document.getElementById('resultadoSim');r.style.display='block';r.innerHTML='🎙️...';setTimeout(()=>{r.innerHTML='<span style="color:#ff5a5a">🔴 ¡ES ESTAFA!</span>';document.getElementById('btnPaso3Next').style.display='block';},1200);}
-function reclamarXP(){let pop=document.getElementById('xpPopup');pop.style.display='block';xp=Math.min(100,xp+50);checkEvo();guardar();setTimeout(()=>{pop.style.display='none';cerrarTutorialXolo();},1000);}
-initStorage();
-document.getElementById('xolo')?.addEventListener('click',()=>{spawnHearts();xp=Math.min(100,xp+1);checkEvo();guardar();});
-</script></body></html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XOLO V8.4 CENTRADO</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:white;font-family:sans-serif;height:100vh;display:flex}
+.sidebar{width:60px;background:#15151f;display:flex;flex-direction:column;align-items:center;padding:15px 0;gap:15px;z-index:100 !important;position:relative}
+.sidebar button{width:40px;height:40px;border-radius:12px;border:none}
+.main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.aura{position:absolute;width:280px;height:280px;background:radial-gradient(circle, rgba(156,39,176,0.4), transparent 70%);border-radius:50%}
+#xolo-display{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%}
+#xolo-display img{max-width:70% !important;max-height:50vh !important;margin:0 auto !important;display:block !important;object-fit:contain !important}
+.etapa{margin-top:15px;background:rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px}
+</style>
+</head>
+<body>
+<div class="sidebar">
+<button style="background:#ffcc00">🏠</button>
+<button style="background:#9c27b0">🐾</button>
+<button style="background:#ffcc00">💎</button>
+</div>
+<div class="main">
+<div class="aura"></div>
+<div id="xolo-display">
+<img src="icon-512.png">
+<div class="etapa">ETAPA 7/7 DIOS DORADO</div>
+</div>
+</div>
+</body>
+</html>
