@@ -4,15 +4,15 @@
   "description": "Xolo Anti-IA - Detecta clonación de voz y video con IA en tiempo real. Protección local.",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "IMG-20260812-WA7634.jpg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "IMG-20260812-WA7634.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ],
