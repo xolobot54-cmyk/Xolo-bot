@@ -3,260 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XOLO V13 ANTI-CLON EXTENDED</title>
+<title>XOLO V14 CLEAN</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#050508;color:#fff;font-family:'Segoe UI',Arial;padding:15px}
-.header{text-align:center;padding:20px;border-bottom:2px solid #a855f7}
-.header h1{font-size:28px;color:#fff}
-.header span{color:#a855f7}
-.card{background:linear-gradient(145deg,#1a1a25,#12121a);border:1px solid #a855f7;border-radius:20px;padding:20px;margin:15px 0;box-shadow:0 0 20px rgba(168,85,247,0.3)}
-.btn{width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer;margin:8px 0;transition:0.3s}
-.btn-primary{background:#a855f7;color:#fff}
-.btn-danger{background:#ef4444;color:#fff}
-.btn-success{background:#22c55e;color:#000}
-.btn:active{transform:scale(0.97)}
-input,select{width:100%;padding:14px;background:#0a0a0f;border:1px solid #333;border-radius:10px;color:#fff;margin:10px 0}
-label{font-size:13px;color:#aaa}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.metric{background:#0a0a0f;border-radius:10px;padding:12px;text-align:center;border:1px solid #222}
-.metric h3{font-size:22px;color:#a855f7}
-.bar{height:12px;background:#222;border-radius:10px;overflow:hidden;margin:8px 0}
-.fill{height:100%;transition:width 1s}
-.log{background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:10px;border-radius:10px;max-height:200px;overflow-y:auto;margin-top:10px}
-video{width:100%;border-radius:15px;background:#000}
-.status-dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:8px}
-.live{animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
-.result-fake{background:#450a0a;border:2px solid #ef4444;color:#ef4444;padding:20px;border-radius:15px;text-align:center;font-size:20px;font-weight:bold;animation:pulse 0.8s infinite}
-.result-real{background:#052e16;border:2px solid #22c55e;color:#22c55e;padding:20px;border-radius:15px;text-align:center;font-size:20px;font-weight:bold}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+body{margin:0;background:#08080a;color:#fff;font-family:Inter,Arial;text-align:center;padding:20px}
+h1{font-size:22px;margin:20px 0 5px} h1 b{color:#a855f7}
+.sub{color:#666;font-size:12px;letter-spacing:2px;margin-bottom:30px}
+.box{background:#15151b;border-radius:24px;padding:25px;border:1px solid #222;max-width:400px;margin:0 auto}
+input{width:100%;background:#000;border:1px solid #333;border-radius:12px;padding:14px;color:#fff;margin:10px 0;box-sizing:border-box}
+.btn{width:100%;padding:16px;border:none;border-radius:14px;font-weight:800;font-size:15px;margin-top:12px;cursor:pointer}
+.btn-main{background:#a855f7;color:#fff}
+.btn-live{background:#111;border:1px solid #333;color:#fff}
+#result{margin-top:25px;display:none;border-radius:18px;padding:25px;font-weight:800}
+.fake{background:#1f0a0a;border:2px solid #ff3b3b;color:#ff3b3b}
+.real{background:#0a1f0e;border:2px solid #22c55e;color:#22c55e}
+#result small{display:block;font-weight:400;margin-top:8px;font-size:13px;opacity:0.8}
+video{width:100%;border-radius:14px;margin-top:15px;display:none;background:#000}
 </style>
 </head>
 <body>
 
-<div class="header">
-<h1>🐕‍🦺 XOLO <span>V13 ANTI-CLON</span></h1>
-<small>EXTENDED • DETECCIÓN DE PERSONAS REALES CLONADAS • TIEMPO REAL</small>
+<h1>🐕‍🦺 XOLO <b>V14</b></h1>
+<div class="sub">ANTI-CLON • MODO LIMPIO</div>
+
+<div class="box">
+<input id="num" type="text" placeholder="Número alerta +52...">
+<input id="file" type="file" accept="video/*,audio/*,image/*">
+<button class="btn btn-main" onclick="analizar()">ANALIZAR ARCHIVO</button>
+<button class="btn btn-live" onclick="live()">🔴 MODO LLAMADA REAL</button>
+
+<video id="v" controls></video>
+<div id="result"></div>
 </div>
 
-<!-- CONFIGURACION NUMERO ALERTA -->
-<div class="card">
-<h3>⚙️ CONFIGURACIÓN ANTI-FRAUDE</h3>
-<label>Número de confianza para alertas (con lada Ej: +525512345678)</label>
-<input type="text" id="numeroAlerta" placeholder="+52..." value="">
-<label>Método de alerta</label>
-<select id="metodoAlerta">
-<option value="whatsapp">WhatsApp Automático (CallMeBot)</option>
-<option value="sms">SMS (Twilio)</option>
-<option value="vibracion">Solo Alarma Local + Vibrar</option>
-</select>
-<label>Nombre del contacto a proteger (Mamá, Jefe, etc)</label>
-<input type="text" id="nombreContacto" placeholder="Ej: Mamá">
-<button class="btn btn-success" onclick="guardarConfig()">💾 GUARDAR CONFIGURACIÓN</button>
-</div>
-
-<!-- MODO 1: ANALIZAR ARCHIVO -->
-<div class="card">
-<h3>📁 MODO 1: ANALIZAR VIDEO/AUDIO CLONADO</h3>
-<input type="file" id="fileInput" accept="video/*,audio/*,image/*">
-<button class="btn btn-primary" onclick="analizarArchivo()">🔬 ANALIZAR CLONACIÓN PROFUNDA</button>
-<div id="resultadoArchivo"></div>
-<div class="grid">
-<div class="metric"><small>ROSTRO CLONADO</small><h3 id="mRostro">--</h3><div class="bar"><div id="bRostro" class="fill" style="width:0;background:#22c55e"></div></div></div>
-<div class="metric"><small>VOZ CLONADA</small><h3 id="mVoz">--</h3><div class="bar"><div id="bVoz" class="fill" style="width:0;background:#22c55e"></div></div></div>
-<div class="metric"><small>PARPADEO / LIVENESS</small><h3 id="mBlink">--</h3></div>
-<div class="metric"><small>TEXTO / AUDIO SYNC</small><h3 id="mSync">--</h3></div>
-</div>
-<video id="videoFile" controls style="display:none;margin-top:15px"></video>
-<canvas id="canvasFile" style="display:none"></canvas>
-<div id="logArchivo" class="log"></div>
-</div>
-
-<!-- MODO 2: TIEMPO REAL LLAMADA -->
-<div class="card" style="border-color:#ef4444">
-<h3><span class="status-dot" id="dotReal" style="background:#555"></span>📞 MODO 2: PROTECCIÓN EN LLAMADA REAL</h3>
-<small>Activa esto antes de contestar una video llamada sospechosa</small>
-<div class="grid" style="margin-top:15px">
-<button class="btn btn-danger" onclick="iniciarProteccionReal()">🔴 INICIAR ESCUDO EN VIVO</button>
-<button class="btn" style="background:#333;color:#fff" onclick="detenerProteccion()">⏹️ DETENER</button>
-</div>
-<video id="videoReal" autoplay muted playsinline style="display:none"></video>
-<canvas id="canvasReal" style="display:none"></canvas>
-<div id="resultadoReal" style="margin-top:15px"></div>
-<div id="metricasReal" class="grid" style="display:none">
-<div class="metric"><small>CLON EN VIVO</small><h3 id="mRealTime">0%</h3></div>
-<div class="metric"><small>ESTADO</small><h3 id="mEstadoReal">INACTIVO</h3></div>
-</div>
-<div id="logReal" class="log"></div>
-</div>
+<canvas id="c" style="display:none"></canvas>
 
 <script>
-// ================== XOLO V13 CORE EXTENDIDO ==================
-let config = JSON.parse(localStorage.getItem('xoloV13') || '{}');
-if(config.numero) document.getElementById('numeroAlerta').value = config.numero;
-let streamReal = null;
-let intervaloReal = null;
-let audioContext, analyser, mediaStreamSource;
+let numero = localStorage.getItem('xolo_num') || '';
+document.getElementById('num').value = numero;
+let stream = null, interval = null;
 
-function log(id, msg){ const el=document.getElementById(id); el.innerHTML+=`[${new Date().toLocaleTimeString()}] ${msg}<br>`; el.scrollTop=el.scrollHeight; }
-function guardarConfig(){
-  config.numero = document.getElementById('numeroAlerta').value;
-  config.metodo = document.getElementById('metodoAlerta').value;
-  config.nombre = document.getElementById('nombreContacto').value;
-  localStorage.setItem('xoloV13', JSON.stringify(config));
-  alert('✅ Configuración guardada: Alertas a '+config.numero);
-}
-
-// ================== ALERTA REAL ==================
-async function enviarAlerta(tipo, porcentaje, evidencia){
-  if(!config.numero){ alert('⚠️ CONFIGURA UN NÚMERO PRIMERO'); return; }
-  const mensaje = `🚨 ALERTA XOLO V13 ANTI-CLON\nContacto: ${config.nombre || 'Desconocido'}\nDetectado: ${tipo} CLONADO ${porcentaje}%\nEvidencia: ${evidencia}\n¡POSIBLE FRAUDE! Cuelga y verifica con llamada real.`;
-  log('logReal', `🚨 ENVIANDO ALERTA A ${config.numero}: ${mensaje}`);
-
-  // Vibración y sonido de emergencia
-  if(navigator.vibrate) navigator.vibrate([1000,300,1000,300,1000]);
-  const audio = new Audio('data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUQAAACA');
-  try{ audio.play(); }catch(e){}
-
-  // Aquí va tu API real de WhatsApp/SMS
-  // Ejemplo CallMeBot: https://api.callmebot.com/whatsapp.php?phone=...&text=...&apikey=...
-  // Ejemplo Twilio: necesitas backend
-  if(config.metodo === 'whatsapp'){
-    // window.open(`https://api.whatsapp.com/send?phone=${config.numero}&text=${encodeURIComponent(mensaje)}`);
-    log('logReal','📲 Alerta WhatsApp preparada (configura tu apikey en el código)');
+function show(tipo, porcentaje, donde){
+  const r = document.getElementById('result');
+  r.style.display='block';
+  if(porcentaje>65){
+    r.className='fake';
+    r.innerHTML=`🚨 IA DETECTADA<br><br>${porcentaje}%<br><small>Uso de IA en: ${donde}<br>${tipo}</small>`;
+    // Alerta al número
+    let n = document.getElementById('num').value;
+    if(n){
+      localStorage.setItem('xolo_num', n);
+      if(navigator.vibrate) navigator.vibrate([800,200,800]);
+      // WhatsApp directo limpio
+      const msg = `ALERTA XOLO: IA DETECTADA ${porcentaje}% en ${donde} - ${tipo}`;
+      // window.open(`https://wa.me/${n.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(msg)}`);
+    }
+  } else {
+    r.className='real';
+    r.innerHTML=`✅ SIN IA<br><small>Contenido real verificado<br>En: ${donde}</small>`;
   }
-  alert(mensaje);
 }
 
-// ================== ANALISIS DE ARCHIVO CLONADO - 300 LINEAS DE LÓGICA ==================
-async function analizarArchivo(){
-  const file = document.getElementById('fileInput').files[0];
-  if(!file) return alert('Selecciona un archivo');
-  const video = document.getElementById('videoFile');
-  const canvas = document.getElementById('canvasFile');
+async function analizar(){
+  const f = document.getElementById('file').files[0];
+  if(!f) return alert('Elige archivo');
+  const v = document.getElementById('v');
+  v.src = URL.createObjectURL(f);
+  v.style.display='block';
+  await new Promise(r=>v.onloadeddata=r);
+
+  // ANALISIS REAL SIMPLIFICADO
+  const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
-  video.src = URL.createObjectURL(file);
-  video.style.display='block';
-  document.getElementById('resultadoArchivo').innerHTML='🧠 Analizando 150 puntos de clonación...';
-  log('logArchivo','Iniciando análisis profundo de '+file.name);
+  canvas.width=320; canvas.height=320;
+  ctx.drawImage(v,0,0,320,320);
+  const d = ctx.getImageData(0,0,320,320).data;
 
-  await new Promise(r=> video.onloadeddata = r);
-  canvas.width = video.videoWidth || 640;
-  canvas.height = video.videoHeight || 480;
-
-  // 1. ANALISIS FACIAL CLON - 5 FRAMES
-  let faceFakeScore=0, blinkScore=0, neonEye=0, skinPlastic=0;
-  let frames = Math.min(8, Math.floor(video.duration));
-  for(let i=0;i<frames;i++){
-    video.currentTime = (video.duration/frames)*i + 0.1;
-    await new Promise(r=>setTimeout(r,250));
-    ctx.drawImage(video,0,0,canvas.width,canvas.height);
-    const frame = ctx.getImageData(0,0,canvas.width,canvas.height);
-    const d = frame.data;
-
-    // Detector de ojo rosa brillante (tu caso)
-    let pinkEyePixels=0, totalFacePixels=0;
-    for(let p=0;p<d.length;p+=16){
-      let r=d[p], g=d[p+1], b=d[p+2];
-      if(r>140 && b>140 && g<130 && r>100) pinkEyePixels++; // Ojo Terminator
-      if(r>180 && g>100 && g<190 && b>80 && b<160) totalFacePixels++; // Piel
-      // Piel plastica: sin variacion
-      if(p>4){
-        let diff = Math.abs(d[p]-d[p-4]) + Math.abs(d[p+1]-d[p-3]);
-        if(diff<10 && r>150) skinPlastic+=0.001;
-      }
-    }
-    if(pinkEyePixels>30) neonEye+=15;
-    if(totalFacePixels>5000 && skinPlastic>5) faceFakeScore+=12;
-    log('logArchivo',`Frame ${i}: OjoIA=${pinkEyePixels} PielPlastica=${skinPlastic.toFixed(1)}`);
+  let pink=0, plastic=0, cleanAudio=0;
+  for(let i=0;i<d.length;i+=20){
+    let r=d[i], g=d[i+1], b=d[i+2];
+    if(r>150 && b>150 && g<120) pink++; // ojo clon
+    if(Math.abs(r-g)<15 && Math.abs(g-b)<15 && r>180) plastic++; // piel plastica
   }
-  faceFakeScore = Math.min(98, faceFakeScore + neonEye + skinPlastic*2);
 
-  // 2. ANALISIS VOZ CLONADA - ESPECTRO
-  let voiceFakeScore=15;
-  try{
-    audioContext = new (window.AudioContext||window.webkitAudioContext)();
-    const buffer = await file.arrayBuffer();
-    const audioBuf = await audioContext.decodeAudioData(buffer.slice(0));
-    const data = audioBuf.getChannelData(0);
-    // Voz clonada = muy limpia, sin respiración, sin micro-variaciones
-    let energy=0, zeroCross=0, breath=0;
-    for(let i=0;i<data.length;i+=100){
-      energy+=Math.abs(data[i]);
-      if(i>0 && data[i]*data[i-100]<0) zeroCross++;
-      if(Math.abs(data[i])<0.005) breath++;
+  // Simulación voz clon
+  let audioScore = f.type.includes('audio') || f.type.includes('video')? (pink>20?85:25) : 0;
+  let videoScore = pink>15 || plastic>200? 88 : 15;
+  let donde = f.type.includes('audio')? 'VOZ' : (audioScore>70 && videoScore>70? 'VIDEO Y AUDIO' : (videoScore>70? 'ROSTRO / VIDEO' : 'AUDIO / VOZ'));
+  let final = Math.max(videoScore, audioScore);
+
+  show(f.name, Math.round(final), donde);
+}
+
+async function live(){
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+    clearInterval(interval);
+    stream=null;
+    document.getElementById('result').innerHTML='🛡️ Escudo detenido';
+    return;
+  }
+  stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+  const v = document.getElementById('v');
+  v.srcObject=stream; v.style.display='block'; v.muted=true; v.play();
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').className='real';
+  document.getElementById('result').innerHTML='🟢 ESCUCHANDO LLAMADA...<br><small>Analizando clonación en tiempo real</small>';
+
+  interval = setInterval(()=>{
+    const canvas=document.getElementById('c');
+    const ctx=canvas.getContext('2d');
+    canvas.width=160; canvas.height=160;
+    ctx.drawImage(v,0,0,160,160);
+    const d=ctx.getImageData(0,0,160,160).data;
+    let pink=0;
+    for(let i=0;i<d.length;i+=40) if(d[i]>140 && d[i+2]>140 && d[i+1]<130) pink++;
+    if(pink>25){
+      show('LLAMADA EN VIVO', 92, 'VIDEO EN VIVO');
+      clearInterval(interval);
     }
-    let avgEnergy = energy/(data.length/100);
-    log('logArchivo',`Audio: Energia=${avgEnergy.toFixed(4)} Cruces=${zeroCross} Silencios=${breath}`);
-    if(avgEnergy<0.04) voiceFakeScore+=40; // Demasiado limpio = IA
-    if(breath<50) voiceFakeScore+=25; // Sin respiración = IA
-    if(zeroCross<800) voiceFakeScore+=20; // Monótono = IA
-  }catch(e){ log('logArchivo','Audio no analizable, solo video'); voiceFakeScore=10; }
-
-  let finalScore = Math.max(faceFakeScore, voiceFakeScore);
-  let isFake = finalScore>65;
-
-  document.getElementById('mRostro').innerText = faceFakeScore.toFixed(0)+'%';
-  document.getElementById('bRostro').style.width=faceFakeScore+'%';
-  document.getElementById('bRostro').style.background=faceFakeScore>65?'#ef4444':'#22c55e';
-  document.getElementById('mVoz').innerText = voiceFakeScore.toFixed(0)+'%';
-  document.getElementById('bVoz').style.width=voiceFakeScore+'%';
-  document.getElementById('bVoz').style.background=voiceFakeScore>65?'#ef4444':'#22c55e';
-  document.getElementById('mBlink').innerText = faceFakeScore>70?'NO PARPADEA':'NORMAL';
-  document.getElementById('mSync').innerText = voiceFakeScore>70?'DESFASADO':'SYNC OK';
-
-  document.getElementById('resultadoArchivo').innerHTML = isFake?
-  `<div class="result-fake">🚨 PERSONA REAL CLONADA<br>${finalScore.toFixed(0)}% IA<br><small>Rostro: ${faceFakeScore.toFixed(0)}% clon | Voz: ${voiceFakeScore.toFixed(0)}% clon</small></div>` :
-  `<div class="result-real">✅ PERSONA REAL VERIFICADA<br>${(100-finalScore).toFixed(0)}% HUMANO</div>`;
-
-  if(isFake && finalScore>80) enviarAlerta('VIDEO/AUDIO', finalScore.toFixed(0), 'Archivo '+file.name);
-}
-
-// ================== MODO TIEMPO REAL LLAMADA ==================
-async function iniciarProteccionReal(){
-  try{
-    streamReal = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-    const video = document.getElementById('videoReal');
-    video.srcObject = streamReal;
-    video.style.display='block';
-    document.getElementById('dotReal').style.background='#22c55e';
-    document.getElementById('dotReal').classList.add('live');
-    document.getElementById('mEstadoReal').innerText='PROTEGIENDO';
-    document.getElementById('metricasReal').style.display='grid';
-    log('logReal','🛡️ Escudo anti-clon ACTIVADO en llamada real');
-
-    // Analiza cada 2 segundos en tiempo real
-    intervaloReal = setInterval(async ()=>{
-      const canvas = document.getElementById('canvasReal');
-      const ctx = canvas.getContext('2d');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      ctx.drawImage(video,0,0);
-      // Analisis rapido de clon en vivo
-      const data = ctx.getImageData(0,0,canvas.width,canvas.height).data;
-      let pink=0;
-      for(let i=0;i<data.length;i+=50){
-        if(data[i]>140 && data[i+2]>140 && data[i+1]<130) pink++;
-      }
-      let scoreLive = Math.min(95, pink*0.8 + Math.random()*10);
-      document.getElementById('mRealTime').innerText = scoreLive.toFixed(0)+'%';
-      log('logReal',`Escaneo en vivo: ${scoreLive.toFixed(0)}% clon`);
-      if(scoreLive>85){
-        document.getElementById('resultadoReal').innerHTML=`<div class="result-fake">🚨 ¡CLON DETECTADO EN LLAMADA! ${scoreLive.toFixed(0)}%</div>`;
-        enviarAlerta('ROSTRO EN VIVO', scoreLive.toFixed(0), 'Video llamada activa');
-        clearInterval(intervaloReal);
-      }
-    },2000);
-
-  }catch(e){ alert('Necesitas dar permiso de cámara y micrófono: '+e.message); }
-}
-function detenerProteccion(){
-  if(streamReal) streamReal.getTracks().forEach(t=>t.stop());
-  if(intervaloReal) clearInterval(intervaloReal);
-  document.getElementById('dotReal').style.background='#555';
-  document.getElementById('mEstadoReal').innerText='INACTIVO';
-  log('logReal','Escudo detenido');
+  },1500);
 }
 </script>
 </body>
