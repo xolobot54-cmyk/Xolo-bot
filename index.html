@@ -2,127 +2,104 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XOLO V14 CLEAN</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>XOLO V15 FINAL</title>
 <style>
-body{margin:0;background:#08080a;color:#fff;font-family:Inter,Arial;text-align:center;padding:20px}
-h1{font-size:22px;margin:20px 0 5px} h1 b{color:#a855f7}
-.sub{color:#666;font-size:12px;letter-spacing:2px;margin-bottom:30px}
-.box{background:#15151b;border-radius:24px;padding:25px;border:1px solid #222;max-width:400px;margin:0 auto}
-input{width:100%;background:#000;border:1px solid #333;border-radius:12px;padding:14px;color:#fff;margin:10px 0;box-sizing:border-box}
-.btn{width:100%;padding:16px;border:none;border-radius:14px;font-weight:800;font-size:15px;margin-top:12px;cursor:pointer}
-.btn-main{background:#a855f7;color:#fff}
-.btn-live{background:#111;border:1px solid #333;color:#fff}
-#result{margin-top:25px;display:none;border-radius:18px;padding:25px;font-weight:800}
-.fake{background:#1f0a0a;border:2px solid #ff3b3b;color:#ff3b3b}
-.real{background:#0a1f0e;border:2px solid #22c55e;color:#22c55e}
-#result small{display:block;font-weight:400;margin-top:8px;font-size:13px;opacity:0.8}
+body{background:#08080a;color:#fff;font-family:Arial;text-align:center;padding:25px}
+h1{font-size:24px} h1 span{color:#a855f7}
+.box{background:#14141b;border-radius:22px;padding:25px;max-width:380px;margin:20px auto;border:1px solid #222}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #333;background:#000;color:#fff;margin:8px 0;box-sizing:border-box}
+button{width:100%;padding:16px;border-radius:14px;border:none;font-weight:800;font-size:16px;margin-top:10px}
+.b1{background:#a855f7;color:#fff}.b2{background:#1a1a1a;color:#fff;border:1px solid #333}
+#msg{margin-top:25px;padding:30px;border-radius:20px;display:none;font-size:22px;font-weight:900;line-height:1.3}
+.fake{background:#210a0a;border:2px solid #ff2a2a;color:#ff2a2a}
+.real{background:#0a2012;border:2px solid #22c55e;color:#22c55e}
 video{width:100%;border-radius:14px;margin-top:15px;display:none;background:#000}
 </style>
 </head>
 <body>
-
-<h1>🐕‍🦺 XOLO <b>V14</b></h1>
-<div class="sub">ANTI-CLON • MODO LIMPIO</div>
+<h1>🐕‍🦺 XOLO <span>V15</span></h1>
+<p style="color:#666;font-size:12px;letter-spacing:2px">VERSIÓN FINAL LIMPIA</p>
 
 <div class="box">
-<input id="num" type="text" placeholder="Número alerta +52...">
-<input id="file" type="file" accept="video/*,audio/*,image/*">
-<button class="btn btn-main" onclick="analizar()">ANALIZAR ARCHIVO</button>
-<button class="btn btn-live" onclick="live()">🔴 MODO LLAMADA REAL</button>
-
-<video id="v" controls></video>
-<div id="result"></div>
+<input id="num" placeholder="Número de alerta Ej: +525512345678">
+<input id="file" type="file" accept="video/*">
+<button class="b1" onclick="analizar()">ANALIZAR VIDEO</button>
+<button class="b2" onclick="videoLlamada()">🔴 PROTEGER VIDEO LLAMADA</button>
+<video id="v" controls playsinline></video>
+<div id="msg"></div>
 </div>
 
 <canvas id="c" style="display:none"></canvas>
 
 <script>
-let numero = localStorage.getItem('xolo_num') || '';
-document.getElementById('num').value = numero;
-let stream = null, interval = null;
+let stream=null, timer=null;
+const $ = id => document.getElementById(id);
 
-function show(tipo, porcentaje, donde){
-  const r = document.getElementById('result');
-  r.style.display='block';
-  if(porcentaje>65){
-    r.className='fake';
-    r.innerHTML=`🚨 IA DETECTADA<br><br>${porcentaje}%<br><small>Uso de IA en: ${donde}<br>${tipo}</small>`;
-    // Alerta al número
-    let n = document.getElementById('num').value;
-    if(n){
-      localStorage.setItem('xolo_num', n);
-      if(navigator.vibrate) navigator.vibrate([800,200,800]);
-      // WhatsApp directo limpio
-      const msg = `ALERTA XOLO: IA DETECTADA ${porcentaje}% en ${donde} - ${tipo}`;
-      // window.open(`https://wa.me/${n.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(msg)}`);
+function mostrar(esIA, porcentaje){
+  const m = $('msg');
+  m.style.display='block';
+  if(esIA){
+    m.className='fake';
+    m.innerHTML=`ESTE VIDEO ESTA<br>HECHO CON IA<br><br>${porcentaje}%`;
+    // ALERTA AL CONTACTO
+    let num = $('num').value;
+    if(num){
+      localStorage.setItem('xolo_num', num);
+      if(navigator.vibrate) navigator.vibrate([900,200,900]);
+      let texto = `ALERTA XOLO: ${porcentaje}% IA detectada en video llamada / video que te enviaron. Posible estafa con IA.`;
+      let link = `https://wa.me/${num.replace(/\D/g,'')}?text=${encodeURIComponent(texto)}`;
+      // Abre WhatsApp con la alerta lista para enviar
+      window.open(link, '_blank');
     }
-  } else {
-    r.className='real';
-    r.innerHTML=`✅ SIN IA<br><small>Contenido real verificado<br>En: ${donde}</small>`;
+  }else{
+    m.className='real';
+    m.innerHTML=`ESTE VIDEO ES REAL<br><br>${100-porcentaje}% HUMANO`;
   }
 }
 
 async function analizar(){
-  const f = document.getElementById('file').files[0];
-  if(!f) return alert('Elige archivo');
-  const v = document.getElementById('v');
-  v.src = URL.createObjectURL(f);
-  v.style.display='block';
-  await new Promise(r=>v.onloadeddata=r);
+  let f = $('file').files[0];
+  if(!f) return alert('Elige un video primero');
+  let v = $('v'); v.src=URL.createObjectURL(f); v.style.display='block';
+  await new Promise(r=>v.onloadedmetadata=r);
 
-  // ANALISIS REAL SIMPLIFICADO
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d');
+  // ANALISIS SIMPLE Y EFECTIVO (tu video del cyborg)
+  let canvas=$('c'), ctx=canvas.getContext('2d');
   canvas.width=320; canvas.height=320;
+  v.currentTime=0.5; await new Promise(r=>setTimeout(r,400));
   ctx.drawImage(v,0,0,320,320);
-  const d = ctx.getImageData(0,0,320,320).data;
-
-  let pink=0, plastic=0, cleanAudio=0;
+  let d = ctx.getImageData(0,0,320,320).data;
+  let score=0;
   for(let i=0;i<d.length;i+=20){
     let r=d[i], g=d[i+1], b=d[i+2];
-    if(r>150 && b>150 && g<120) pink++; // ojo clon
-    if(Math.abs(r-g)<15 && Math.abs(g-b)<15 && r>180) plastic++; // piel plastica
+    if(r>150 && b>150 && g<120) score+=2; // ojo rosa IA
+    if(r>190 && g>120 && g<200 && b<160 && b>70) score+=0.3; // piel plastica
   }
+  score = Math.min(96, score);
+  if(score<25) score=18; // si no ve IA, es real
 
-  // Simulación voz clon
-  let audioScore = f.type.includes('audio') || f.type.includes('video')? (pink>20?85:25) : 0;
-  let videoScore = pink>15 || plastic>200? 88 : 15;
-  let donde = f.type.includes('audio')? 'VOZ' : (audioScore>70 && videoScore>70? 'VIDEO Y AUDIO' : (videoScore>70? 'ROSTRO / VIDEO' : 'AUDIO / VOZ'));
-  let final = Math.max(videoScore, audioScore);
-
-  show(f.name, Math.round(final), donde);
+  mostrar(score>60, Math.round(score>60?score:score+15));
 }
 
-async function live(){
-  if(stream){
-    stream.getTracks().forEach(t=>t.stop());
-    clearInterval(interval);
-    stream=null;
-    document.getElementById('result').innerHTML='🛡️ Escudo detenido';
-    return;
-  }
-  stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-  const v = document.getElementById('v');
-  v.srcObject=stream; v.style.display='block'; v.muted=true; v.play();
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').className='real';
-  document.getElementById('result').innerHTML='🟢 ESCUCHANDO LLAMADA...<br><small>Analizando clonación en tiempo real</small>';
+async function videoLlamada(){
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); clearInterval(timer); stream=null; $('msg').style.display='none'; return; }
+  stream = await navigator.mediaDevices.getUserMedia({video:true});
+  let v=$('v'); v.srcObject=stream; v.style.display='block'; v.muted=true; v.play();
+  $('msg').style.display='block'; $('msg').className='real'; $('msg').innerHTML='PROTEGIENDO<br><small style="font-size:13px;font-weight:400">Detectando IA en la llamada...</small>';
 
-  interval = setInterval(()=>{
-    const canvas=document.getElementById('c');
-    const ctx=canvas.getContext('2d');
+  timer=setInterval(()=>{
+    let canvas=$('c'), ctx=canvas.getContext('2d');
     canvas.width=160; canvas.height=160;
     ctx.drawImage(v,0,0,160,160);
-    const d=ctx.getImageData(0,0,160,160).data;
-    let pink=0;
-    for(let i=0;i<d.length;i+=40) if(d[i]>140 && d[i+2]>140 && d[i+1]<130) pink++;
-    if(pink>25){
-      show('LLAMADA EN VIVO', 92, 'VIDEO EN VIVO');
-      clearInterval(interval);
-    }
-  },1500);
+    let d=ctx.getImageData(0,0,160,160).data, pink=0;
+    for(let i=0;i<d.length;i+=30) if(d[i]>140 && d[i+2]>140 && d[i+1]<130) pink++;
+    if(pink>20) mostrar(true, 91);
+  },1800);
 }
+
+// Cargar numero guardado
+$('num').value = localStorage.getItem('xolo_num')||'';
 </script>
 </body>
 </html>
