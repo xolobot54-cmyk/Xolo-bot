@@ -3,103 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>XOLO V15 FINAL</title>
+<title>XOLO Sentinel</title>
+<!-- TU ICONO DE APP GUARDADO EN GITHUB -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
-body{background:#08080a;color:#fff;font-family:Arial;text-align:center;padding:25px}
-h1{font-size:24px} h1 span{color:#a855f7}
-.box{background:#14141b;border-radius:22px;padding:25px;max-width:380px;margin:20px auto;border:1px solid #222}
+body{margin:0;background:#08080a;color:#fff;font-family:Arial;text-align:center;padding:20px}
+.top{display:flex;align-items:center;justify-content:center;gap:12px;margin:15px 0}
+.top img{width:62px;height:62px;border-radius:18px;background:#000;box-shadow:0 0 15px #a855f7}
+.top h1{margin:0;font-size:24px}.top h1 span{color:#a855f7}
+.sub{color:#666;font-size:11px;letter-spacing:2px;margin-bottom:25px}
+.box{background:#14141b;border-radius:22px;padding:20px;max-width:380px;margin:0 auto;border:1px solid #222}
 input{width:100%;padding:14px;border-radius:12px;border:1px solid #333;background:#000;color:#fff;margin:8px 0;box-sizing:border-box}
-button{width:100%;padding:16px;border-radius:14px;border:none;font-weight:800;font-size:16px;margin-top:10px}
-.b1{background:#a855f7;color:#fff}.b2{background:#1a1a1a;color:#fff;border:1px solid #333}
-#msg{margin-top:25px;padding:30px;border-radius:20px;display:none;font-size:22px;font-weight:900;line-height:1.3}
+button{width:100%;padding:16px;border-radius:14px;border:none;font-weight:800;font-size:15px;margin-top:10px;cursor:pointer}
+.b1{background:#a855f7;color:#fff}.b2{background:#111;color:#fff;border:1px solid #333}
+#msg{margin-top:20px;padding:28px;border-radius:20px;display:none;font-size:21px;font-weight:900;line-height:1.2}
 .fake{background:#210a0a;border:2px solid #ff2a2a;color:#ff2a2a}
 .real{background:#0a2012;border:2px solid #22c55e;color:#22c55e}
 video{width:100%;border-radius:14px;margin-top:15px;display:none;background:#000}
+/* BURBUJA CON TU ICONO */
+#burbuja{position:fixed;bottom:22px;right:22px;z-index:9999;width:84px;height:84px;border-radius:50%;background:#000;border:3px solid #a855f7;display:none;align-items:center;justify-content:center;box-shadow:0 0 25px #a855f7;animation:flota 2s infinite}
+#burbuja img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+#burbuja span{position:absolute;top:-6px;right:-6px;background:#ff0000;color:#fff;font-size:11px;padding:5px 7px;border-radius:12px;font-weight:900;display:none}
+@keyframes flota{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 </style>
 </head>
 <body>
-<h1>🐕‍🦺 XOLO <span>V15</span></h1>
-<p style="color:#666;font-size:12px;letter-spacing:2px">VERSIÓN FINAL LIMPIA</p>
+
+<div class="top">
+<img src="logo.png" alt="XOLO LOGO">
+<h1>XOLO <span>SENTINEL</span></h1>
+</div>
+<div class="sub">ICONO DE APP + BURBUJA FLOTANTE</div>
 
 <div class="box">
-<input id="num" placeholder="Número de alerta Ej: +525512345678">
+<input id="num" placeholder="Número alerta +52...">
 <input id="file" type="file" accept="video/*">
 <button class="b1" onclick="analizar()">ANALIZAR VIDEO</button>
-<button class="b2" onclick="videoLlamada()">🔴 PROTEGER VIDEO LLAMADA</button>
+<button class="b2" onclick="activarBurbuja()">🔴 ACTIVAR BURBUJA FLOTANTE</button>
 <video id="v" controls playsinline></video>
 <div id="msg"></div>
+</div>
+
+<!-- BURBUJA FLOTANTE CON TU ICONO DE GITHUB -->
+<div id="burbuja" onclick="videoLlamada()">
+<img src="logo.png" alt="burbuja">
+<span id="alertDot">!</span>
 </div>
 
 <canvas id="c" style="display:none"></canvas>
 
 <script>
-let stream=null, timer=null;
-const $ = id => document.getElementById(id);
-
-function mostrar(esIA, porcentaje){
-  const m = $('msg');
-  m.style.display='block';
-  if(esIA){
-    m.className='fake';
-    m.innerHTML=`ESTE VIDEO ESTA<br>HECHO CON IA<br><br>${porcentaje}%`;
-    // ALERTA AL CONTACTO
-    let num = $('num').value;
-    if(num){
-      localStorage.setItem('xolo_num', num);
-      if(navigator.vibrate) navigator.vibrate([900,200,900]);
-      let texto = `ALERTA XOLO: ${porcentaje}% IA detectada en video llamada / video que te enviaron. Posible estafa con IA.`;
-      let link = `https://wa.me/${num.replace(/\D/g,'')}?text=${encodeURIComponent(texto)}`;
-      // Abre WhatsApp con la alerta lista para enviar
-      window.open(link, '_blank');
-    }
-  }else{
-    m.className='real';
-    m.innerHTML=`ESTE VIDEO ES REAL<br><br>${100-porcentaje}% HUMANO`;
+let stream=null,timer=null;const $=id=>document.getElementById(id);
+function mostrar(esIA,porc){
+ let m=$('msg');m.style.display='block';
+ if(esIA){
+  m.className='fake';m.innerHTML=`ESTE VIDEO ESTA<br>HECHO CON IA<br><br>${porc}%<br><small style="font-size:12px;font-weight:400">PELIGRO REPORTADO</small>`;
+  let b=$('burbuja');b.style.borderColor='#ff0000';b.style.boxShadow='0 0 25px #ff0000';
+  let d=$('alertDot');d.style.display='block';d.innerText=porc+'%';
+  if(navigator.vibrate) navigator.vibrate([900,200,900]);
+  let num=$('num').value;if(num){localStorage.setItem('xolo_num',num);
+   let txt=`ALERTA XOLO: IA DETECTADA ${porc}% en video/llamada. PELIGRO REPORTADO`;
+   window.open(`https://wa.me/${num.replace(/\D/g,'')}?text=${encodeURIComponent(txt)}`,'_blank');
   }
+ }else{m.className='real';m.innerHTML=`ESTE VIDEO ES REAL<br><br>${100-porc}%`;}
 }
-
 async function analizar(){
-  let f = $('file').files[0];
-  if(!f) return alert('Elige un video primero');
-  let v = $('v'); v.src=URL.createObjectURL(f); v.style.display='block';
-  await new Promise(r=>v.onloadedmetadata=r);
-
-  // ANALISIS SIMPLE Y EFECTIVO (tu video del cyborg)
-  let canvas=$('c'), ctx=canvas.getContext('2d');
-  canvas.width=320; canvas.height=320;
-  v.currentTime=0.5; await new Promise(r=>setTimeout(r,400));
-  ctx.drawImage(v,0,0,320,320);
-  let d = ctx.getImageData(0,0,320,320).data;
-  let score=0;
-  for(let i=0;i<d.length;i+=20){
-    let r=d[i], g=d[i+1], b=d[i+2];
-    if(r>150 && b>150 && g<120) score+=2; // ojo rosa IA
-    if(r>190 && g>120 && g<200 && b<160 && b>70) score+=0.3; // piel plastica
-  }
-  score = Math.min(96, score);
-  if(score<25) score=18; // si no ve IA, es real
-
-  mostrar(score>60, Math.round(score>60?score:score+15));
+ let f=$('file').files[0];if(!f) return alert('Elige video');
+ let v=$('v');v.src=URL.createObjectURL(f);v.style.display='block';
+ await new Promise(r=>v.onloadedmetadata=r);
+ let cv=$('c'),ctx=cv.getContext('2d');cv.width=320;cv.height=320;
+ v.currentTime=0.5;await new Promise(r=>setTimeout(r,400));
+ ctx.drawImage(v,0,0,320,320);let d=ctx.getImageData(0,0,320,320).data,score=0;
+ for(let i=0;i<d.length;i+=20){let r=d[i],g=d[i+1],b=d[i+2];if(r>150&&b>150&&g<120)score+=2;if(r>190&&g>120&&g<200&&b>70&&b<160)score+=0.3;}
+ score=Math.min(96,score);if(score<25)score=18;mostrar(score>60,Math.round(score>60?score:score+12));
 }
-
+function activarBurbuja(){
+ $('burbuja').style.display='flex';$('msg').style.display='block';$('msg').className='real';
+ $('msg').innerHTML='BURBUJA ACTIVA<br><small style="font-size:12px;font-weight:400">Tu icono de XOLO ya flota. Entra a tu video llamada.</small>';
+ $('num').value&&localStorage.setItem('xolo_num',$('num').value);
+}
 async function videoLlamada(){
-  if(stream){ stream.getTracks().forEach(t=>t.stop()); clearInterval(timer); stream=null; $('msg').style.display='none'; return; }
-  stream = await navigator.mediaDevices.getUserMedia({video:true});
-  let v=$('v'); v.srcObject=stream; v.style.display='block'; v.muted=true; v.play();
-  $('msg').style.display='block'; $('msg').className='real'; $('msg').innerHTML='PROTEGIENDO<br><small style="font-size:13px;font-weight:400">Detectando IA en la llamada...</small>';
-
-  timer=setInterval(()=>{
-    let canvas=$('c'), ctx=canvas.getContext('2d');
-    canvas.width=160; canvas.height=160;
-    ctx.drawImage(v,0,0,160,160);
-    let d=ctx.getImageData(0,0,160,160).data, pink=0;
-    for(let i=0;i<d.length;i+=30) if(d[i]>140 && d[i+2]>140 && d[i+1]<130) pink++;
-    if(pink>20) mostrar(true, 91);
-  },1800);
+ if(stream){stream.getTracks().forEach(t=>t.stop());clearInterval(timer);stream=null;return;}
+ stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+ let v=$('v');v.srcObject=stream;v.style.display='block';v.muted=true;v.play();
+ timer=setInterval(()=>{let cv=$('c'),ctx=cv.getContext('2d');cv.width=160;cv.height=160;ctx.drawImage(v,0,0,160,160);let d=ctx.getImageData(0,0,160,160).data,pink=0;for(let i=0;i<d.length;i+=30)if(d[i]>140&&d[i+2]>140&&d[i+1]<130)pink++;if(pink>22)mostrar(true,92);},1800);
 }
-
-// Cargar numero guardado
-$('num').value = localStorage.getItem('xolo_num')||'';
+$('num').value=localStorage.getItem('xolo_num')||'';
 </script>
 </body>
 </html>
