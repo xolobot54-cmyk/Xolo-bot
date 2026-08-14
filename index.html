@@ -134,15 +134,15 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 <body>
 
 <!-- Botones de las dos esquinas -->
-<button class="btn-esquina btn-ayuda" onclick="abrirAyuda()">❓</button>
-<button class="btn-esquina btn-config" onclick="abrirConfig()">⚙</button>
+<button class="btn-esquina btn-ayuda" id="btnAyuda">❓</button>
+<button class="btn-esquina btn-config" id="btnConfig">⚙</button>
 
 <!-- Pantalla Principal -->
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
   <p id="estadoTexto" class="estado-texto">Sistema listo — Toca el círculo para iniciar</p>
 
-  <div id="xoloPrincipal" class="xolo-contenedor safe" onclick="toggleAnalisis()">
+  <div id="xoloPrincipal" class="xolo-contenedor safe">
     <div class="xolo-nucleo"></div>
   </div>
 
@@ -152,7 +152,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 
 <!-- Pantalla de AYUDA E INSTRUCCIONES -->
 <div id="pantallaAyuda" class="pantalla-emergente">
-  <span class="cerrar" onclick="cerrarAyuda()">✕</span>
+  <span class="cerrar" id="cerrarAyuda">✕</span>
   <div class="contenido-pantalla">
     <h2>📋 Cómo usar XOLO</h2>
 
@@ -180,158 +180,191 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 
 <!-- Pantalla de CONFIGURACIÓN -->
 <div id="pantallaConfig" class="pantalla-emergente">
-  <span class="cerrar" onclick="cerrarConfig()">✕</span>
+  <span class="cerrar" id="cerrarConfig">✕</span>
   <div class="contenido-pantalla">
     <h2>Contacto de Confianza</h2>
     <p>Guarda el número que recibirá el aviso cuando XOLO detecte una voz generada por Inteligencia Artificial. Todo se analiza aquí mismo, tus datos nunca salen de tu dispositivo.</p>
     <label>Número de teléfono</label>
     <input type="tel" id="numeroConfianza" class="inp" placeholder="+52 123 456 7890">
-    <button class="btn-guardar" onclick="guardarNumero()">💾 GUARDAR NÚMERO</button>
+    <button class="btn-guardar" id="btnGuardarNumero">💾 GUARDAR NÚMERO</button>
     <p class="guardado" id="mensajeGuardado">✅ Número guardado correctamente</p>
   </div>
 </div>
 
 <script>
-// Estado
-let numeroConfianza=localStorage.getItem('numeroConfianza')||'';
-let estaAnalizando=false,audioCtx,analyser,mic,raf,historialPuntuacion=[];
-const xolo=document.getElementById('xoloPrincipal'),
-      estadoTexto=document.getElementById('estadoTexto'),
-      accionTexto=document.getElementById('accionTexto'),
-      porcentajeTexto=document.getElementById('porcentajeTexto'),
-      pantallaConfig=document.getElementById('pantallaConfig'),
-      pantallaAyuda=document.getElementById('pantallaAyuda'),
-      inputNumero=document.getElementById('numeroConfianza'),
-      mensajeGuardado=document.getElementById('mensajeGuardado');
+// Esperar a que el DOM esté completamente cargado antes de asignar eventos
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('XOLO cargado correctamente');
+  
+  // Estado
+  let numeroConfianza = localStorage.getItem('numeroConfianza') || '';
+  let estaAnalizando = false, audioCtx, analyser, mic, raf, historialPuntuacion = [];
+  const xolo = document.getElementById('xoloPrincipal'),
+        estadoTexto = document.getElementById('estadoTexto'),
+        accionTexto = document.getElementById('accionTexto'),
+        porcentajeTexto = document.getElementById('porcentajeTexto'),
+        pantallaConfig = document.getElementById('pantallaConfig'),
+        pantallaAyuda = document.getElementById('pantallaAyuda'),
+        inputNumero = document.getElementById('numeroConfianza'),
+        mensajeGuardado = document.getElementById('mensajeGuardado'),
+        btnAyuda = document.getElementById('btnAyuda'),
+        btnConfig = document.getElementById('btnConfig'),
+        cerrarAyuda = document.getElementById('cerrarAyuda'),
+        cerrarConfig = document.getElementById('cerrarConfig'),
+        btnGuardarNumero = document.getElementById('btnGuardarNumero');
 
-// Cargar número guardado
-inputNumero.value=numeroConfianza;
+  // Cargar número guardado
+  inputNumero.value = numeroConfianza;
 
-// Pantalla de AYUDA
-function abrirAyuda(){pantallaAyuda.style.display='block';setTimeout(()=>pantallaAyuda.classList.add('activa'),10)}
-function cerrarAyuda(){pantallaAyuda.classList.remove('activa');setTimeout(()=>pantallaAyuda.style.display='none'),350)}
-
-// Pantalla de CONFIGURACIÓN
-function abrirConfig(){pantallaConfig.style.display='block';setTimeout(()=>pantallaConfig.classList.add('activa'),10)}
-function cerrarConfig(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none'),350)}
-function guardarNumero(){
-  const n=inputNumero.value.trim();
-  if(!n){alert('Escribe un número de teléfono');return}
-  numeroConfianza=n;
-  localStorage.setItem('numeroConfianza',n);
-  mensajeGuardado.style.display='block';
-  setTimeout(()=>mensajeGuardado.style.display='none',3500);
-}
-
-// Cambiar color y estado del núcleo
-function cambiarEstado(nivel,puntuacion=0){
-  document.body.classList.remove('ok','warn','danger');
-  xolo.classList.remove('safe','ok','warn','danger');
-  if(nivel==='ok'){
-    xolo.classList.add('ok');
-    estadoTexto.textContent='✅ Voz verificada como humana';
-    document.body.classList.add('ok');
-  }else if(nivel==='warn'){
-    xolo.classList.add('warn');
-    estadoTexto.textContent='⚠️ Señales sospechosas detectadas';
-    document.body.classList.add('warn');
-  }else if(nivel==='danger'){
-    xolo.classList.add('danger');
-    estadoTexto.textContent='🚨 ALERTA: Posible voz generada por IA';
-    document.body.classList.add('danger');
-    enviarAlerta(puntuacion);
-  }else{
-    xolo.classList.add('safe');
-    estadoTexto.textContent='Sistema listo — Toca el círculo para iniciar';
+  // Funciones de pantalla de AYUDA
+  function abrirAyuda() {
+    pantallaAyuda.style.display = 'block';
+    setTimeout(() => pantallaAyuda.classList.add('activa'), 10);
   }
-  porcentajeTexto.innerHTML=puntuacion>0
-    ?`<span>Probabilidad IA</span><br>${puntuacion} %`
-    :`<span>Probabilidad IA</span><br>— %`;
-}
-
-// Enviar alerta al número guardado
-function enviarAlerta(porc){
-  if(!numeroConfianza){
-    setTimeout(()=>alert('⚠️ Escribe y guarda tu número de confianza primero'),600);
-    return;
+  function cerrarAyudaFunc() {
+    pantallaAyuda.classList.remove('activa');
+    setTimeout(() => pantallaAyuda.style.display = 'none', 350);
   }
-  const hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-  const mensaje=`🚨 ALERTA XOLO ANTI-IA
+
+  // Funciones de pantalla de CONFIGURACIÓN
+  function abrirConfig() {
+    pantallaConfig.style.display = 'block';
+    setTimeout(() => pantallaConfig.classList.add('activa'), 10);
+  }
+  function cerrarConfigFunc() {
+    pantallaConfig.classList.remove('activa');
+    setTimeout(() => pantallaConfig.style.display = 'none', 350);
+  }
+  function guardarNumero() {
+    const n = inputNumero.value.trim();
+    if (!n) { alert('Escribe un número de teléfono'); return; }
+    numeroConfianza = n;
+    localStorage.setItem('numeroConfianza', n);
+    mensajeGuardado.style.display = 'block';
+    setTimeout(() => mensajeGuardado.style.display = 'none', 3500);
+  }
+
+  // Asignar eventos a botones
+  btnAyuda.addEventListener('click', abrirAyuda);
+  cerrarAyuda.addEventListener('click', cerrarAyudaFunc);
+  btnConfig.addEventListener('click', abrirConfig);
+  cerrarConfig.addEventListener('click', cerrarConfigFunc);
+  btnGuardarNumero.addEventListener('click', guardarNumero);
+  xolo.addEventListener('click', toggleAnalisis);
+
+  // Cambiar color y estado del núcleo
+  function cambiarEstado(nivel, puntuacion = 0) {
+    document.body.classList.remove('ok', 'warn', 'danger');
+    xolo.classList.remove('safe', 'ok', 'warn', 'danger');
+    if (nivel === 'ok') {
+      xolo.classList.add('ok');
+      estadoTexto.textContent = '✅ Voz verificada como humana';
+      document.body.classList.add('ok');
+    } else if (nivel === 'warn') {
+      xolo.classList.add('warn');
+      estadoTexto.textContent = '⚠️ Señales sospechosas detectadas';
+      document.body.classList.add('warn');
+    } else if (nivel === 'danger') {
+      xolo.classList.add('danger');
+      estadoTexto.textContent = '🚨 ALERTA: Posible voz generada por IA';
+      document.body.classList.add('danger');
+      enviarAlerta(puntuacion);
+    } else {
+      xolo.classList.add('safe');
+      estadoTexto.textContent = 'Sistema listo — Toca el círculo para iniciar';
+    }
+    porcentajeTexto.innerHTML = puntuacion > 0
+      ? `<span>Probabilidad IA</span><br>${puntuacion} %`
+      : `<span>Probabilidad IA</span><br>— %`;
+  }
+
+  // Enviar alerta al número guardado
+  function enviarAlerta(porc) {
+    if (!numeroConfianza) {
+      setTimeout(() => alert('⚠️ Escribe y guarda tu número de confianza primero'), 600);
+      return;
+    }
+    const hora = new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    const mensaje = `🚨 ALERTA XOLO ANTI-IA
 Se detectó voz con características de Inteligencia Artificial.
 Probabilidad estimada: ${porc}%
 Hora de detección: ${hora}
 Mensaje enviado automáticamente por tu aplicación XOLO.`;
-  window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`,'_blank');
-  if(navigator.vibrate) navigator.vibrate([200,150,200,150,200]);
-}
-
-// Iniciar / Detener análisis tocando el núcleo
-async function toggleAnalisis(){
-  if(!estaAnalizando) iniciarAnalisis();
-  else detenerAnalisis();
-}
-
-async function iniciarAnalisis(){
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    analyser=audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.6;
-    mic=audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
-    estaAnalizando=true; historialPuntuacion=[];
-    accionTexto.textContent='Toca para detener análisis';
-    analizarBucle();
-  }catch(e){alert('Permiso de micrófono necesario: '+e.message)}
-}
-
-function detenerAnalisis(){
-  estaAnalizando=false; cancelAnimationFrame(raf);
-  if(audioCtx) audioCtx.close();
-  accionTexto.textContent='Toca para iniciar análisis';
-  cambiarEstado('safe');
-}
-
-function analizarBucle(){
-  const datosTiempo=new Uint8Array(analyser.fftSize);
-  const datosFrec=new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteTimeDomainData(datosTiempo);
-  analyser.getByteFrequencyData(datosFrec);
-
-  let crucesCero=0;
-  for(let i=1;i<datosTiempo.length;i++){
-    if((datosTiempo[i-1]>128)!==(datosTiempo[i]>128)) crucesCero++;
+    window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`, '_blank');
+    if (navigator.vibrate) navigator.vibrate([200, 150, 200, 150, 200]);
   }
-  const energia=datosTiempo.reduce((s,v)=>s+Math.abs(v-128),0)/datosTiempo.length;
-  const altaFrec=datosFrec.slice(datosFrec.length/2).reduce((a,b)=>a+b,0)/(datosFrec.length/2);
-  const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec.length/4);
-  const planitud=altaFrec/(bajaFrec+1);
 
-  let puntuacion=0;
-  if(energia>6&&energia<16)puntuacion+=30;else if(energia>4&&energia<20)puntuacion+=15;
-  if(crucesCero<350)puntuacion+=20;else if(crucesCero<450)puntuacion+=10;
-  if(planitud>0.45)puntuacion+=35;else if(planitud>0.3)puntuacion+=15;
+  // Iniciar / Detener análisis tocando el núcleo
+  async function toggleAnalisis() {
+    if (!estaAnalizando) iniciarAnalisis();
+    else detenerAnalisis();
+  }
 
-  const recientes=historialPuntuacion.slice(-10);
-  const variacion=recientes.length>1?Math.sqrt(recientes.reduce((a,b)=>a+(b-(recientes.reduce((p,q)=>p+q,0)/recientes.length))**2,0)/(recientes.length-1)):0;
-  if(variacion<6)puntuacion+=15;
+  async function iniciarAnalisis() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.6;
+      mic = audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
+      estaAnalizando = true; historialPuntuacion = [];
+      accionTexto.textContent = 'Toca para detener análisis';
+      analizarBucle();
+    } catch (e) { alert('Permiso de micrófono necesario: ' + e.message); }
+  }
 
-  puntuacion=Math.max(0,Math.min(100,Math.round(puntuacion)));
-  historialPuntuacion.push(puntuacion);
-  if(historialPuntuacion.length>25)historialPuntuacion.shift();
-  const promedio=Math.round(historialPuntuacion.reduce((a,b)=>a+b,0)/historialPuntuacion.length);
+  function detenerAnalisis() {
+    estaAnalizando = false; cancelAnimationFrame(raf);
+    if (audioCtx) audioCtx.close();
+    accionTexto.textContent = 'Toca para iniciar análisis';
+    cambiarEstado('safe');
+  }
 
-  // Cambiar color según resultado
-  if(promedio>75) cambiarEstado('danger',promedio);
-  else if(promedio>45) cambiarEstado('warn',promedio);
-  else if(promedio>15) cambiarEstado('ok',promedio);
-  else cambiarEstado('safe',promedio);
+  function analizarBucle() {
+    const datosTiempo = new Uint8Array(analyser.fftSize);
+    const datosFrec = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(datosTiempo);
+    analyser.getByteFrequencyData(datosFrec);
 
-  estaAnalizando&&(raf=requestAnimationFrame(analizarBucle));
-}
+    let crucesCero = 0;
+    for (let i = 1; i < datosTiempo.length; i++) {
+      if ((datosTiempo[i - 1] > 128) !== (datosTiempo[i] > 128)) crucesCero++;
+    }
+    const energia = datosTiempo.reduce((s, v) => s + Math.abs(v - 128), 0) / datosTiempo.length;
+    const altaFrec = datosFrec.slice(datosFrec.length / 2).reduce((a, b) => a + b, 0) / (datosFrec.length / 2);
+    const bajaFrec = datosFrec.slice(0, datosFrec.length / 4).reduce((a, b) => a + b, 0) / (datosFrec.length / 4);
+    const planitud = altaFrec / (bajaFrec + 1);
 
-// Service Worker
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+    let puntuacion = 0;
+    if (energia > 6 && energia < 16) puntuacion += 30;
+    else if (energia > 4 && energia < 20) puntuacion += 15;
+    if (crucesCero < 350) puntuacion += 20;
+    else if (crucesCero < 450) puntuacion += 10;
+    if (planitud > 0.45) puntuacion += 35;
+    else if (planitud > 0.3) puntuacion += 15;
+
+    const recientes = historialPuntuacion.slice(-10);
+    const variacion = recientes.length > 1 ? Math.sqrt(recientes.reduce((a, b) => a + Math.pow(b - recientes.reduce((p, q) => p + q, 0) / recientes.length, 2), 0) / (recientes.length - 1)) : 0;
+    if (variacion < 6) puntuacion += 15;
+
+    puntuacion = Math.max(0, Math.min(100, Math.round(puntuacion)));
+    historialPuntuacion.push(puntuacion);
+    if (historialPuntuacion.length > 25) historialPuntuacion.shift();
+    const promedio = Math.round(historialPuntuacion.reduce((a, b) => a + b, 0) / historialPuntuacion.length);
+
+    // Cambiar color según resultado
+    if (promedio > 75) cambiarEstado('danger', promedio);
+    else if (promedio > 45) cambiarEstado('warn', promedio);
+    else if (promedio > 15) cambiarEstado('ok', promedio);
+    else cambiarEstado('safe', promedio);
+
+    if (estaAnalizando) raf = requestAnimationFrame(analizarBucle);
+  }
+
+  // Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+});
 </script>
 </body>
 </html>
