@@ -2,404 +2,323 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#0a0a0f">
-<title>XOLO ANTI-IA V12 FIX</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>XOLO ANTI-IA</title>
 <link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#0a0a0f;color:#e5e5e5;min-height:100vh;padding:16px;padding-bottom:100px}
-header{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #1e1e2a;margin-bottom:18px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo img{width:36px;height:36px;border-radius:10px;box-shadow:0 0 15px rgba(168,85,247,.5);background:#000;object-fit:cover}
-.logo b{font-size:18px;letter-spacing:1px;color:#fff}
-.ver{color:#a855f7;font-size:11px;font-weight:700}
-.status{border:1px solid #22c55e;color:#22c55e;background:rgba(34,197,94,.08);padding:10px 14px;border-radius:100px;font-size:12px;font-weight:700;text-align:center;margin-bottom:20px}
-.status.alert{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,.15);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-.card{background:#12121a;border:1px solid #232334;border-radius:16px;padding:20px;margin-bottom:16px}
-.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;transition:opacity .2s}
-.btn:active{opacity:.8}
-.btn-audio{background:#fff;color:#000}
-.btn-audio.rec{background:#ef4444;color:#fff;animation:pulse 1s infinite}
-.btn-video{background:#a855f7;color:#fff;margin-top:12px}
-.meter{height:12px;background:#1a1a25;border-radius:100px;overflow:hidden;margin:12px 0;display:none}
-.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);transition:width .3s ease}
-.result-box{display:none;padding:16px;border-radius:10px;margin-top:12px;font-size:14px;font-weight:800;text-align:center;line-height:1.4}
-.result-box.safe{background:rgba(34,197,94,.1);border:2px solid #22c55e;color:#22c55e}
-.result-box.warn{background:rgba(234,179,8,.1);border:2px solid #eab308;color:#eab308}
-.result-box.danger{background:rgba(239,68,68,.15);border:2px solid #ef4444;color:#ef4444;font-size:20px}
-.inp{background:#0a0a0f;border:1px solid #232334;border-radius:10px;padding:12px;color:#fff;width:100%;font-size:13px}
-#xolo-bubble{
-position:fixed;
-bottom:24px;
-right:20px;
-width:62px;
-height:62px;
-border-radius:50%;
-background:#0a0a0f;
-border:2px solid #a855f7;
-box-shadow:0 0 20px rgba(168,85,247,.7);
-z-index:9999;
-cursor:grab;
-touch-action:none;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:800;
-color:#fff;
-transition:transform .08s ease,box-shadow .08s ease;
+:root{
+  --bg:#000000;
+  --safe:#a855f7;
+  --ok:#22c55e;
+  --warn:#eab308;
+  --danger:#ef4444;
 }
-.xolo-core{
-width:52px;
-height:52px;
-border-radius:50%;
-background:#0a0a0f url('icon-512.png') center/cover no-repeat;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:800;
-color:#fff;
-z-index:4;
+body{
+  background:var(--bg);
+  min-height:100vh;
+  color:#fff;
+  overflow:hidden;
+  transition:background .6s ease;
 }
-.xolo-ring{
-position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-border-radius:50%;
-border:1px solid #a855f7;
-pointer-events:none;
-opacity:.35;
-z-index:3;
+body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
+body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
+
+/* Botón configuración esquina */
+.btn-config{
+  position:absolute;
+  top:18px;right:18px;
+  width:44px;height:44px;
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:#aaa;
+  font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:20;transition:all .25s ease
 }
-.ring1{width:70px;height:70px;border-color:red;}
-.ring2{width:82px;height:82px;opacity:.22;}
-.ring3{width:96px;height:96px;opacity:.12;}
-canvas{width:100%;height:60px;background:#0a0a0f;border-radius:8px;margin-top:10px;display:none}
+.btn-config:hover{color:#fff;border-color:var(--safe)}
+
+/* Pantalla principal */
+.pantalla-principal{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;transition:opacity .3s ease
+}
+.titulo{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
+.estado-texto{font-size:13px;color:#888;margin-bottom:60px}
+
+/* El núcleo brillante con vida */
+.xolo-contenedor{
+  position:relative;cursor:pointer;margin-bottom:40px;transition:transform .2s ease
+}
+.xolo-contenedor:active{transform:scale(.96)}
+.xolo-nucleo{
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:3;
+  box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35);
+  animation:latido 2.8s ease-in-out infinite;
+  transition:all .5s ease
+}
+.xolo-nucleio img{width:110px;height:110px;border-radius:50%;object-fit:cover}
+
+/* Anillos brillantes */
+.anillo{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;border:1px solid currentColor;opacity:.35;
+  animation:girar 12s linear infinite, brillo 3s ease-in-out infinite alternate;
+  transition:all .5s ease
+}
+.anillo1{width:260px;height:260px;animation-duration:7s}
+.anillo2{width:300px;height:300px;opacity:.2;animation-duration:10s;animation-direction:reverse}
+.anillo3{width:340px;height:340px;opacity:.1;animation-duration:14s}
+
+/* Colores según estado */
+.xolo-contenedor.safe .xolo-nucleo{
+  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
+  box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35)
+}
+.xolo-contenedor.ok .xolo-nucleo{
+  background:radial-gradient(circle at 35% 35%,#4ade80,#22c55e 60%,#16a34a);
+  box-shadow:0 0 45px rgba(34,197,94,.5), inset 0 -15px 30px rgba(0,0,0,.35)
+}
+.xolo-contenedor.warn .xolo-nucleo{
+  background:radial-gradient(circle at 35% 35%,#facc15,#eab308 60%,#ca8a04);
+  box-shadow:0 0 50px rgba(234,179,8,.55), inset 0 -15px 30px rgba(0,0,0,.35)
+}
+.xolo-contenedor.danger .xolo-nucleo{
+  background:radial-gradient(circle at 35% 35%,#f87171,#ef4444 60%,#dc2626);
+  box-shadow:0 0 60px rgba(239,68,68,.7), inset 0 -15px 30px rgba(0,0,0,.35);
+  animation:latidoFuerte .9s ease-in-out infinite
+}
+
+/* Animaciones */
+@keyframes latido{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.04)}
+}
+@keyframes latidoFuerte{
+  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(239,68,68,.7)}
+  50%{transform:scale(1.06);box-shadow:0 0 80px rgba(239,68,68,.95)}
+}
+@keyframes girar{
+  from{transform:translate(-50%,-50%) rotate(0deg)}
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+@keyframes brillo{
+  0%{opacity:.2}
+  100%{opacity:.45}
+}
+
+/* Texto inferior */
+.accion{font-size:14px;color:#777;margin-top:10px}
+.porcentaje{font-size:32px;font-weight:800;margin-top:8px}
+.porcentaje span{font-size:16px;color:#888;font-weight:600}
+
+/* Pantalla de configuración */
+.pantalla-config{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:#050508;z-index:30;
+  padding:26px;display:none;opacity:0;transition:opacity .35s ease
+}
+.pantalla-config.activa{display:block;opacity:1}
+.cerrar{
+  position:absolute;top:18px;right:18px;font-size:26px;
+  color:#888;cursor:pointer;transition:color .2s
+}
+.cerrar:hover{color:#fff}
+.config-contenido{margin-top:60px}
+.config-contenido h2{font-size:20px;margin-bottom:24px}
+.config-contenido p{font-size:13px;color:#777;margin-bottom:14px;line-height:1.5}
+label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
+.inp{
+  width:100%;padding:14px 16px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+  color:#fff;font-size:16px;outline:none;margin-bottom:14px
+}
+.inp:focus{border-color:var(--safe)}
+.btn-guardar{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(90deg,#a855f7,#7c3aed);color:#fff;
+  font-weight:800;font-size:15px;cursor:pointer;transition:opacity .2s
+}
+.btn-guardar:active{opacity:.8}
+.guardado{color:#22c55e;font-size:13px;margin-top:12px;display:none}
 </style>
 </head>
 <body>
-<header>
-<div class="logo"><img src="icon-512.png" alt="Logo Xolo"><b>XOLO ANTI-IA</b></div>
-<div class="ver">V12 FIX REAL</div>
-</header>
-<div id="status" class="status">● PROTECCIÓN ACTIVA - MOTOR LOCAL</div>
 
-<div class="card">
-<h2>🎙️ Análisis de Llamada en Vivo</h2>
-<p>Detecta voces artificiales: falta de imperfecciones, variación y respiración natural.</p>
-<button id="btnAudio" class="btn btn-audio" onclick="toggleAudio()">INICIAR ANÁLISIS DE AUDIO</button>
-<canvas id="wave" width="600" height="60"></canvas>
-<div id="meter" class="meter"><div id="fill" class="meter-fill"></div></div>
-<div id="resAudio" class="result-box"></div>
-<div id="stats" style="font-size:11px;color:#6b7280;margin-top:8px;display:none"></div>
+<!-- Pantalla Principal -->
+<div class="pantalla-principal">
+  <button class="btn-config" onclick="abrirConfig()">⚙</button>
+
+  <h1 class="titulo">XOLO ANTI-IA</h1>
+  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca el núcleo para iniciar</p>
+
+  <div id="xoloPrincipal" class="xolo-contenedor safe" onclick="toggleAnalisis()">
+    <div class="anillo anillo1"></div>
+    <div class="anillo anillo2"></div>
+    <div class="anillo anillo3"></div>
+    <div class="xolo-nucleo">
+      <!-- Aquí puedes poner tu icono si quieres, o dejarlo brillante -->
+    </div>
+  </div>
+
+  <p class="accion" id="accionTexto">Toca para iniciar análisis</p>
+  <p class="porcentaje" id="porcentajeTexto"><span>Probabilidad IA</span><br>— %</p>
 </div>
 
-<div class="card">
-<h2>🎬 Análisis de Video</h2>
-<input type="file" id="v" accept="video/*" style="width:100%;background:#0a0a0f;border:1px dashed #2a2a3a;color:#6b7280;padding:12px;border-radius:10px;font-size:12px">
-<button class="btn btn-video" onclick="analizarVideoReal()">ANALIZAR VIDEO</button>
-<div id="resVideo" class="result-box"></div>
-<video id="preview" style="width:100%;margin-top:12px;border-radius:10px;display:none" muted></video>
-<canvas id="c" style="display:none;width:320px;height:240px"></canvas>
-</div>
-
-<div id="xolo-bubble">
-  <div class="xolo-core"></div>
-  <div class="xolo-ring ring1"></div>
-  <div class="xolo-ring ring2"></div>
-  <div class="xolo-ring ring3"></div>
+<!-- Pantalla Configuración -->
+<div id="pantallaConfig" class="pantalla-config">
+  <span class="cerrar" onclick="cerrarConfig()">✕</span>
+  <div class="config-contenido">
+    <h2>Contacto de Confianza</h2>
+    <p>Guarda el número que recibirá el aviso cuando XOLO detecte una voz generada por Inteligencia Artificial. Todo se analiza aquí mismo, tus datos nunca salen de tu dispositivo.</p>
+    <label>Número de teléfono</label>
+    <input type="tel" id="numeroConfianza" class="inp" placeholder="+52 123 456 7890">
+    <button class="btn-guardar" onclick="guardarNumero()">💾 GUARDAR NÚMERO</button>
+    <p class="guardado" id="mensajeGuardado">✅ Número guardado correctamente</p>
+  </div>
 </div>
 
 <script>
-// Burbuja arrastrable
-const b=document.getElementById('xolo-bubble');
-let isD=false,sx,sy,ox=0,oy=0;
-b.addEventListener('touchstart',e=>{
-  isD=true;
-  sx=e.touches[0].clientX;
-  sy=e.touches[0].clientY;
-  const r=b.getBoundingClientRect();
-  ox=r.left;
-  oy=r.top;
-  b.style.left=ox+'px';
-  b.style.top=oy+'px';
-  b.style.right='auto';
-  b.style.bottom='auto';
-},{passive:false});
+// Estado
+let numeroConfianza=localStorage.getItem('numeroConfianza')||'';
+let estaAnalizando=false,audioCtx,analyser,mic,raf,historialPuntuacion=[];
+const xolo=document.getElementById('xoloPrincipal'),
+      estadoTexto=document.getElementById('estadoTexto'),
+      accionTexto=document.getElementById('accionTexto'),
+      porcentajeTexto=document.getElementById('porcentajeTexto'),
+      pantallaConfig=document.getElementById('pantallaConfig'),
+      inputNumero=document.getElementById('numeroConfianza'),
+      mensajeGuardado=document.getElementById('mensajeGuardado');
 
-b.addEventListener('touchmove',e=>{
-  if(!isD)return;
-  e.preventDefault();
-  let nx=ox+e.touches[0].clientX-sx;
-  let ny=oy+e.touches[0].clientY-sy;
-  if(nx<0)nx=0;
-  if(ny<0)ny=0;
-  b.style.left=nx+'px';
-  b.style.top=ny+'px';
-},{passive:false});
+// Cargar número guardado
+inputNumero.value=numeroConfianza;
 
-b.addEventListener('touchend',()=>{isD=false;});
-
-// Soporte para ratón
-let dragging=false,mx,my,px,py;
-b.addEventListener('mousedown',e=>{
-  dragging=true;
-  mx=e.clientX; my=e.clientY;
-  px=parseInt(b.style.left)||0;
-  py=parseInt(b.style.top)||0;
-});
-document.addEventListener('mousemove',e=>{
-  if(!dragging)return;
-  e.preventDefault();
-  const dx=e.clientX-mx;
-  const dy=e.clientY-my;
-  b.style.left=Math.max(0,px+dx)+'px';
-  b.style.top=Math.max(0,py+dy)+'px';
-});
-document.addEventListener('mouseup',()=>{dragging=false;});
-
-// === ANÁLISIS DE AUDIO ===
-let audioCtx,analyser,mic,raf,isRec=false,fakeScoreHistory=[];
-const btnAudio=document.getElementById('btnAudio'),
-      meter=document.getElementById('meter'),
-      fill=document.getElementById('fill'),
-      resAudio=document.getElementById('resAudio'),
-      statusEl=document.getElementById('status'),
-      waveCanvas=document.getElementById('wave'),
-      waveCtx=waveCanvas.getContext('2d'),
-      statsEl=document.getElementById('stats');
-
-async function toggleAudio(){
-  if(!isRec) iniciarAudioReal();
-  else detenerAudio();
+// Pantalla de configuración
+function abrirConfig(){pantallaConfig.style.display='block';setTimeout(()=>pantallaConfig.classList.add('activa'),10)}
+function cerrarConfig(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none'),350}
+function guardarNumero(){
+  const n=inputNumero.value.trim();
+  if(!n){alert('Escribe un número de teléfono');return}
+  numeroConfianza=n;
+  localStorage.setItem('numeroConfianza',n);
+  mensajeGuardado.style.display='block';
+  setTimeout(()=>mensajeGuardado.style.display='none',3500);
 }
 
-async function iniciarAudioReal(){
+// Cambiar color y estado del núcleo
+function cambiarEstado(nivel,puntuacion=0){
+  document.body.classList.remove('ok','warn','danger');
+  xolo.classList.remove('safe','ok','warn','danger');
+  if(nivel==='ok'){
+    xolo.classList.add('ok');
+    estadoTexto.textContent='✅ Voz verificada como humana';
+    document.body.classList.add('ok');
+  }else if(nivel==='warn'){
+    xolo.classList.add('warn');
+    estadoTexto.textContent='⚠️ Señales sospechosas detectadas';
+    document.body.classList.add('warn');
+  }else if(nivel==='danger'){
+    xolo.classList.add('danger');
+    estadoTexto.textContent='🚨 ALERTA: Posible voz generada por IA';
+    document.body.classList.add('danger');
+    enviarAlerta(puntuacion);
+  }else{
+    xolo.classList.add('safe');
+    estadoTexto.textContent='Sistema listo — Toca el núcleo para iniciar';
+  }
+  porcentajeTexto.innerHTML=puntuacion>0
+    ?`<span>Probabilidad IA</span><br>${puntuacion} %`
+    :`<span>Probabilidad IA</span><br>— %`;
+}
+
+// Enviar alerta al número guardado
+function enviarAlerta(porc){
+  if(!numeroConfianza){
+    setTimeout(()=>alert('⚠️ Escribe y guarda tu número de confianza primero'),600);
+    return;
+  }
+  const hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const mensaje=`🚨 ALERTA XOLO ANTI-IA
+Se detectó voz con características de Inteligencia Artificial.
+Probabilidad estimada: ${porc}%
+Hora de detección: ${hora}
+Mensaje enviado automáticamente por tu aplicación XOLO.`;
+  window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`,'_blank');
+  if(navigator.vibrate) navigator.vibrate([200,150,200,150,200]);
+}
+
+// Iniciar / Detener análisis tocando el núcleo
+async function toggleAnalisis(){
+  if(!estaAnalizando) iniciarAnalisis();
+  else detenerAnalisis();
+}
+
+async function iniciarAnalisis(){
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({
-      audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}
-    });
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
     audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    analyser=audioCtx.createAnalyser();
-    analyser.fftSize=2048;
-    analyser.smoothingTimeConstant=0.6;
-    mic=audioCtx.createMediaStreamSource(stream);
-    mic.connect(analyser);
-    isRec=true;
-    btnAudio.textContent='DETENER ANÁLISIS';
-    btnAudio.classList.add('rec');
-    meter.style.display='block';
-    waveCanvas.style.display='block';
-    statsEl.style.display='block';
-    resAudio.style.display='none';
-    fakeScoreHistory=[];
-    statusEl.className='status';
-    statusEl.textContent='● ANALIZANDO AUDIO...';
-    analyzeLoop();
-  }catch(e){
-    alert('Permiso micrófono: '+e.message);
-  }
+    analyser=audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.6;
+    mic=audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
+    estaAnalizando=true; historialPuntuacion=[];
+    accionTexto.textContent='Toca para detener análisis';
+    analizarBucle();
+  }catch(e){alert('Permiso de micrófono necesario: '+e.message)}
 }
 
-function detenerAudio(){
-  isRec=false;
-  cancelAnimationFrame(raf);
+function detenerAnalisis(){
+  estaAnalizando=false; cancelAnimationFrame(raf);
   if(audioCtx) audioCtx.close();
-  btnAudio.textContent='INICIAR ANÁLISIS DE AUDIO';
-  btnAudio.classList.remove('rec');
-  meter.style.display='none';
-  waveCanvas.style.display='none';
-  statusEl.className='status';
-  statusEl.textContent='● PROTECCIÓN ACTIVA - MOTOR LOCAL';
+  accionTexto.textContent='Toca para iniciar análisis';
+  cambiarEstado('safe');
 }
 
-function analyzeLoop(){
-  const data=new Uint8Array(analyser.fftSize);
-  const freq=new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteTimeDomainData(data);
-  analyser.getByteFrequencyData(freq);
+function analizarBucle(){
+  const datosTiempo=new Uint8Array(analyser.fftSize);
+  const datosFrec=new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteTimeDomainData(datosTiempo);
+  analyser.getByteFrequencyData(datosFrec);
 
-  // Dibujar onda
-  waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height);
-  waveCtx.beginPath();
-  waveCtx.strokeStyle='#a855f7';
-  waveCtx.lineWidth=2;
-  for(let i=0;i<data.length;i++){
-    const x=i/data.length*waveCanvas.width;
-    const y=data[i]/128*waveCanvas.height/2;
-    if(i===0) waveCtx.moveTo(x,y);
-    else waveCtx.lineTo(x,y);
+  let crucesCero=0;
+  for(let i=1;i<datosTiempo.length;i++){
+    if((datosTiempo[i-1]>128)!==(datosTiempo[i]>128)) crucesCero++;
   }
-  waveCtx.stroke();
+  const energia=datosTiempo.reduce((s,v)=>s+Math.abs(v-128),0)/datosTiempo.length;
+  const altaFrec=datosFrec.slice(datosFrec.length/2).reduce((a,b)=>a+b,0)/(datosFrec.length/2);
+  const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec/4);
+  const planitud=altaFrec/(bajaFrec+1);
 
-  // Cálculos de detección
-  let zeroCross=0;
-  for(let i=1;i<data.length;i++){
-    if((data[i-1]>128)!=(data[i]>128)) zeroCross++;
-  }
-  const energy=data.reduce((s,v)=>s+Math.abs(v-128),0)/data.length;
-  const highFreq=freq.slice(freq.length/2).reduce((a,b)=>a+b,0)/(freq.length/2);
-  const lowFreq=freq.slice(0,freq.length/4).reduce((a,b)=>a+b,0)/(freq.length/4);
-  const spectralFlatness=highFreq/(lowFreq+1);
+  let puntuacion=0;
+  if(energia>6&&energia<16)puntuacion+=30;else if(energia>4&&energia<20)puntuacion+=15;
+  if(crucesCero<350)puntuacion+=20;else if(crucesCero<450)puntuacion+=10;
+  if(planitud>0.45)puntuacion+=35;else if(planitud>0.3)puntuacion+=15;
 
-  // Puntuación ajustada
-  let fakeScore=0;
-  if(energy>6 && energy<16) fakeScore+=30;
-  else if(energy>4 && energy<20) fakeScore+=15;
+  const recientes=historialPuntuacion.slice(-10);
+  const variacion=recientes.length>1?Math.sqrt(recientes.reduce((a,b)=>a+(b-(recientes.reduce((p,q)=>p+q,0)/recientes.length))**2,0)/(recientes.length-1)):0;
+  if(variacion<6)puntuacion+=15;
 
-  if(zeroCross<350) fakeScore+=20;
-  else if(zeroCross<450) fakeScore+=10;
+  puntuacion=Math.max(0,Math.min(100,Math.round(puntuacion)));
+  historialPuntuacion.push(puntuacion);
+  if(historialPuntuacion.length>25)historialPuntuacion.shift();
+  const promedio=Math.round(historialPuntuacion.reduce((a,b)=>a+b,0)/historialPuntuacion.length);
 
-  if(spectralFlatness>0.45) fakeScore+=35;
-  else if(spectralFlatness>0.3) fakeScore+=15;
+  // Cambiar color según resultado
+  if(promedio>75) cambiarEstado('danger',promedio);
+  else if(promedio>45) cambiarEstado('warn',promedio);
+  else if(promedio>15) cambiarEstado('ok',promedio);
+  else cambiarEstado('safe',promedio);
 
-  // Variabilidad: voces humanas cambian más entre sí
-  const recent=fakeScoreHistory.slice(-10);
-  const variance=recent.length>1 ?
-    Math.sqrt(recent.reduce((a,b)=>a+(b-(recent.reduce((p,q)=>p+q,0)/recent.length))**2,0)/(recent.length-1)) : 0;
-  if(variance<6) fakeScore+=15; // muy estable = sospechoso
-
-  fakeScore=Math.max(0,Math.min(100,fakeScore));
-  fakeScoreHistory.push(fakeScore);
-  if(fakeScoreHistory.length>25) fakeScoreHistory.shift();
-
-  const avgScore=Math.round(fakeScoreHistory.reduce((a,b)=>a+b,0)/fakeScoreHistory.length);
-  fill.style.width=avgScore+'%';
-  statsEl.textContent=`Energía: ${energy.toFixed(1)} | Cruces: ${zeroCross} | Planitud: ${spectralFlatness.toFixed(2)} | Variación: ${variance.toFixed(1)} | Riesgo: ${avgScore}%`;
-
-  // Resultado
-  if(avgScore>75){
-    resAudio.className='result-box danger';
-    resAudio.style.display='block';
-    resAudio.innerHTML='🚨 ALERTA: Voz con alta probabilidad de IA ('+avgScore+'%)';
-    statusEl.className='status alert';
-    statusEl.textContent='⚠️ POSIBLE FRAUDE POR VOZ IA';
-    if(avgScore>85 && navigator.vibrate) navigator.vibrate([200,100,200]);
-  } else if(avgScore>45){
-    resAudio.className='result-box warn';
-    resAudio.style.display='block';
-    resAudio.innerHTML='⚠️ SOSPECHOSO: '+avgScore+'% IA. Verifica la identidad.';
-    statusEl.className='status alert';
-    statusEl.textContent='⚠️ SEÑALES SOSPECHOSAS';
-  } else {
-    resAudio.className='result-box safe';
-    resAudio.style.display='block';
-    resAudio.innerHTML='✅ VOZ HUMANA CONFIRMADA: '+(100-avgScore)+'% natural';
-    statusEl.className='status';
-    statusEl.textContent='● PROTECCIÓN ACTIVA - HUMANO DETECTADO';
-  }
-
-  if(isRec) raf=requestAnimationFrame(analyzeLoop);
+  estaAnalizando&&(raf=requestAnimationFrame(analizarBucle));
 }
 
-// === ANÁLISIS DE VIDEO ===
-async function analizarVideoReal(){
-  const file=document.getElementById('v').files[0];
-  const res=document.getElementById('resVideo');
-  const preview=document.getElementById('preview');
-  const canvas=document.getElementById('c');
-  const ctx=canvas.getContext('2d');
-
-  if(!file){alert('Primero selecciona un video');return;}
-
-  res.style.display='block';
-  res.className='result-box warn';
-  res.innerHTML='🔍 Cargando video...';
-  statusEl.className='status';
-  statusEl.textContent='● Analizando video...';
-
-  preview.src=URL.createObjectURL(file);
-  preview.style.display='block';
-
-  await new Promise((resolve,reject)=>{
-    preview.onloadedmetadata=resolve;
-    preview.onerror=()=>reject('No se pudo cargar el video');
-  });
-
-  canvas.width=320;
-  canvas.height=240;
-
-  // Analizar varios fotogramas para mayor precisión
-  const framesToCheck=5;
-  let totalPink=0, totalNeon=0, totalEdges=0;
-
-  for(let f=0;f<framesToCheck;f++){
-    const timePoint=0.2 + (f * 0.1);
-    preview.currentTime=Math.min(timePoint, preview.duration * 0.3);
-    await new Promise(r=>{preview.onseeked=r;});
-    await new Promise(r=>setTimeout(r,80));
-
-    ctx.drawImage(preview,0,0,canvas.width,canvas.height);
-    const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-    const d=imgData.data;
-
-    let pink=0, neon=0;
-    let edgeScore=0;
-    let prevGray;
-
-    for(let i=0;i<d.length;i+=4){
-      const r=d[i], g=d[i+1], b=d[i+2];
-      const gray=Math.round((r*0.299)+(g*0.587)+(b*0.114));
-
-      // Tonos rosas/magenta típicos de IA
-      if(r>170 && g<110 && b>130 && r>b*0.85) pink++;
-      if(r>190 && g<140 && b>140 && Math.abs(r-b)<60) neon++;
-
-      // Bordes: videos reales tienen más detalle
-      if(prevGray!==undefined){
-        edgeScore+=Math.abs(gray-prevGray);
-      }
-      prevGray=gray;
-    }
-    totalPink+=pink;
-    totalNeon+=neon;
-    totalEdges+=edgeScore/(canvas.width*canvas.height);
-  }
-
-  const avgPink=totalPink/framesToCheck;
-  const avgNeon=totalNeon/framesToCheck;
-  const avgEdge=totalEdges/framesToCheck;
-
-  // Cálculo de porcentaje IA
-  let score=0;
-  if(avgPink>200) score+=40;
-  else if(avgPink>80) score+=20;
-
-  if(avgNeon>150) score+=35;
-  else if(avgNeon>60) score+=15;
-
-  if(avgEdge<12) score+=25; // muy suave = probable IA
-  else if(avgEdge<18) score+=10;
-
-  const porc=Math.min(98, Math.round(score));
-
-  // Resultado final
-  if(porc>=55){
-    res.className='result-box danger';
-    res.innerHTML=`🚨 VIDEO GENERADO POR IA<br><br>${porc}%<br><small style="font-size:12px">Patrones y colores artificiales detectados</small>`;
-    statusEl.className='status alert';
-    statusEl.textContent='🚨 IA DETECTADA: '+porc+'%';
-    if(navigator.vibrate) navigator.vibrate([200,150,200,150,200]);
-  } else if(porc>=35){
-    res.className='result-box warn';
-    res.innerHTML=`⚠️ CONTENIDO SOSPECHOSO<br><br>${porc}% IA<br><small style="font-size:12px">Revisa con atención</small>`;
-    statusEl.className='status alert';
-    statusEl.textContent='⚠️ SOSPECHOSO: '+porc+'% IA';
-  } else {
-    res.className='result-box safe';
-    res.innerHTML=`✅ VIDEO REAL<br><br>${100-porc}% VERIFICADO`;
-    statusEl.className='status';
-    statusEl.textContent='● VIDEO VERIFICADO COMO REAL';
-  }
-}
-
-// Registrar Service Worker
+// Service Worker
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js')
-    .catch(()=>{/* sin error si no existe sw.js */});
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>
