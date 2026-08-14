@@ -26,10 +26,10 @@ body{
 body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
 body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
 
-/* Botón configuración esquina */
-.btn-config{
+/* Botones esquinas */
+.btn-esquina{
   position:absolute;
-  top:18px;right:18px;
+  top:18px;
   width:44px;height:44px;
   border-radius:12px;
   background:rgba(255,255,255,.06);
@@ -39,7 +39,9 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;z-index:20;transition:all .25s ease
 }
-.btn-config:hover{color:#fff;border-color:var(--safe)}
+.btn-esquina:hover{color:#fff;border-color:var(--safe)}
+.btn-ayuda{left:18px}
+.btn-config{right:18px}
 
 /* Pantalla principal */
 .pantalla-principal{
@@ -47,9 +49,9 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   min-height:100vh;padding:20px;transition:opacity .3s ease
 }
 .titulo{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
-.estado-texto{font-size:13px;color:#888;margin-bottom:60px}
+.estado-texto{font-size:13px;color:#888;margin-bottom:60px;text-align:center;line-height:1.5}
 
-/* El núcleo brillante con vida */
+/* El núcleo brillante — SIN AROS */
 .xolo-contenedor{
   position:relative;cursor:pointer;margin-bottom:40px;transition:transform .2s ease
 }
@@ -58,23 +60,10 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   width:220px;height:220px;border-radius:50%;
   background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
   display:flex;align-items:center;justify-content:center;
-  position:relative;z-index:3;
   box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35);
   animation:latido 2.8s ease-in-out infinite;
   transition:all .5s ease
 }
-.xolo-nucleio img{width:110px;height:110px;border-radius:50%;object-fit:cover}
-
-/* Anillos brillantes */
-.anillo{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  border-radius:50%;border:1px solid currentColor;opacity:.35;
-  animation:girar 12s linear infinite, brillo 3s ease-in-out infinite alternate;
-  transition:all .5s ease
-}
-.anillo1{width:260px;height:260px;animation-duration:7s}
-.anillo2{width:300px;height:300px;opacity:.2;animation-duration:10s;animation-direction:reverse}
-.anillo3{width:340px;height:340px;opacity:.1;animation-duration:14s}
 
 /* Colores según estado */
 .xolo-contenedor.safe .xolo-nucleo{
@@ -104,35 +93,28 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(239,68,68,.7)}
   50%{transform:scale(1.06);box-shadow:0 0 80px rgba(239,68,68,.95)}
 }
-@keyframes girar{
-  from{transform:translate(-50%,-50%) rotate(0deg)}
-  to{transform:translate(-50%,-50%) rotate(360deg)}
-}
-@keyframes brillo{
-  0%{opacity:.2}
-  100%{opacity:.45}
-}
 
 /* Texto inferior */
 .accion{font-size:14px;color:#777;margin-top:10px}
 .porcentaje{font-size:32px;font-weight:800;margin-top:8px}
 .porcentaje span{font-size:16px;color:#888;font-weight:600}
 
-/* Pantalla de configuración */
-.pantalla-config{
+/* Pantallas emergentes */
+.pantalla-emergente{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:#050508;z-index:30;
-  padding:26px;display:none;opacity:0;transition:opacity .35s ease
+  padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto
 }
-.pantalla-config.activa{display:block;opacity:1}
+.pantalla-emergente.activa{display:block;opacity:1}
 .cerrar{
   position:absolute;top:18px;right:18px;font-size:26px;
   color:#888;cursor:pointer;transition:color .2s
 }
 .cerrar:hover{color:#fff}
-.config-contenido{margin-top:60px}
-.config-contenido h2{font-size:20px;margin-bottom:24px}
-.config-contenido p{font-size:13px;color:#777;margin-bottom:14px;line-height:1.5}
+.contenido-pantalla{margin-top:60px}
+.contenido-pantalla h2{font-size:20px;margin-bottom:20px}
+.contenido-pantalla p{font-size:14px;color:#aaa;margin-bottom:12px;line-height:1.6}
+.contenido-pantalla h3{font-size:16px;margin:18px 0 8px;color:#ddd}
 label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .inp{
   width:100%;padding:14px 16px;border-radius:12px;
@@ -151,30 +133,55 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 </head>
 <body>
 
+<!-- Botones de las dos esquinas -->
+<button class="btn-esquina btn-ayuda" onclick="abrirAyuda()">❓</button>
+<button class="btn-esquina btn-config" onclick="abrirConfig()">⚙</button>
+
 <!-- Pantalla Principal -->
 <div class="pantalla-principal">
-  <button class="btn-config" onclick="abrirConfig()">⚙</button>
-
   <h1 class="titulo">XOLO ANTI-IA</h1>
-  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca el núcleo para iniciar</p>
+  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca el círculo para iniciar</p>
 
   <div id="xoloPrincipal" class="xolo-contenedor safe" onclick="toggleAnalisis()">
-    <div class="anillo anillo1"></div>
-    <div class="anillo anillo2"></div>
-    <div class="anillo anillo3"></div>
-    <div class="xolo-nucleo">
-      <!-- Aquí puedes poner tu icono si quieres, o dejarlo brillante -->
-    </div>
+    <div class="xolo-nucleo"></div>
   </div>
 
   <p class="accion" id="accionTexto">Toca para iniciar análisis</p>
   <p class="porcentaje" id="porcentajeTexto"><span>Probabilidad IA</span><br>— %</p>
 </div>
 
-<!-- Pantalla Configuración -->
-<div id="pantallaConfig" class="pantalla-config">
+<!-- Pantalla de AYUDA E INSTRUCCIONES -->
+<div id="pantallaAyuda" class="pantalla-emergente">
+  <span class="cerrar" onclick="cerrarAyuda()">✕</span>
+  <div class="contenido-pantalla">
+    <h2>📋 Cómo usar XOLO</h2>
+
+    <h3>📞 En llamadas normales</h3>
+    <p>1. Contesta la llamada y pon el teléfono en <strong>altavoz</strong> 🔊</p>
+    <p>2. Abre XOLO y toca el círculo para que empiece a escuchar</p>
+    <p>3. Deja que analice mientras hablan. Observa los colores del círculo.</p>
+
+    <h3>📹 En videollamadas</h3>
+    <p>1. Pon la llamada en altavoz para que XOLO escuche claramente</p>
+    <p>2. Toca el círculo de XOLO para iniciar el análisis de voz</p>
+
+    <h3>🎨 Qué significan los colores</h3>
+    <p>💜 <strong>Morado</strong> → Sistema listo, sin analizar</p>
+    <p>💚 <strong>Verde</strong> → Voz humana confirmada ✅</p>
+    <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️. Pregunta algo secreto que solo esa persona sepa.</p>
+    <p>🔴 <strong>Rojo brillante</strong> → ¡ALERTA! Posible voz generada por IA 🚨. No des datos ni envíes dinero sin confirmar de otra forma.</p>
+
+    <h3>💡 Consejos de protección</h3>
+    <p>• Acuerda una palabra secreta que solo ustedes sepan</p>
+    <p>• Si te pide dinero urgentemente, confirma por OTRO medio: mensajes, otra llamada, o directamente en persona</p>
+    <p>• Una voz clonada suena demasiado perfecta, sin pausas ni emociones naturales</p>
+  </div>
+</div>
+
+<!-- Pantalla de CONFIGURACIÓN -->
+<div id="pantallaConfig" class="pantalla-emergente">
   <span class="cerrar" onclick="cerrarConfig()">✕</span>
-  <div class="config-contenido">
+  <div class="contenido-pantalla">
     <h2>Contacto de Confianza</h2>
     <p>Guarda el número que recibirá el aviso cuando XOLO detecte una voz generada por Inteligencia Artificial. Todo se analiza aquí mismo, tus datos nunca salen de tu dispositivo.</p>
     <label>Número de teléfono</label>
@@ -193,15 +200,20 @@ const xolo=document.getElementById('xoloPrincipal'),
       accionTexto=document.getElementById('accionTexto'),
       porcentajeTexto=document.getElementById('porcentajeTexto'),
       pantallaConfig=document.getElementById('pantallaConfig'),
+      pantallaAyuda=document.getElementById('pantallaAyuda'),
       inputNumero=document.getElementById('numeroConfianza'),
       mensajeGuardado=document.getElementById('mensajeGuardado');
 
 // Cargar número guardado
 inputNumero.value=numeroConfianza;
 
-// Pantalla de configuración
+// Pantalla de AYUDA
+function abrirAyuda(){pantallaAyuda.style.display='block';setTimeout(()=>pantallaAyuda.classList.add('activa'),10)}
+function cerrarAyuda(){pantallaAyuda.classList.remove('activa');setTimeout(()=>pantallaAyuda.style.display='none'),350)}
+
+// Pantalla de CONFIGURACIÓN
 function abrirConfig(){pantallaConfig.style.display='block';setTimeout(()=>pantallaConfig.classList.add('activa'),10)}
-function cerrarConfig(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none'),350}
+function cerrarConfig(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none'),350)}
 function guardarNumero(){
   const n=inputNumero.value.trim();
   if(!n){alert('Escribe un número de teléfono');return}
@@ -230,7 +242,7 @@ function cambiarEstado(nivel,puntuacion=0){
     enviarAlerta(puntuacion);
   }else{
     xolo.classList.add('safe');
-    estadoTexto.textContent='Sistema listo — Toca el núcleo para iniciar';
+    estadoTexto.textContent='Sistema listo — Toca el círculo para iniciar';
   }
   porcentajeTexto.innerHTML=puntuacion>0
     ?`<span>Probabilidad IA</span><br>${puntuacion} %`
@@ -290,7 +302,7 @@ function analizarBucle(){
   }
   const energia=datosTiempo.reduce((s,v)=>s+Math.abs(v-128),0)/datosTiempo.length;
   const altaFrec=datosFrec.slice(datosFrec.length/2).reduce((a,b)=>a+b,0)/(datosFrec.length/2);
-  const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec/4);
+  const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec.length/4);
   const planitud=altaFrec/(bajaFrec+1);
 
   let puntuacion=0;
