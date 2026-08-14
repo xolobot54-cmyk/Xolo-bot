@@ -26,7 +26,6 @@ body{
 body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
 body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
 
-/* Botones esquinas */
 .btn-esquina{
   position:absolute;
   top:18px;
@@ -43,7 +42,6 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .btn-ayuda{left:18px}
 .btn-config{right:18px}
 
-/* Pantalla principal */
 .pantalla-principal{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:100vh;padding:20px;transition:opacity .3s ease
@@ -51,55 +49,54 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .titulo{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
 .estado-texto{font-size:13px;color:#888;margin-bottom:60px;text-align:center;line-height:1.5}
 
-/* El núcleo brillante — SIN AROS */
 .xolo-contenedor{
   position:relative;cursor:pointer;margin-bottom:40px;transition:transform .2s ease
 }
 .xolo-contenedor:active{transform:scale(.96)}
 .xolo-nucleo{
   width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
   display:flex;align-items:center;justify-content:center;
+  transition:all .5s ease;
+  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
   box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35);
-  animation:latido 2.8s ease-in-out infinite;
-  transition:all .5s ease
 }
 
-/* Colores según estado */
 .xolo-contenedor.safe .xolo-nucleo{
-  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
-  box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35)
+  background:linear-gradient(270deg,#a855f7,#7c3aed,#5b21b6,#8b5cf6,#d946ef,#a855f7);
+  background-size:300% 300%;
+  animation:respiraFuerte 2.2s ease-in-out infinite, coloresFondo 8s ease-in-out infinite alternate;
 }
 .xolo-contenedor.ok .xolo-nucleo{
   background:radial-gradient(circle at 35% 35%,#4ade80,#22c55e 60%,#16a34a);
-  box-shadow:0 0 45px rgba(34,197,94,.5), inset 0 -15px 30px rgba(0,0,0,.35)
+  box-shadow:0 0 45px rgba(34,197,94,.5), inset 0 -15px 30px rgba(0,0,0,.35);
+  animation:respiraFuerte 2.5s ease-in-out infinite;
 }
 .xolo-contenedor.warn .xolo-nucleo{
   background:radial-gradient(circle at 35% 35%,#facc15,#eab308 60%,#ca8a04);
-  box-shadow:0 0 50px rgba(234,179,8,.55), inset 0 -15px 30px rgba(0,0,0,.35)
+  box-shadow:0 0 50px rgba(234,179,8,.55), inset 0 -15px 30px rgba(0,0,0,.35);
+  animation:respiraFuerte 2s ease-in-out infinite;
 }
 .xolo-contenedor.danger .xolo-nucleo{
   background:radial-gradient(circle at 35% 35%,#f87171,#ef4444 60%,#dc2626);
   box-shadow:0 0 60px rgba(239,68,68,.7), inset 0 -15px 30px rgba(0,0,0,.35);
-  animation:latidoFuerte .9s ease-in-out infinite
+  animation:latidoFuerte 0.9s ease-in-out infinite;
 }
 
-/* Animaciones */
-@keyframes latido{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
+@keyframes respiraFuerte{
+  0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(168,85,247,.5), inset 0 -15px 30px rgba(0,0,0,.35)}
+  50%{transform:scale(1.12);box-shadow:0 0 70px rgba(168,85,247,.8), inset 0 -15px 30px rgba(0,0,0,.35)}
 }
 @keyframes latidoFuerte{
   0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(239,68,68,.7)}
-  50%{transform:scale(1.06);box-shadow:0 0 80px rgba(239,68,68,.95)}
+  50%{transform:scale(1.08);box-shadow:0 0 90px rgba(239,68,68,.95)}
+}
+@keyframes coloresFondo{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }
 
-/* Texto inferior */
 .accion{font-size:14px;color:#777;margin-top:10px}
-.porcentaje{font-size:32px;font-weight:800;margin-top:8px}
-.porcentaje span{font-size:16px;color:#888;font-weight:600}
 
-/* Pantallas emergentes */
 .pantalla-emergente{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:#050508;z-index:30;
@@ -133,44 +130,34 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 </head>
 <body>
 
-<!-- Botones de las dos esquinas -->
 <button class="btn-esquina btn-ayuda" id="btnAyuda">❓</button>
 <button class="btn-esquina btn-config" id="btnConfig">⚙</button>
 
-<!-- Pantalla Principal -->
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
   <p id="estadoTexto" class="estado-texto">Sistema listo — Toca el círculo para iniciar</p>
-
   <div id="xoloPrincipal" class="xolo-contenedor safe">
     <div class="xolo-nucleo"></div>
   </div>
-
   <p class="accion" id="accionTexto">Toca para iniciar análisis</p>
-  <p class="porcentaje" id="porcentajeTexto"><span>Probabilidad IA</span><br>— %</p>
 </div>
 
-<!-- Pantalla de AYUDA E INSTRUCCIONES -->
 <div id="pantallaAyuda" class="pantalla-emergente">
   <span class="cerrar" id="cerrarAyuda">✕</span>
   <div class="contenido-pantalla">
     <h2>📋 Cómo usar XOLO</h2>
-
     <h3>📞 En llamadas normales</h3>
     <p>1. Contesta la llamada y pon el teléfono en <strong>altavoz</strong> 🔊</p>
     <p>2. Abre XOLO y toca el círculo para que empiece a escuchar</p>
     <p>3. Deja que analice mientras hablan. Observa los colores del círculo.</p>
-
     <h3>📹 En videollamadas</h3>
     <p>1. Pon la llamada en altavoz para que XOLO escuche claramente</p>
     <p>2. Toca el círculo de XOLO para iniciar el análisis de voz</p>
-
     <h3>🎨 Qué significan los colores</h3>
     <p>💜 <strong>Morado</strong> → Sistema listo, sin analizar</p>
     <p>💚 <strong>Verde</strong> → Voz humana confirmada ✅</p>
     <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️. Pregunta algo secreto que solo esa persona sepa.</p>
     <p>🔴 <strong>Rojo brillante</strong> → ¡ALERTA! Posible voz generada por IA 🚨. No des datos ni envíes dinero sin confirmar de otra forma.</p>
-
     <h3>💡 Consejos de protección</h3>
     <p>• Acuerda una palabra secreta que solo ustedes sepan</p>
     <p>• Si te pide dinero urgentemente, confirma por OTRO medio: mensajes, otra llamada, o directamente en persona</p>
@@ -178,7 +165,6 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
   </div>
 </div>
 
-<!-- Pantalla de CONFIGURACIÓN -->
 <div id="pantallaConfig" class="pantalla-emergente">
   <span class="cerrar" id="cerrarConfig">✕</span>
   <div class="contenido-pantalla">
@@ -192,17 +178,12 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 </div>
 
 <script>
-// Esperar a que el DOM esté completamente cargado antes de asignar eventos
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('XOLO cargado correctamente');
-  
-  // Estado
   let numeroConfianza = localStorage.getItem('numeroConfianza') || '';
   let estaAnalizando = false, audioCtx, analyser, mic, raf, historialPuntuacion = [];
   const xolo = document.getElementById('xoloPrincipal'),
         estadoTexto = document.getElementById('estadoTexto'),
         accionTexto = document.getElementById('accionTexto'),
-        porcentajeTexto = document.getElementById('porcentajeTexto'),
         pantallaConfig = document.getElementById('pantallaConfig'),
         pantallaAyuda = document.getElementById('pantallaAyuda'),
         inputNumero = document.getElementById('numeroConfianza'),
@@ -213,156 +194,127 @@ document.addEventListener('DOMContentLoaded', function() {
         cerrarConfig = document.getElementById('cerrarConfig'),
         btnGuardarNumero = document.getElementById('btnGuardarNumero');
 
-  // Cargar número guardado
   inputNumero.value = numeroConfianza;
 
-  // Funciones de pantalla de AYUDA
-  function abrirAyuda() {
-    pantallaAyuda.style.display = 'block';
-    setTimeout(() => pantallaAyuda.classList.add('activa'), 10);
-  }
-  function cerrarAyudaFunc() {
-    pantallaAyuda.classList.remove('activa');
-    setTimeout(() => pantallaAyuda.style.display = 'none', 350);
-  }
-
-  // Funciones de pantalla de CONFIGURACIÓN
-  function abrirConfig() {
-    pantallaConfig.style.display = 'block';
-    setTimeout(() => pantallaConfig.classList.add('activa'), 10);
-  }
-  function cerrarConfigFunc() {
-    pantallaConfig.classList.remove('activa');
-    setTimeout(() => pantallaConfig.style.display = 'none', 350);
-  }
-  function guardarNumero() {
-    const n = inputNumero.value.trim();
-    if (!n) { alert('Escribe un número de teléfono'); return; }
-    numeroConfianza = n;
-    localStorage.setItem('numeroConfianza', n);
-    mensajeGuardado.style.display = 'block';
-    setTimeout(() => mensajeGuardado.style.display = 'none', 3500);
+  function abrirAyuda(){pantallaAyuda.style.display='block';setTimeout(()=>pantallaAyuda.classList.add('activa'),10)}
+  function cerrarAyudaFunc(){pantallaAyuda.classList.remove('activa');setTimeout(()=>pantallaAyuda.style.display='none',350)}
+  function abrirConfig(){pantallaConfig.style.display='block';setTimeout(()=>pantallaConfig.classList.add('activa'),10)}
+  function cerrarConfigFunc(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none',350)}
+  function guardarNumero(){
+    const n=inputNumero.value.trim();
+    if(!n){alert('Escribe un número de teléfono');return;}
+    numeroConfianza=n;
+    localStorage.setItem('numeroConfianza',n);
+    mensajeGuardado.style.display='block';
+    setTimeout(()=>mensajeGuardado.style.display='none',3500);
   }
 
-  // Asignar eventos a botones
-  btnAyuda.addEventListener('click', abrirAyuda);
-  cerrarAyuda.addEventListener('click', cerrarAyudaFunc);
-  btnConfig.addEventListener('click', abrirConfig);
-  cerrarConfig.addEventListener('click', cerrarConfigFunc);
-  btnGuardarNumero.addEventListener('click', guardarNumero);
-  xolo.addEventListener('click', toggleAnalisis);
+  btnAyuda.addEventListener('click',abrirAyuda);
+  cerrarAyuda.addEventListener('click',cerrarAyudaFunc);
+  btnConfig.addEventListener('click',abrirConfig);
+  cerrarConfig.addEventListener('click',cerrarConfigFunc);
+  btnGuardarNumero.addEventListener('click',guardarNumero);
+  xolo.addEventListener('click',toggleAnalisis);
 
-  // Cambiar color y estado del núcleo
-  function cambiarEstado(nivel, puntuacion = 0) {
-    document.body.classList.remove('ok', 'warn', 'danger');
-    xolo.classList.remove('safe', 'ok', 'warn', 'danger');
-    if (nivel === 'ok') {
+  function cambiarEstado(nivel){
+    document.body.classList.remove('ok','warn','danger');
+    xolo.classList.remove('safe','ok','warn','danger');
+    if(nivel==='ok'){
       xolo.classList.add('ok');
-      estadoTexto.textContent = '✅ Voz verificada como humana';
+      estadoTexto.textContent='✅ Voz verificada como humana';
       document.body.classList.add('ok');
-    } else if (nivel === 'warn') {
+    }else if(nivel==='warn'){
       xolo.classList.add('warn');
-      estadoTexto.textContent = '⚠️ Señales sospechosas detectadas';
+      estadoTexto.textContent='⚠️ Señales sospechosas detectadas';
       document.body.classList.add('warn');
-    } else if (nivel === 'danger') {
+    }else if(nivel==='danger'){
       xolo.classList.add('danger');
-      estadoTexto.textContent = '🚨 ALERTA: Posible voz generada por IA';
+      estadoTexto.textContent='🚨 ALERTA: Posible voz generada por IA';
       document.body.classList.add('danger');
-      enviarAlerta(puntuacion);
-    } else {
+      enviarAlerta();
+    }else{
       xolo.classList.add('safe');
-      estadoTexto.textContent = 'Sistema listo — Toca el círculo para iniciar';
+      estadoTexto.textContent='Sistema listo — Toca el círculo para iniciar';
     }
-    porcentajeTexto.innerHTML = puntuacion > 0
-      ? `<span>Probabilidad IA</span><br>${puntuacion} %`
-      : `<span>Probabilidad IA</span><br>— %`;
   }
 
-  // Enviar alerta al número guardado
-  function enviarAlerta(porc) {
-    if (!numeroConfianza) {
-      setTimeout(() => alert('⚠️ Escribe y guarda tu número de confianza primero'), 600);
+  function enviarAlerta(){
+    if(!numeroConfianza){
+      setTimeout(()=>alert('⚠️ Escribe y guarda tu número de confianza primero'),600);
       return;
     }
-    const hora = new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-    const mensaje = `🚨 ALERTA XOLO ANTI-IA
+    const hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    const mensaje=`🚨 ALERTA XOLO ANTI-IA
 Se detectó voz con características de Inteligencia Artificial.
-Probabilidad estimada: ${porc}%
 Hora de detección: ${hora}
 Mensaje enviado automáticamente por tu aplicación XOLO.`;
-    window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`, '_blank');
-    if (navigator.vibrate) navigator.vibrate([200, 150, 200, 150, 200]);
+    window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`,'_blank');
+    if(navigator.vibrate) navigator.vibrate([200,150,200,150,200]);
   }
 
-  // Iniciar / Detener análisis tocando el núcleo
-  async function toggleAnalisis() {
-    if (!estaAnalizando) iniciarAnalisis();
+  async function toggleAnalisis(){
+    if(!estaAnalizando) iniciarAnalisis();
     else detenerAnalisis();
   }
 
-  async function iniciarAnalisis() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.6;
-      mic = audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
-      estaAnalizando = true; historialPuntuacion = [];
-      accionTexto.textContent = 'Toca para detener análisis';
+  async function iniciarAnalisis(){
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      analyser=audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.6;
+      mic=audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
+      estaAnalizando=true; historialPuntuacion=[];
+      accionTexto.textContent='Toca para detener análisis';
       analizarBucle();
-    } catch (e) { alert('Permiso de micrófono necesario: ' + e.message); }
+    }catch(e){alert('Permiso de micrófono necesario: '+e.message)}
   }
 
-  function detenerAnalisis() {
-    estaAnalizando = false; cancelAnimationFrame(raf);
-    if (audioCtx) audioCtx.close();
-    accionTexto.textContent = 'Toca para iniciar análisis';
+  function detenerAnalisis(){
+    estaAnalizando=false; cancelAnimationFrame(raf);
+    if(audioCtx) audioCtx.close();
+    accionTexto.textContent='Toca para iniciar análisis';
     cambiarEstado('safe');
   }
 
-  function analizarBucle() {
-    const datosTiempo = new Uint8Array(analyser.fftSize);
-    const datosFrec = new Uint8Array(analyser.frequencyBinCount);
+  function analizarBucle(){
+    const datosTiempo=new Uint8Array(analyser.fftSize);
+    const datosFrec=new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteTimeDomainData(datosTiempo);
     analyser.getByteFrequencyData(datosFrec);
 
-    let crucesCero = 0;
-    for (let i = 1; i < datosTiempo.length; i++) {
-      if ((datosTiempo[i - 1] > 128) !== (datosTiempo[i] > 128)) crucesCero++;
+    let crucesCero=0;
+    for(let i=1;i<datosTiempo.length;i++){
+      if((datosTiempo[i-1]>128)!==(datosTiempo[i]>128)) crucesCero++;
     }
-    const energia = datosTiempo.reduce((s, v) => s + Math.abs(v - 128), 0) / datosTiempo.length;
-    const altaFrec = datosFrec.slice(datosFrec.length / 2).reduce((a, b) => a + b, 0) / (datosFrec.length / 2);
-    const bajaFrec = datosFrec.slice(0, datosFrec.length / 4).reduce((a, b) => a + b, 0) / (datosFrec.length / 4);
-    const planitud = altaFrec / (bajaFrec + 1);
+    const energia=datosTiempo.reduce((s,v)=>s+Math.abs(v-128),0)/datosTiempo.length;
+    const altaFrec=datosFrec.slice(datosFrec.length/2).reduce((a,b)=>a+b,0)/(datosFrec.length/2);
+    const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec.length/4);
+    const planitud=altaFrec/(bajaFrec+1);
 
-    let puntuacion = 0;
-    if (energia > 6 && energia < 16) puntuacion += 30;
-    else if (energia > 4 && energia < 20) puntuacion += 15;
-    if (crucesCero < 350) puntuacion += 20;
-    else if (crucesCero < 450) puntuacion += 10;
-    if (planitud > 0.45) puntuacion += 35;
-    else if (planitud > 0.3) puntuacion += 15;
+    let puntuacion=0;
+    if(energia>6&&energia<16)puntuacion+=30;else if(energia>4&&energia<20)puntuacion+=15;
+    if(crucesCero<350)puntuacion+=20;else if(crucesCero<450)puntuacion+=10;
+    if(planitud>0.45)puntuacion+=35;else if(planitud>0.3)puntuacion+=15;
 
-    const recientes = historialPuntuacion.slice(-10);
-    const variacion = recientes.length > 1 ? Math.sqrt(recientes.reduce((a, b) => a + Math.pow(b - recientes.reduce((p, q) => p + q, 0) / recientes.length, 2), 0) / (recientes.length - 1)) : 0;
-    if (variacion < 6) puntuacion += 15;
+    const recientes=historialPuntuacion.slice(-10);
+    const variacion=recientes.length>1?Math.sqrt(recientes.reduce((a,b)=>a+Math.pow(b-recientes.reduce((p,q)=>p+q,0)/recientes.length,2),0)/(recientes.length-1)):0;
+    if(variacion<6)puntuacion+=15;
 
-    puntuacion = Math.max(0, Math.min(100, Math.round(puntuacion)));
+    puntuacion=Math.max(0,Math.min(100,Math.round(puntuacion)));
     historialPuntuacion.push(puntuacion);
-    if (historialPuntuacion.length > 25) historialPuntuacion.shift();
-    const promedio = Math.round(historialPuntuacion.reduce((a, b) => a + b, 0) / historialPuntuacion.length);
+    if(historialPuntuacion.length>25)historialPuntuacion.shift();
+    const promedio=Math.round(historialPuntuacion.reduce((a,b)=>a+b,0)/historialPuntuacion.length);
 
-    // Cambiar color según resultado
-    if (promedio > 75) cambiarEstado('danger', promedio);
-    else if (promedio > 45) cambiarEstado('warn', promedio);
-    else if (promedio > 15) cambiarEstado('ok', promedio);
-    else cambiarEstado('safe', promedio);
+    if(promedio>75) cambiarEstado('danger');
+    else if(promedio>45) cambiarEstado('warn');
+    else if(promedio>15) cambiarEstado('ok');
+    else cambiarEstado('safe');
 
-    if (estaAnalizando) raf = requestAnimationFrame(analizarBucle);
+    if(estaAnalizando) raf=requestAnimationFrame(analizarBucle);
   }
 
-  // Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
   }
 });
 </script>
