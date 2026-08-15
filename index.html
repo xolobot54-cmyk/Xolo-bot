@@ -167,6 +167,14 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   margin-bottom:20px;
 }
 .aviso-importante p{color:#e5e5e5 !important}
+.consejos{
+  background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.25);
+  border-radius:12px;
+  padding:14px;
+  margin-top:16px;
+}
+.consejos p{color:#d1fae5 !important}
 label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .inp{
   width:100%;padding:14px 16px;border-radius:12px;
@@ -246,11 +254,19 @@ video{width:100%;display:block;transform:scaleX(-1)}
     <p><strong>Paso 4:</strong> Cuando termines, vuelve a tocar para detener.</p>
 
     <h3>🎥 ANÁLISIS DE IMAGEN — En videollamadas</h3>
-    <p><strong>Paso 1:</strong> En la videollamada, pon la cara de la otra persona bien visible en tu pantalla.</p>
+    <p><strong>Paso 1:</strong> En la videollamada, deja la cara de la persona bien visible en tu pantalla.</p>
     <p><strong>Paso 2:</strong> Toca la mitad derecha del círculo donde dice <strong>IMAGEN 🎥</strong>.</p>
-    <p><strong>Paso 3:</strong> Apunta la cámara de tu teléfono hacia la pantalla donde ves la videollamada.</p>
-    <p><strong>Paso 4:</strong> XOLO grabará <strong>3 segundos</strong> y analizará el movimiento de la cara.</p>
-    <p><strong>Paso 5:</strong> Recibirás el resultado: si parece real o posiblemente generado por IA.</p>
+    <p><strong>Paso 3:</strong> Tu cámara se encenderá automáticamente. <strong>NO muevas el teléfono.</strong> Déjalo como está.</p>
+    <p><strong>Paso 4:</strong> Espera 3 segundos sin moverlo. XOLO analizará el movimiento de la imagen.</p>
+    <p><strong>Paso 5:</strong> Recibirás el resultado.</p>
+
+    <div class="consejos">
+      <strong>💡 CONSEJOS PARA QUE SEA MÁS PRECISO:</strong>
+      <p>• Que la cara se vea completa y bien iluminada en tu pantalla<br>
+      • No muevas el teléfono mientras graba esos 3 segundos<br>
+      • Que no haya brillos ni reflejos fuertes sobre tu pantalla<br>
+      • Si da sospechoso, confirma por mensaje o llamada de voz</p>
+    </div>
 
     <h3>🎨 Qué significan los colores</h3>
     <p>💜 <strong>Morado</strong> → Sistema listo, sin analizar</p>
@@ -262,7 +278,6 @@ video{width:100%;display:block;transform:scaleX(-1)}
     <p>• Acuerda una palabra secreta que solo ustedes sepan.</p>
     <p>• Si te pide dinero urgentemente, confirma por OTRO medio: mensajes, otra llamada, o directamente en persona.</p>
     <p>• Una voz clonada suena demasiado perfecta, sin pausas ni respiración.</p>
-    <p>• Una imagen clonada por IA se mueve raro: parpadea poco, ojos asimétricos, manos raras, o se ve "demasiado perfecta".</p>
   </div>
 </div>
 
@@ -449,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
       vistaCamara.classList.add('activa');
       resultadoImagen.innerHTML='';
       grabandoVideo=true;
-      accionTexto.textContent='🎥 Grabando... Apunta a la pantalla de la llamada';
+      accionTexto.textContent='🎥 Grabando... NO muevas el teléfono';
 
       // Cuenta 3 segundos
       let segundos=3;
