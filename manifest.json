@@ -2,11 +2,11 @@
   "name": "XOLO ANTI-IA",
   "short_name": "XOLO",
   "description": "Detecta voces e imágenes generadas por Inteligencia Artificial en llamadas y videollamadas",
-  "start_url": "/Xolo-bot/?utm_source=homescreen",
+  "start_url": "/Xolo-bot/?v=beta-prueba",
   "scope": "/Xolo-bot/",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#a855f7",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {
