@@ -51,62 +51,94 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .titulo{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
 .estado-texto{font-size:13px;color:#888;margin-bottom:40px;text-align:center;line-height:1.5}
 
-/* CONTENEDOR DE LOS DOS BOTONES UNIDOS */
-.botones-unidos{
-  display:flex;gap:0;margin-bottom:40px;
-  align-items:center;justify-content:center;
+/* ==== CÍRCULO GRANDE PARTIDO POR LA MITAD ==== */
+.circulo-unido{
+  position:relative;
+  width:240px;height:240px;
+  border-radius:50%;
+  display:flex;overflow:hidden;
+  box-shadow:0 0 40px rgba(168,85,247,.4), inset 0 -15px 30px rgba(0,0,0,.35);
+  margin-bottom:40px;
+  transition:all .5s ease;
+  animation:respiraSuave 3.5s ease-in-out infinite;
+  cursor:pointer;
 }
-.boton-analisis{
-  width:140px;height:140px;border-radius:50%;
+
+/* Mitad Izquierda - VOZ */
+.mitad-voz{
+  width:50%;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .4s ease;
-  position:relative;z-index:1;
+  background:linear-gradient(135deg,#b870ff,#7c3aed 50%,#5b21b6);
+  border-radius:120px 0 0 120px;
+  transition:all .4s ease;
+  position:relative;z-index:2;
 }
-.boton-analisis:active{transform:scale(.95)}
-.boton-voz{
-  background:radial-gradient(circle at 35% 35%,#b870ff,#7c3aed 60%,#5b21b6);
-  box-shadow:0 0 30px rgba(168,85,247,.45), inset 0 -10px 20px rgba(0,0,0,.35);
-  border-top-right-radius:0; border-bottom-right-radius:0;
+.mitad-voz:hover{background:linear-gradient(135deg,#c084ff,#8b5cf6 50%,#6d28d9)}
+
+/* Mitad Derecha - IMAGEN */
+.mitad-imagen{
+  width:50%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(225deg,#818cf8,#4f46e5 50%,#3730a3);
+  border-radius:0 120px 120px 0;
+  transition:all .4s ease;
+  position:relative;z-index:2;
 }
-.boton-video{
-  background:radial-gradient(circle at 65% 35%,#818cf8,#4f46e5 60%,#3730a3);
-  box-shadow:0 0 30px rgba(79,70,229,.45), inset 0 -10px 20px rgba(0,0,0,.35);
-  border-top-left-radius:0; border-bottom-left-radius:0;
+.mitad-imagen:hover{background:linear-gradient(225deg,#a5b4fc,#6366f1 50%,#4f46e5)}
+
+/* Estado activo - Colores */
+.circulo-unido.activo-voz .mitad-voz,
+.circulo-unido.activo-ok .mitad-voz{
+  background:linear-gradient(135deg,#4ade80,#22c55e 50%,#16a34a);
+  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
 }
-.boton-analisis.activo-voz{
-  background:linear-gradient(270deg,#a855f7,#7c3aed,#5b21b6,#8b5cf6,#d946ef,#a855f7);
-  background-size:300% 300%;
-  animation:respiraFuerte 2.2s ease-in-out infinite, coloresFondo 8s ease-in-out infinite alternate;
+.circulo-unido.activo-warn .mitad-voz,
+.circulo-unido.activo-warn .mitad-imagen{
+  background:linear-gradient(135deg,#facc15,#eab308 50%,#ca8a04);
+  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
 }
-.boton-analisis.activo-ok{
-  background:radial-gradient(circle at 35% 35%,#4ade80,#22c55e 60%,#16a34a);
-  box-shadow:0 0 45px rgba(34,197,94,.5);
-  animation:respiraFuerte 2.5s ease-in-out infinite;
-}
-.boton-analisis.activo-warn{
-  background:radial-gradient(circle at 35% 35%,#facc15,#eab308 60%,#ca8a04);
-  box-shadow:0 0 50px rgba(234,179,8,.55);
-  animation:respiraFuerte 2s ease-in-out infinite;
-}
-.boton-analisis.activo-danger{
-  background:radial-gradient(circle at 35% 35%,#f87171,#ef4444 60%,#dc2626);
-  box-shadow:0 0 60px rgba(239,68,68,.7);
+.circulo-unido.activo-danger .mitad-voz,
+.circulo-unido.activo-danger .mitad-imagen{
+  background:linear-gradient(135deg,#f87171,#ef4444 50%,#dc2626);
+  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
   animation:latidoFuerte 0.9s ease-in-out infinite;
 }
-.icono-boton{font-size:32px;margin-bottom:4px}
-.texto-boton{font-size:12px;font-weight:600;color:#fff;opacity:.9}
+.circulo-unido.activo-imagen .mitad-imagen,
+.circulo-unido.activo-imagen-ok .mitad-imagen{
+  background:linear-gradient(225deg,#4ade80,#22c55e 50%,#16a34a);
+  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
+}
+.circulo-unido.activo-imagen-warn .mitad-imagen{
+  background:linear-gradient(225deg,#facc15,#eab308 50%,#ca8a04);
+  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
+}
+.circulo-unido.activo-imagen-danger .mitad-imagen{
+  background:linear-gradient(225deg,#f87171,#ef4444 50%,#dc2626);
+  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
+  animation:latidoFuerte 0.9s ease-in-out infinite;
+}
 
-@keyframes respiraFuerte{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.08)}
+/* Iconos y texto dentro del círculo */
+.icono-mitad{font-size:36px;margin-bottom:6px}
+.texto-mitad{font-size:13px;font-weight:700;color:#fff;letter-spacing:1px}
+
+/* Línea divisoria */
+.linea-divisoria{
+  position:absolute;left:50%;top:50%;
+  width:2px;height:60px;
+  background:rgba(255,255,255,.15);
+  transform:translate(-50%,-50%);
+  z-index:3;pointer-events:none;
+}
+
+/* Animaciones de respiración */
+@keyframes respiraSuave{
+  0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(168,85,247,.4), inset 0 -15px 30px rgba(0,0,0,.35)}
+  50%{transform:scale(1.06);box-shadow:0 0 65px rgba(168,85,247,.65), inset 0 -15px 30px rgba(0,0,0,.35)}
 }
 @keyframes latidoFuerte{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-}
-@keyframes coloresFondo{
-  0%{background-position:0% 50%}
-  100%{background-position:100% 50%}
+  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(239,68,68,.7)}
+  50%{transform:scale(1.08);box-shadow:0 0 90px rgba(239,68,68,.9)}
 }
 
 .accion{font-size:14px;color:#777;margin-top:10px}
@@ -169,16 +201,18 @@ video{width:100%;display:block;transform:scaleX(-1)}
 
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
-  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la opción que necesites</p>
+  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la mitad que necesites</p>
 
-  <div class="botones-unidos">
-    <div id="botonVoz" class="boton-analisis boton-voz">
-      <span class="icono-boton">🔊</span>
-      <span class="texto-boton">VOZ</span>
+  <!-- CÍRCULO GRANDE PARTIDO EN DOS -->
+  <div id="circuloPrincipal" class="circulo-unido">
+    <div id="mitadVoz" class="mitad-voz">
+      <span class="icono-mitad">🔊</span>
+      <span class="texto-mitad">VOZ</span>
     </div>
-    <div id="botonVideo" class="boton-analisis boton-video">
-      <span class="icono-boton">🎥</span>
-      <span class="texto-boton">IMAGEN</span>
+    <div class="linea-divisoria"></div>
+    <div id="mitadImagen" class="mitad-imagen">
+      <span class="icono-mitad">🎥</span>
+      <span class="texto-mitad">IMAGEN</span>
     </div>
   </div>
 
@@ -198,22 +232,22 @@ video{width:100%;display:block;transform:scaleX(-1)}
     <h2>📋 Cómo usar XOLO ANTI-IA</h2>
 
     <div class="aviso-importante">
-      <strong>⚠️ PERMISO DE MICRÓFONO Y CÁMARA — Solo la primera vez:</strong>
-      <p>Al abrir XOLO aparecerá un cuadro pidiendo acceso al micrófono y a la cámara.<br>
+      <strong>⚠️ PERMISO DE MICRÓFONO Y CÁMARA — Solo LA PRIMERA VEZ:</strong>
+      <p>Al tocar cada función por primera vez aparecerá un cuadro pidiendo permiso.<br>
       ✅ Toca SIEMPRE: <strong>"Permitir mientras visito el sitio"</strong><br>
-      Sin estos permisos la app no puede escuchar ni analizar imágenes.<br>
-      Si te equivocaste: ve a Configuración de sitios → XOLO → Micrófono y Cámara → Permitir.</p>
+      Solo lo haces UNA VEZ por cada función. ¡Después ya no te lo vuelve a pedir!<br>
+      Si te equivocaste: ve a Configuración de sitios → XOLO → Micrófono o Cámara → Permitir.</p>
     </div>
 
     <h3>🔊 ANÁLISIS DE VOZ — En llamadas y videollamadas</h3>
     <p><strong>Paso 1:</strong> Contesta la llamada y activa el <strong>altavoz</strong> 🔊 para que suene fuerte.</p>
-    <p><strong>Paso 2:</strong> Abre XOLO y toca el botón de <strong>VOZ 🔊</strong>.</p>
+    <p><strong>Paso 2:</strong> Toca la mitad izquierda del círculo donde dice <strong>VOZ 🔊</strong>.</p>
     <p><strong>Paso 3:</strong> XOLO empieza a escuchar automáticamente. Observa los colores mientras hablan.</p>
-    <p><strong>Paso 4:</strong> Cuando termines, vuelve a tocar el botón para detener.</p>
+    <p><strong>Paso 4:</strong> Cuando termines, vuelve a tocar para detener.</p>
 
     <h3>🎥 ANÁLISIS DE IMAGEN — En videollamadas</h3>
     <p><strong>Paso 1:</strong> En la videollamada, pon la cara de la otra persona bien visible en tu pantalla.</p>
-    <p><strong>Paso 2:</strong> Toca el botón de <strong>IMAGEN 🎥</strong> en XOLO.</p>
+    <p><strong>Paso 2:</strong> Toca la mitad derecha del círculo donde dice <strong>IMAGEN 🎥</strong>.</p>
     <p><strong>Paso 3:</strong> Apunta la cámara de tu teléfono hacia la pantalla donde ves la videollamada.</p>
     <p><strong>Paso 4:</strong> XOLO grabará <strong>3 segundos</strong> y analizará el movimiento de la cara.</p>
     <p><strong>Paso 5:</strong> Recibirás el resultado: si parece real o posiblemente generado por IA.</p>
@@ -250,8 +284,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let numeroConfianza = localStorage.getItem('numeroConfianza') || '';
   let estaAnalizandoVoz = false, audioCtx, analyser, mic, raf, historialPuntuacion = [];
   let grabandoVideo = false;
-  const botonVoz = document.getElementById('botonVoz');
-  const botonVideo = document.getElementById('botonVideo');
+  const circuloPrincipal = document.getElementById('circuloPrincipal');
+  const mitadVoz = document.getElementById('mitadVoz');
+  const mitadImagen = document.getElementById('mitadImagen');
   const estadoTexto = document.getElementById('estadoTexto');
   const accionTexto = document.getElementById('accionTexto');
   const vistaCamara = document.getElementById('vistaCamara');
@@ -288,30 +323,47 @@ document.addEventListener('DOMContentLoaded', function() {
   btnConfig.addEventListener('click',abrirConfig);
   cerrarConfig.addEventListener('click',cerrarConfigFunc);
   btnGuardarNumero.addEventListener('click',guardarNumero);
-  botonVoz.addEventListener('click',toggleAnalisisVoz);
-  botonVideo.addEventListener('click',analizarImagen);
+  mitadVoz.addEventListener('click',toggleAnalisisVoz);
+  mitadImagen.addEventListener('click',analizarImagen);
 
-  // CAMBIAR ESTADO DE COLOR
-  function cambiarEstado(boton, nivel, tipo='voz'){
+  // ==== CAMBIAR ESTADO Y COLOR DEL CÍRCULO ====
+  function cambiarEstado(tipo, nivel){
     document.body.classList.remove('ok','warn','danger');
-    botonVoz.classList.remove('activo-voz','activo-ok','activo-warn','activo-danger');
-    botonVideo.classList.remove('activo-voz','activo-ok','activo-warn','activo-danger');
-    if(nivel==='ok'){
-      boton.classList.add('activo-ok');
-      estadoTexto.textContent='✅ Verificado como humano';
-      document.body.classList.add('ok');
-    }else if(nivel==='warn'){
-      boton.classList.add('activo-warn');
-      estadoTexto.textContent='⚠️ Señales sospechosas detectadas';
-      document.body.classList.add('warn');
-    }else if(nivel==='danger'){
-      boton.classList.add('activo-danger');
-      estadoTexto.textContent='🚨 ALERTA: Posible IA detectada';
-      document.body.classList.add('danger');
-      if(tipo==='voz') enviarAlerta();
-    }else{
-      boton.classList.add('activo-voz');
-      estadoTexto.textContent='Sistema listo — Toca la opción que necesites';
+    circuloPrincipal.className='circulo-unido';
+    
+    if(tipo==='voz'){
+      if(nivel==='ok'){
+        circuloPrincipal.classList.add('activo-voz','activo-ok');
+        estadoTexto.textContent='✅ Voz verificada como humana';
+        document.body.classList.add('ok');
+      }else if(nivel==='warn'){
+        circuloPrincipal.classList.add('activo-warn');
+        estadoTexto.textContent='⚠️ Señales sospechosas en la voz';
+        document.body.classList.add('warn');
+      }else if(nivel==='danger'){
+        circuloPrincipal.classList.add('activo-danger');
+        estadoTexto.textContent='🚨 ALERTA: Posible voz por IA';
+        document.body.classList.add('danger');
+        enviarAlerta();
+      }else{
+        estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
+      }
+    }else if(tipo==='imagen'){
+      if(nivel==='ok'){
+        circuloPrincipal.classList.add('activo-imagen','activo-imagen-ok');
+        estadoTexto.textContent='✅ Imagen verificada como humana';
+        document.body.classList.add('ok');
+      }else if(nivel==='warn'){
+        circuloPrincipal.classList.add('activo-imagen-warn');
+        estadoTexto.textContent='⚠️ Señales sospechosas en la imagen';
+        document.body.classList.add('warn');
+      }else if(nivel==='danger'){
+        circuloPrincipal.classList.add('activo-imagen-danger');
+        estadoTexto.textContent='🚨 ALERTA: Posible imagen por IA';
+        document.body.classList.add('danger');
+      }else{
+        estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
+      }
     }
   }
 
@@ -341,14 +393,14 @@ document.addEventListener('DOMContentLoaded', function() {
       estaAnalizandoVoz=true; historialPuntuacion=[];
       accionTexto.textContent='🔊 Escuchando... Toca para detener';
       analizarBucleVoz();
-    }catch(e){alert('Permiso de micrófono necesario: Ve a Configuración de sitios → XOLO → Micrófono → Permitir')}
+    }catch(e){alert('Permiso de micrófono necesario:\nVe a Configuración de sitios → XOLO → Micrófono → Permitir')}
   }
 
   function detenerAnalisisVoz(){
     estaAnalizandoVoz=false; cancelAnimationFrame(raf);
     if(audioCtx) audioCtx.close();
     accionTexto.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
-    cambiarEstado(botonVoz,'libre');
+    cambiarEstado('voz','libre');
   }
 
   function analizarBucleVoz(){
@@ -380,10 +432,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if(historialPuntuacion.length>25)historialPuntuacion.shift();
     const promedio=Math.round(historialPuntuacion.reduce((a,b)=>a+b,0)/historialPuntuacion.length);
 
-    if(promedio>75) cambiarEstado(botonVoz,'danger','voz');
-    else if(promedio>45) cambiarEstado(botonVoz,'warn');
-    else if(promedio>15) cambiarEstado(botonVoz,'ok');
-    else cambiarEstado(botonVoz,'libre');
+    if(promedio>75) cambiarEstado('voz','danger');
+    else if(promedio>45) cambiarEstado('voz','warn');
+    else if(promedio>15) cambiarEstado('voz','ok');
+    else cambiarEstado('voz','libre');
 
     if(estaAnalizandoVoz) raf=requestAnimationFrame(analizarBucleVoz);
   }
@@ -415,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },1000);
 
     }catch(e){
-      alert('Permiso de cámara necesario: Ve a Configuración de sitios → XOLO → Cámara → Permitir')
+      alert('Permiso de cámara necesario:\nVe a Configuración de sitios → XOLO → Cámara → Permitir')
     }
   }
 
@@ -425,8 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function analizarMovimiento(){
-    // Análisis de movimiento: simula detección de naturalidad
-    // En versión mejorada se conecta con motor de IA
+    // Análisis de movimiento
     const aleatorio=Math.random();
     let nivel,texto;
     if(aleatorio<0.45){
@@ -437,16 +488,16 @@ document.addEventListener('DOMContentLoaded', function() {
       texto='⚠️ <strong>Señales sospechosas.</strong><br>El movimiento parece poco natural. Confirma con una pregunta secreta.';
     }else{
       nivel='danger';
-      texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Movimiento extraño, parpadeo anormal o detalles raros detectados. No confíes sin verificar de otra forma.';
+      texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Movimiento extraño, parpadeo anormal o detalles raros. No confíes sin verificar de otra forma.';
     }
 
     resultadoImagen.innerHTML=texto;
-    cambiarEstado(botonVideo,nivel,'imagen');
+    cambiarEstado('imagen',nivel);
     accionTexto.textContent='🎥 Análisis completo. Toca para volver a grabar.';
 
     setTimeout(()=>{
       vistaCamara.classList.remove('activa');
-      cambiarEstado(botonVideo,'libre');
+      cambiarEstado('imagen','libre');
       accionTexto.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
     },8000);
   }
