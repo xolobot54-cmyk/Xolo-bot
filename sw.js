@@ -16,17 +16,19 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(nombres =>
-      Promise.all(
-        nombres.filter(n => n !== NOMBRE_CACHE).map(n => caches.delete(n))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys().then(nombres => {
+      return Promise.all(
+        nombres.filter(n => n !== NOMBRE_CACHE)
+          .map(n => caches.delete(n))
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request)
-      .then(respuesta => respuesta || fetch(e.request))
+    caches.match(e.request).then(respuesta => {
+      return respuesta || fetch(e.request);
+    })
   );
 });
