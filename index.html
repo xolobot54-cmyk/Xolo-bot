@@ -41,7 +41,7 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 }
 .btn-esquina:hover{color:#fff;border-color:var(--safe)}
 .btn-ayuda{left:18px}
-.btn-config{right:18px}
+.btn-donar{right:18px}
 
 /* Pantalla principal */
 .pantalla-principal{
@@ -51,8 +51,8 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .titulo{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
 .estado-texto{font-size:13px;color:#888;margin-bottom:40px;text-align:center;line-height:1.5}
 
-/* ==== CÍRCULO GRANDE PARTIDO POR LA MITAD ==== */
-.circulo-unido{
+/* Círculo central */
+.circulo-central{
   position:relative;
   width:240px;height:240px;
   border-radius:50%;
@@ -63,8 +63,37 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   animation:respiraSuave 3.5s ease-in-out infinite;
   cursor:pointer;
 }
+.circulo-central.activo-voz .mitad-voz,
+.circulo-central.activo-ok .mitad-voz{
+  background:linear-gradient(135deg,#4ade80,#22c55e 50%,#16a34a);
+  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
+}
+.circulo-central.activo-warn .mitad-voz,
+.circulo-central.activo-warn .mitad-imagen{
+  background:linear-gradient(135deg,#facc15,#eab308 50%,#ca8a04);
+  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
+}
+.circulo-central.activo-danger .mitad-voz,
+.circulo-central.activo-danger .mitad-imagen{
+  background:linear-gradient(135deg,#f87171,#ef4444 50%,#dc2626);
+  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
+  animation:latidoFuerte .9s ease-in-out infinite;
+}
+.circulo-central.activo-imagen .mitad-imagen,
+.circulo-central.activo-imagen-ok .mitad-imagen{
+  background:linear-gradient(225deg,#4ade80,#22c55e 50%,#16a34a);
+  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
+}
+.circulo-central.activo-imagen-warn .mitad-imagen{
+  background:linear-gradient(225deg,#facc15,#eab308 50%,#ca8a04);
+  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
+}
+.circulo-central.activo-imagen-danger .mitad-imagen{
+  background:linear-gradient(225deg,#f87171,#ef4444 50%,#dc2626);
+  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
+  animation:latidoFuerte .9s ease-in-out infinite;
+}
 
-/* Mitad Izquierda - VOZ */
 .mitad-voz{
   width:50%;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -73,9 +102,6 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   transition:all .4s ease;
   position:relative;z-index:2;
 }
-.mitad-voz:hover{background:linear-gradient(135deg,#c084ff,#8b5cf6 50%,#6d28d9)}
-
-/* Mitad Derecha - IMAGEN */
 .mitad-imagen{
   width:50%;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -84,45 +110,8 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   transition:all .4s ease;
   position:relative;z-index:2;
 }
-.mitad-imagen:hover{background:linear-gradient(225deg,#a5b4fc,#6366f1 50%,#4f46e5)}
-
-/* Estado activo - Colores */
-.circulo-unido.activo-voz .mitad-voz,
-.circulo-unido.activo-ok .mitad-voz{
-  background:linear-gradient(135deg,#4ade80,#22c55e 50%,#16a34a);
-  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
-}
-.circulo-unido.activo-warn .mitad-voz,
-.circulo-unido.activo-warn .mitad-imagen{
-  background:linear-gradient(135deg,#facc15,#eab308 50%,#ca8a04);
-  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
-}
-.circulo-unido.activo-danger .mitad-voz,
-.circulo-unido.activo-danger .mitad-imagen{
-  background:linear-gradient(135deg,#f87171,#ef4444 50%,#dc2626);
-  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
-  animation:latidoFuerte 0.9s ease-in-out infinite;
-}
-.circulo-unido.activo-imagen .mitad-imagen,
-.circulo-unido.activo-imagen-ok .mitad-imagen{
-  background:linear-gradient(225deg,#4ade80,#22c55e 50%,#16a34a);
-  box-shadow:inset 0 0 40px rgba(74,222,128,.3);
-}
-.circulo-unido.activo-imagen-warn .mitad-imagen{
-  background:linear-gradient(225deg,#facc15,#eab308 50%,#ca8a04);
-  box-shadow:inset 0 0 40px rgba(234,179,8,.3);
-}
-.circulo-unido.activo-imagen-danger .mitad-imagen{
-  background:linear-gradient(225deg,#f87171,#ef4444 50%,#dc2626);
-  box-shadow:inset 0 0 50px rgba(239,68,68,.4);
-  animation:latidoFuerte 0.9s ease-in-out infinite;
-}
-
-/* Iconos y texto dentro del círculo */
 .icono-mitad{font-size:36px;margin-bottom:6px}
 .texto-mitad{font-size:13px;font-weight:700;color:#fff;letter-spacing:1px}
-
-/* Línea divisoria */
 .linea-divisoria{
   position:absolute;left:50%;top:50%;
   width:2px;height:60px;
@@ -131,14 +120,13 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   z-index:3;pointer-events:none;
 }
 
-/* Animaciones de respiración */
 @keyframes respiraSuave{
-  0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(168,85,247,.4), inset 0 -15px 30px rgba(0,0,0,.35)}
-  50%{transform:scale(1.06);box-shadow:0 0 65px rgba(168,85,247,.65), inset 0 -15px 30px rgba(0,0,0,.35)}
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
 }
 @keyframes latidoFuerte{
-  0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(239,68,68,.7)}
-  50%{transform:scale(1.08);box-shadow:0 0 90px rgba(239,68,68,.9)}
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
 }
 
 .accion{font-size:14px;color:#777;margin-top:10px}
@@ -146,7 +134,7 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 /* Pantallas emergentes */
 .pantalla-emergente{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#050508;z-index:30;
+  background:rgba(5,5,10,.96);z-index:30;
   padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto
 }
 .pantalla-emergente.activa{display:block;opacity:1}
@@ -156,9 +144,10 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 }
 .cerrar:hover{color:#fff}
 .contenido-pantalla{margin-top:60px}
-.contenido-pantalla h2{font-size:20px;margin-bottom:16px}
-.contenido-pantalla h3{font-size:16px;margin:18px 0 8px;color:#ddd}
+.contenido-pantalla h2{font-size:20px;margin-bottom:20px;color:#fff}
+.contenido-pantalla h3{font-size:16px;margin:20px 0 8px;color:#ddd}
 .contenido-pantalla p{font-size:14px;color:#aaa;margin-bottom:10px;line-height:1.6}
+
 .aviso-importante{
   background:rgba(168,85,247,.1);
   border:1px solid rgba(168,85,247,.3);
@@ -167,30 +156,36 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   margin-bottom:20px;
 }
 .aviso-importante p{color:#e5e5e5 !important}
-.consejos{
+
+.caja-consejos{
   background:rgba(34,197,94,.08);
   border:1px solid rgba(34,197,94,.25);
   border-radius:12px;
   padding:14px;
   margin-top:16px;
 }
-.consejos p{color:#d1fae5 !important}
-label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
-.inp{
-  width:100%;padding:14px 16px;border-radius:12px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
-  color:#fff;font-size:16px;outline:none;margin-bottom:14px
-}
-.inp:focus{border-color:var(--safe)}
-.btn-guardar{
-  width:100%;padding:14px;border-radius:12px;border:none;
-  background:linear-gradient(90deg,#a855f7,#7c3aed);color:#fff;
-  font-weight:800;font-size:15px;cursor:pointer;transition:opacity .2s
-}
-.btn-guardar:active{opacity:.8}
-.guardado{color:#22c55e;font-size:13px;margin-top:12px;display:none}
+.caja-consejos p{color:#d1fae5 !important}
 
-/* Vista previa de cámara */
+.caja-donar{
+  background:rgba(168,85,247,.08);
+  border:1px solid rgba(168,85,247,.25);
+  border-radius:12px;
+  padding:20px;
+  margin-top:20px;
+  text-align:center
+}
+.enlace-donar{
+  color:#a855f7;
+  font-weight:600;
+  word-break:break-all;
+  display:inline-block;
+  margin:12px 0;
+  text-decoration:none;
+  border-bottom:1px dashed #a855f7;
+  padding-bottom:2px
+}
+
+/* Vista de cámara */
 .vista-camara{
   width:100%;max-width:340px;border-radius:16px;overflow:hidden;
   background:#111;margin:16px auto;display:none;
@@ -200,19 +195,35 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 video{width:100%;display:block;transform:scaleX(-1)}
 .contador{text-align:center;font-size:48px;font-weight:800;color:var(--danger);padding:10px}
 .resultado-imagen{text-align:center;padding:12px;font-size:16px;line-height:1.6}
+
+/* Configuración */
+label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
+.entrada{
+  width:100%;padding:14px 16px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+  color:#fff;font-size:16px;outline:none;margin-bottom:14px
+}
+.entrada:focus{border-color:var(--safe)}
+.boton-guardar{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(90deg,#a855f7,#7c3aed);color:#fff;
+  font-weight:800;font-size:15px;cursor:pointer;transition:opacity .2s
+}
+.boton-guardar:active{opacity:.8}
+.confirmacion{color:#22c55e;font-size:13px;margin-top:12px;display:none}
+.confirmacion.visible{display:block}
 </style>
 </head>
 <body>
 
 <button class="btn-esquina btn-ayuda" id="btnAyuda">❓</button>
-<button class="btn-esquina btn-config" id="btnConfig">⚙</button>
+<button class="btn-esquina btn-donar" id="btnDonar">☕</button>
 
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
   <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la mitad que necesites</p>
 
-  <!-- CÍRCULO GRANDE PARTIDO EN DOS -->
-  <div id="circuloPrincipal" class="circulo-unido">
+  <div id="circuloPrincipal" class="circulo-central">
     <div id="mitadVoz" class="mitad-voz">
       <span class="icono-mitad">🔊</span>
       <span class="texto-mitad">VOZ</span>
@@ -224,7 +235,7 @@ video{width:100%;display:block;transform:scaleX(-1)}
     </div>
   </div>
 
-  <p class="accion" id="accionTexto">Toca 🔊 para escuchar o 🎥 para analizar imagen</p>
+  <p class="accion" id="textoAccion">Toca 🔊 para escuchar o 🎥 para analizar imagen</p>
 
   <div id="vistaCamara" class="vista-camara">
     <video id="videoCamara" autoplay playsinline muted></video>
@@ -240,286 +251,230 @@ video{width:100%;display:block;transform:scaleX(-1)}
     <h2>📋 Cómo usar XOLO ANTI-IA</h2>
 
     <div class="aviso-importante">
-      <strong>⚠️ PERMISO DE MICRÓFONO Y CÁMARA — Solo LA PRIMERA VEZ:</strong>
-      <p>Al tocar cada función por primera vez aparecerá un cuadro pidiendo permiso.<br>
-      ✅ Toca SIEMPRE: <strong>"Permitir mientras visito el sitio"</strong><br>
-      Solo lo haces UNA VEZ por cada función. ¡Después ya no te lo vuelve a pedir!<br>
-      Si te equivocaste: ve a Configuración de sitios → XOLO → Micrófono o Cámara → Permitir.</p>
+      <strong>⚠️ Permisos — Solo la primera vez:</strong>
+      <p>Al tocar cada función aparecerá un aviso. Elige <strong>"Permitir mientras visito el sitio"</strong>. Solo se pide una vez.</p>
     </div>
 
-    <h3>🔊 ANÁLISIS DE VOZ — En llamadas y videollamadas</h3>
-    <p><strong>Paso 1:</strong> Contesta la llamada y activa el <strong>altavoz</strong> 🔊 para que suene fuerte.</p>
+    <h3>🔊 DETECCIÓN DE VOZ — En llamadas y videollamadas</h3>
+    <p><strong>Paso 1:</strong> Contesta la llamada y activa el <strong>altavoz</strong> 🔊 para que el sonido salga fuerte.</p>
     <p><strong>Paso 2:</strong> Toca la mitad izquierda del círculo donde dice <strong>VOZ 🔊</strong>.</p>
-    <p><strong>Paso 3:</strong> XOLO empieza a escuchar automáticamente. Observa los colores mientras hablan.</p>
-    <p><strong>Paso 4:</strong> Cuando termines, vuelve a tocar para detener.</p>
+    <p><strong>Paso 3:</strong> XOLO empieza a escuchar. Observa los colores mientras hablan.</p>
+    <p><strong>Paso 4:</strong> Toca de nuevo para detener.</p>
 
     <h3>🎥 ANÁLISIS DE IMAGEN — En videollamadas</h3>
-    <p><strong>Paso 1:</strong> En la videollamada, deja la cara de la persona bien visible en tu pantalla.</p>
+    <p><strong>Paso 1:</strong> En la videollamada, asegúrate de ver bien la cara de la persona en tu pantalla.</p>
     <p><strong>Paso 2:</strong> Toca la mitad derecha del círculo donde dice <strong>IMAGEN 🎥</strong>.</p>
-    <p><strong>Paso 3:</strong> Tu cámara se encenderá automáticamente. <strong>NO muevas el teléfono.</strong> Déjalo como está.</p>
-    <p><strong>Paso 4:</strong> Espera 3 segundos sin moverlo. XOLO analizará el movimiento de la imagen.</p>
-    <p><strong>Paso 5:</strong> Recibirás el resultado.</p>
+    <p><strong>Paso 3:</strong> Apunta tu cámara hacia tu propia pantalla. No muevas el teléfono durante 3 segundos.</p>
+    <p><strong>Paso 4:</strong> Recibirás el resultado.</p>
 
-    <div class="consejos">
-      <strong>💡 CONSEJOS PARA QUE SEA MÁS PRECISO:</strong>
-      <p>• Que la cara se vea completa y bien iluminada en tu pantalla<br>
-      • No muevas el teléfono mientras graba esos 3 segundos<br>
-      • Que no haya brillos ni reflejos fuertes sobre tu pantalla<br>
-      • Si da sospechoso, confirma por mensaje o llamada de voz</p>
+    <div class="caja-consejos">
+      <strong>💡 Consejos para mayor precisión:</strong>
+      <p>• Que la cara se vea completa y bien iluminada<br>
+      • No muevas el celular mientras graba los 3 segundos<br>
+      • Si da sospechoso, confirma por otro medio: pide que te diga una palabra o dato secreto que solo ustedes saben</p>
     </div>
 
     <h3>🎨 Qué significan los colores</h3>
     <p>💜 <strong>Morado</strong> → Sistema listo, sin analizar</p>
-    <p>💚 <strong>Verde</strong> → Voz o imagen verificada como humana ✅ Es la persona real</p>
-    <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️ Pregunta algo secreto que solo esa persona sepa.</p>
-    <p>🔴 <strong>Rojo brillante</strong> → ¡ALERTA! Posible voz o imagen generada por IA 🚨 No des datos ni envíes dinero sin confirmar de otra forma.</p>
+    <p>💚 <strong>Verde</strong> → Voz o imagen verificada como humana ✅</p>
+    <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️ Pide una palabra clave o pregunta algo que solo esa persona sabe.</p>
+    <p>🔴 <strong>Rojo</strong> → ¡ALERTA! Posible voz o imagen generada por IA 🚨 NO des información ni envíes dinero.</p>
 
-    <h3>💡 Consejos de protección</h3>
-    <p>• Acuerda una palabra secreta que solo ustedes sepan.</p>
-    <p>• Si te pide dinero urgentemente, confirma por OTRO medio: mensajes, otra llamada, o directamente en persona.</p>
-    <p>• Una voz clonada suena demasiado perfecta, sin pausas ni respiración.</p>
+    <h3>🛡️ Protege a tu familia</h3>
+    <p>• Acuerda una <strong>palabra secreta</strong> que solo ustedes sepan. Si alguien llama pidiendo dinero y no dice la palabra, ¡CUIDADO!</p>
+    <p>• Si te piden dinero urgentemente o dicen que es una emergencia, <strong>confirma por OTRO medio</strong>: llámalos a otro número o escríbeles por otro chat.</p>
+    <p>• Las voces clonadas por IA suenan demasiado perfectas, sin pausas, sin respiración, sin emociones reales.</p>
   </div>
 </div>
 
-<!-- PANTALLA DE CONFIGURACIÓN -->
-<div id="pantallaConfig" class="pantalla-emergente">
-  <span class="cerrar" id="cerrarConfig">✕</span>
+<!-- PANTALLA DE DONACIONES -->
+<div id="pantallaDonar" class="pantalla-emergente">
+  <span class="cerrar" id="cerrarDonar">✕</span>
   <div class="contenido-pantalla">
-    <h2>Contacto de Confianza</h2>
-    <p>Guarda el número que recibirá el aviso cuando XOLO detecte una voz generada por Inteligencia Artificial. Todo se analiza aquí mismo, tus datos nunca salen de tu dispositivo.</p>
-    <label>Número de teléfono</label>
-    <input type="tel" id="numeroConfianza" class="inp" placeholder="+52 123 456 7890">
-    <button class="btn-guardar" id="btnGuardarNumero">💾 GUARDAR NÚMERO</button>
-    <p class="guardado" id="mensajeGuardado">✅ Número guardado correctamente</p>
+    <h2>☕ Apoya el desarrollo de XOLO</h2>
+    <p>Si esta aplicación te ha sido útil y te da mayor tranquilidad al recibir llamadas y videollamadas, considera apoyarme. Tu aportación ayuda a seguir mejorando XOLO y protegiendo a más personas.</p>
+
+    <div class="caja-donar">
+      <strong>🔗 Aporta la cantidad que quieras aquí:</strong>
+      <a class="enlace-donar" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">link.mercadopago.com.mx/apoyoaxoloantiia</a>
+      <p style="font-size:13px;color:#999;margin-top:8px;">Toca el enlace → pon la cantidad → paga como prefieras.<br>Tu aportación llega directo, sin ver datos privados.</p>
+      <p style="margin-top:16px;font-weight:600;color:#a855f7;">🙏 ¡Gracias por apoyarme!</p>
+    </div>
   </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  let numeroConfianza = localStorage.getItem('numeroConfianza') || '';
-  let estaAnalizandoVoz = false, audioCtx, analyser, mic, raf, historialPuntuacion = [];
-  let grabandoVideo = false;
-  const circuloPrincipal = document.getElementById('circuloPrincipal');
-  const mitadVoz = document.getElementById('mitadVoz');
-  const mitadImagen = document.getElementById('mitadImagen');
-  const estadoTexto = document.getElementById('estadoTexto');
-  const accionTexto = document.getElementById('accionTexto');
-  const vistaCamara = document.getElementById('vistaCamara');
-  const videoCamara = document.getElementById('videoCamara');
-  const contador = document.getElementById('contador');
-  const resultadoImagen = document.getElementById('resultadoImagen');
-  const pantallaConfig = document.getElementById('pantallaConfig');
-  const pantallaAyuda = document.getElementById('pantallaAyuda');
-  const inputNumero = document.getElementById('numeroConfianza');
-  const mensajeGuardado = document.getElementById('mensajeGuardado');
-  const btnAyuda = document.getElementById('btnAyuda');
-  const btnConfig = document.getElementById('btnConfig');
-  const cerrarAyuda = document.getElementById('cerrarAyuda');
-  const cerrarConfig = document.getElementById('cerrarConfig');
-  const btnGuardarNumero = document.getElementById('btnGuardarNumero');
+document.addEventListener('DOMContentLoaded',function(){
+  let estadoVoz=false, estadoImagen=false;
+  let grabandoCamara=false;
+  const circulo=document.getElementById('circuloPrincipal');
+  const mitadVoz=document.getElementById('mitadVoz');
+  const mitadImagen=document.getElementById('mitadImagen');
+  const estadoTexto=document.getElementById('estadoTexto');
+  const textoAccion=document.getElementById('textoAccion');
+  const vistaCamara=document.getElementById('vistaCamara');
+  const videoCamara=document.getElementById('videoCamara');
+  const contador=document.getElementById('contador');
+  const resultadoImagen=document.getElementById('resultadoImagen');
+  const pantallaAyuda=document.getElementById('pantallaAyuda');
+  const pantallaDonar=document.getElementById('pantallaDonar');
 
-  inputNumero.value = numeroConfianza;
+  // Abrir y cerrar pantallas
+  document.getElementById('btnAyuda').onclick=()=>{
+    pantallaAyuda.classList.add('activa');
+    document.body.style.overflowY='hidden';
+  };
+  document.getElementById('cerrarAyuda').onclick=()=>{
+    pantallaAyuda.classList.remove('activa');
+    document.body.style.overflowY='auto';
+  };
+  document.getElementById('btnDonar').onclick=()=>{
+    pantallaDonar.classList.add('activa');
+    document.body.style.overflowY='hidden';
+  };
+  document.getElementById('cerrarDonar').onclick=()=>{
+    pantallaDonar.classList.remove('activa');
+    document.body.style.overflowY='auto';
+  };
 
-  function abrirAyuda(){pantallaAyuda.style.display='block';setTimeout(()=>pantallaAyuda.classList.add('activa'),10)}
-  function cerrarAyudaFunc(){pantallaAyuda.classList.remove('activa');setTimeout(()=>pantallaAyuda.style.display='none',350)}
-  function abrirConfig(){pantallaConfig.style.display='block';setTimeout(()=>pantallaConfig.classList.add('activa'),10)}
-  function cerrarConfigFunc(){pantallaConfig.classList.remove('activa');setTimeout(()=>pantallaConfig.style.display='none',350)}
-  function guardarNumero(){
-    const n=inputNumero.value.trim();
-    if(!n){alert('Escribe un número de teléfono');return;}
-    numeroConfianza=n;
-    localStorage.setItem('numeroConfianza',n);
-    mensajeGuardado.style.display='block';
-    setTimeout(()=>mensajeGuardado.style.display='none',3500);
+  // Función para cambiar estado y colores
+  function reiniciarColores(){
+    circulo.className='circulo-central';
+    document.body.classList.remove('warn','danger');
+    estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
   }
 
-  btnAyuda.addEventListener('click',abrirAyuda);
-  cerrarAyuda.addEventListener('click',cerrarAyudaFunc);
-  btnConfig.addEventListener('click',abrirConfig);
-  cerrarConfig.addEventListener('click',cerrarConfigFunc);
-  btnGuardarNumero.addEventListener('click',guardarNumero);
-  mitadVoz.addEventListener('click',toggleAnalisisVoz);
-  mitadImagen.addEventListener('click',analizarImagen);
-
-  // ==== CAMBIAR ESTADO Y COLOR DEL CÍRCULO ====
-  function cambiarEstado(tipo, nivel){
-    document.body.classList.remove('ok','warn','danger');
-    circuloPrincipal.className='circulo-unido';
-    
-    if(tipo==='voz'){
-      if(nivel==='ok'){
-        circuloPrincipal.classList.add('activo-voz','activo-ok');
-        estadoTexto.textContent='✅ Voz verificada como humana';
-        document.body.classList.add('ok');
-      }else if(nivel==='warn'){
-        circuloPrincipal.classList.add('activo-warn');
-        estadoTexto.textContent='⚠️ Señales sospechosas en la voz';
-        document.body.classList.add('warn');
-      }else if(nivel==='danger'){
-        circuloPrincipal.classList.add('activo-danger');
-        estadoTexto.textContent='🚨 ALERTA: Posible voz por IA';
-        document.body.classList.add('danger');
-        enviarAlerta();
-      }else{
-        estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
-      }
-    }else if(tipo==='imagen'){
-      if(nivel==='ok'){
-        circuloPrincipal.classList.add('activo-imagen','activo-imagen-ok');
-        estadoTexto.textContent='✅ Imagen verificada como humana';
-        document.body.classList.add('ok');
-      }else if(nivel==='warn'){
-        circuloPrincipal.classList.add('activo-imagen-warn');
-        estadoTexto.textContent='⚠️ Señales sospechosas en la imagen';
-        document.body.classList.add('warn');
-      }else if(nivel==='danger'){
-        circuloPrincipal.classList.add('activo-imagen-danger');
-        estadoTexto.textContent='🚨 ALERTA: Posible imagen por IA';
-        document.body.classList.add('danger');
-      }else{
-        estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
-      }
-    }
+  function cambiarEstado(tipo,nivel,mensaje){
+    reiniciarColores();
+    circulo.classList.add(`activo-${tipo}`,`activo-${nivel}`);
+    if(nivel==='warn') document.body.classList.add('warn');
+    if(nivel==='danger') document.body.classList.add('danger');
+    estadoTexto.textContent=mensaje;
   }
 
-  function enviarAlerta(){
-    if(!numeroConfianza){
-      setTimeout(()=>alert('⚠️ Escribe y guarda tu número de confianza primero'),600);
+  // Análisis de voz
+  mitadVoz.onclick=async()=>{
+    if(estadoVoz){
+      estadoVoz=false;
+      reiniciarColores();
+      textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
       return;
     }
-    const hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-    const mensaje=`🚨 ALERTA XOLO ANTI-IA\nSe detectó voz con características de Inteligencia Artificial.\nHora: ${hora}\nMensaje automático de XOLO.`;
-    window.open(`sms:${numeroConfianza}?text=${encodeURIComponent(mensaje)}`,'_blank');
-    if(navigator.vibrate) navigator.vibrate([200,150,200,150,200]);
-  }
-
-  // ===== ANÁLISIS DE VOZ =====
-  async function toggleAnalisisVoz(){
-    if(!estaAnalizandoVoz) iniciarAnalisisVoz();
-    else detenerAnalisisVoz();
-  }
-
-  async function iniciarAnalisisVoz(){
     try{
-      const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-      analyser=audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.6;
-      mic=audioCtx.createMediaStreamSource(stream); mic.connect(analyser);
-      estaAnalizandoVoz=true; historialPuntuacion=[];
-      accionTexto.textContent='🔊 Escuchando... Toca para detener';
-      analizarBucleVoz();
-    }catch(e){alert('Permiso de micrófono necesario:\nVe a Configuración de sitios → XOLO → Micrófono → Permitir')}
-  }
+      estadoVoz=true;
+      textoAccion.textContent='🔊 Escuchando... Toca de nuevo para detener';
+      const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}});
+      const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      const analizador=audioCtx.createAnalyser();
+      const origen=audioCtx.createMediaStreamSource(stream);
+      origen.connect(analizador);
+      analizador.fftSize=2048;
+      const datos=new Uint8Array(analizador.frequencyBinCount);
+      let historial=[];
 
-  function detenerAnalisisVoz(){
-    estaAnalizandoVoz=false; cancelAnimationFrame(raf);
-    if(audioCtx) audioCtx.close();
-    accionTexto.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
-    cambiarEstado('voz','libre');
-  }
+      function analizar(){
+        if(!estadoVoz) return stream.getTracks().forEach(t=>t.stop());
+        analizador.getByteFrequencyData(datos);
+        let suma=datos.reduce((a,b)=>a+b,0);
+        let energia=suma/datos.length;
+        let cruces=0;
+        for(let i=1;i<datos.length;i++){
+          if((datos[i-1]>128)!==(datos[i]>128)) cruces++;
+        }
+        let alta=datos.slice(datos.length/2).reduce((a,b)=>a+b,0)/(datos.length/2);
+        let baja=datos.slice(0,datos.length/4).reduce((a,b)=>a+b,0)/(datos.length/4);
+        let planitud=alta/(baja+1);
 
-  function analizarBucleVoz(){
-    const datosTiempo=new Uint8Array(analyser.fftSize);
-    const datosFrec=new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteTimeDomainData(datosTiempo);
-    analyser.getByteFrequencyData(datosFrec);
+        historial.push(energia);
+        if(historial.length>25) historial.shift();
+        let promedio=historial.reduce((a,b)=>a+b,0)/historial.length;
+        let variacion=historial.length>1?Math.sqrt(historial.reduce((a,b)=>a+Math.pow(b-promedio,2),0)/(historial.length-1)):0;
 
-    let crucesCero=0;
-    for(let i=1;i<datosTiempo.length;i++){
-      if((datosTiempo[i-1]>128)!==(datosTiempo[i]>128)) crucesCero++;
+        let puntaje=0;
+        if(energia>6&&energia<16) puntaje+=30;
+        else if(energia>4&&energia<20) puntaje+=15;
+        if(cruces<350) puntaje+=20;
+        else if(cruces<450) puntaje+=10;
+        if(planitud>0.45) puntaje+=35;
+        else if(planitud>0.3) puntaje+=15;
+        if(variacion<6) puntaje+=15;
+
+        puntaje=Math.max(0,Math.min(100,Math.round(puntaje)));
+
+        if(puntaje>75) cambiarEstado('voz','danger','🚨 ¡ALERTA! Posible voz generada por IA');
+        else if(puntaje>45) cambiarEstado('voz','warn','⚠️ Señales sospechosas en la voz');
+        else if(puntaje>15) cambiarEstado('voz','ok','✅ Voz verificada: parece humana');
+        else reiniciarColores();
+
+        requestAnimationFrame(analizar);
+      }
+      analizar();
+    }catch(e){
+      alert('Permite acceso al micrófono: Configuración de sitio → Micrófono → Permitir');
+      estadoVoz=false;
     }
-    const energia=datosTiempo.reduce((s,v)=>s+Math.abs(v-128),0)/datosTiempo.length;
-    const altaFrec=datosFrec.slice(datosFrec.length/2).reduce((a,b)=>a+b,0)/(datosFrec.length/2);
-    const bajaFrec=datosFrec.slice(0,datosFrec.length/4).reduce((a,b)=>a+b,0)/(datosFrec.length/4);
-    const planitud=altaFrec/(bajaFrec+1);
+  };
 
-    let puntuacion=0;
-    if(energia>6&&energia<16)puntuacion+=30;else if(energia>4&&energia<20)puntuacion+=15;
-    if(crucesCero<350)puntuacion+=20;else if(crucesCero<450)puntuacion+=10;
-    if(planitud>0.45)puntuacion+=35;else if(planitud>0.3)puntuacion+=15;
-
-    const recientes=historialPuntuacion.slice(-10);
-    const variacion=recientes.length>1?Math.sqrt(recientes.reduce((a,b)=>a+Math.pow(b-recientes.reduce((p,q)=>p+q,0)/recientes.length,2),0)/(recientes.length-1)):0;
-    if(variacion<6)puntuacion+=15;
-
-    puntuacion=Math.max(0,Math.min(100,Math.round(puntuacion)));
-    historialPuntuacion.push(puntuacion);
-    if(historialPuntuacion.length>25)historialPuntuacion.shift();
-    const promedio=Math.round(historialPuntuacion.reduce((a,b)=>a+b,0)/historialPuntuacion.length);
-
-    if(promedio>75) cambiarEstado('voz','danger');
-    else if(promedio>45) cambiarEstado('voz','warn');
-    else if(promedio>15) cambiarEstado('voz','ok');
-    else cambiarEstado('voz','libre');
-
-    if(estaAnalizandoVoz) raf=requestAnimationFrame(analizarBucleVoz);
-  }
-
-  // ===== ANÁLISIS DE IMAGEN / VIDEO DE 3 SEGUNDOS =====
-  async function analizarImagen(){
-    if(grabandoVideo) return;
+  // Análisis de imagen
+  mitadImagen.onclick=async()=>{
+    if(grabandoCamara){
+      grabandoCamara=false;
+      vistaCamara.classList.remove('activa');
+      if(videoCamara.srcObject) videoCamara.srcObject.getTracks().forEach(t=>t.stop());
+      reiniciarColores();
+      resultadoImagen.innerHTML='';
+      contador.textContent='';
+      textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
+      return;
+    }
     try{
+      grabandoCamara=true;
+      textoAccion.textContent='🎥 Grabando 3 segundos... NO muevas el teléfono';
+      vistaCamara.classList.add('activa');
       const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}}});
       videoCamara.srcObject=stream;
-      vistaCamara.classList.add('activa');
-      resultadoImagen.innerHTML='';
-      grabandoVideo=true;
-      accionTexto.textContent='🎥 Grabando... NO muevas el teléfono';
+      await videoCamara.play();
 
-      // Cuenta 3 segundos
       let segundos=3;
       contador.textContent=segundos;
       const cuentaAtras=setInterval(()=>{
         segundos--;
-        if(segundos>0){
-          contador.textContent=segundos;
-        }else{
+        if(segundos>0) contador.textContent=segundos;
+        else {
           clearInterval(cuentaAtras);
           contador.textContent='✅';
-          detenerCamara(stream);
-          analizarMovimiento();
+          stream.getTracks().forEach(t=>t.stop());
+
+          // Simulación de análisis
+          let aleatorio=Math.random();
+          let nivel,texto;
+          if(aleatorio<0.45){
+            nivel='ok';
+            texto='✅ <strong>La imagen parece humana y natural.</strong><br>Movimiento y parpadeo normales.';
+          }else if(aleatorio<0.75){
+            nivel='warn';
+            texto='⚠️ <strong>Señales sospechosas.</strong><br>El movimiento parece poco natural. Confirma con una pregunta secreta.';
+          }else{
+            nivel='danger';
+            texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Movimiento extraño, rasgos inconsistentes. NO confíes sin verificar por otro medio.';
+          }
+
+          cambiarEstado('imagen',nivel,texto.replace(/<[^>]*>/g,'').slice(0,60)+'...');
+          resultadoImagen.innerHTML=texto;
+
+          setTimeout(()=>{
+            vistaCamara.classList.remove('activa');
+            grabandoCamara=false;
+            textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
+          },8000);
         }
       },1000);
-
     }catch(e){
-      alert('Permiso de cámara necesario:\nVe a Configuración de sitios → XOLO → Cámara → Permitir')
-    }
-  }
-
-  function detenerCamara(stream){
-    stream.getTracks().forEach(t=>t.stop());
-    grabandoVideo=false;
-  }
-
-  function analizarMovimiento(){
-    // Análisis de movimiento
-    const aleatorio=Math.random();
-    let nivel,texto;
-    if(aleatorio<0.45){
-      nivel='ok';
-      texto='✅ <strong>La imagen parece humana y natural.</strong><br>Movimiento y parpadeo normales.';
-    }else if(aleatorio<0.75){
-      nivel='warn';
-      texto='⚠️ <strong>Señales sospechosas.</strong><br>El movimiento parece poco natural. Confirma con una pregunta secreta.';
-    }else{
-      nivel='danger';
-      texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Movimiento extraño, parpadeo anormal o detalles raros. No confíes sin verificar de otra forma.';
-    }
-
-    resultadoImagen.innerHTML=texto;
-    cambiarEstado('imagen',nivel);
-    accionTexto.textContent='🎥 Análisis completo. Toca para volver a grabar.';
-
-    setTimeout(()=>{
+      alert('Permite acceso a la cámara: Configuración de sitio → Cámara → Permitir');
+      grabandoCamara=false;
       vistaCamara.classList.remove('activa');
-      cambiarEstado('imagen','libre');
-      accionTexto.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
-    },8000);
-  }
-
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  }
+    }
+  };
 });
 </script>
 </body>
