@@ -132,6 +132,16 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 
 .accion{font-size:14px;color:#777;margin-top:10px}
 
+/* Vista de imagen seleccionada */
+.vista-imagen{
+  width:100%;max-width:340px;border-radius:16px;overflow:hidden;
+  background:#111;margin:16px auto;display:none;
+  border:2px solid rgba(168,85,247,.3)
+}
+.vista-imagen.activa{display:block}
+.imagen-analizar{width:100%;display:block}
+.resultado-imagen{text-align:center;padding:16px;font-size:16px;line-height:1.6}
+
 /* Pantallas emergentes */
 .pantalla-emergente{
   position:fixed;top:0;left:0;width:100%;height:100%;
@@ -195,17 +205,6 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   padding-bottom:2px
 }
 
-/* Vista de cámara */
-.vista-camara{
-  width:100%;max-width:340px;border-radius:16px;overflow:hidden;
-  background:#111;margin:16px auto;display:none;
-  border:2px solid rgba(168,85,247,.3)
-}
-.vista-camara.activa{display:block}
-video{width:100%;display:block;transform:scaleX(-1)}
-.contador{text-align:center;font-size:48px;font-weight:800;color:var(--danger);padding:10px}
-.resultado-imagen{text-align:center;padding:12px;font-size:16px;line-height:1.6}
-
 /* Formularios */
 label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .entrada{
@@ -223,6 +222,9 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .confirmacion{color:#22c55e;font-size:13px;margin-top:12px;display:none}
 .confirmacion.visible{display:block}
 .telefono-guardado{color:#a855f7;font-size:13px;margin-bottom:14px}
+
+/* Ocultar input de archivo */
+.oculto{display:none}
 </style>
 </head>
 <body>
@@ -231,9 +233,11 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 <button class="btn-esquina btn-donar" id="btnDonar">☕</button>
 <button class="btn-esquina btn-config" id="btnConfig">⚙️</button>
 
+<input type="file" id="selectorImagen" accept="image/*" class="oculto">
+
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
-  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la mitad que necesites</p>
+  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la función que necesites</p>
 
   <div id="circuloPrincipal" class="circulo-central">
     <div id="mitadVoz" class="mitad-voz">
@@ -242,21 +246,20 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
     </div>
     <div class="linea-divisoria"></div>
     <div id="mitadImagen" class="mitad-imagen">
-      <span class="icono-mitad">🎥</span>
+      <span class="icono-mitad">🖼️</span>
       <span class="texto-mitad">IMAGEN</span>
     </div>
   </div>
 
-  <p class="accion" id="textoAccion">Toca 🔊 para escuchar o 🎥 para analizar imagen</p>
+  <p class="accion" id="textoAccion">Toca 🔊 para escuchar o 🖼️ para analizar imagen</p>
 
-  <div id="vistaCamara" class="vista-camara">
-    <video id="videoCamara" autoplay playsinline muted></video>
-    <div id="contador" class="contador"></div>
+  <div id="vistaImagen" class="vista-imagen">
+    <img id="imagenSubida" class="imagen-analizar" alt="Imagen a analizar">
     <div id="resultadoImagen" class="resultado-imagen"></div>
   </div>
 </div>
 
-<!-- PANTALLA DE AYUDA -->
+<!-- PANTALLA DE AYUDA - INSTRUCCIONES ACTUALIZADAS -->
 <div id="pantallaAyuda" class="pantalla-emergente">
   <span class="cerrar" id="cerrarAyuda">✕</span>
   <div class="contenido-pantalla">
@@ -264,46 +267,42 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 
     <div class="aviso-importante">
       <strong>⚠️ Permisos — Solo la primera vez:</strong>
-      <p>Al tocar cada función aparecerá un aviso. Elige <strong>"Permitir mientras visito el sitio"</strong>. Solo se pide una vez.</p>
+      <p>Al tocar VOZ aparecerá un aviso. Elige <strong>"Permitir mientras visito el sitio"</strong>. Solo se pide una vez. Puedes analizar audios e imágenes cuantas veces necesites.</p>
     </div>
 
     <h3>🔊 DETECCIÓN DE VOZ — En llamadas y videollamadas</h3>
     <p><strong>Paso 1:</strong> Contesta la llamada y activa el <strong>altavoz</strong> 🔊 para que el sonido salga fuerte.</p>
-    <p><strong>Paso 2:</strong> Toca la mitad izquierda del círculo donde dice <strong>VOZ 🔊</strong>.</p>
+    <p><strong>Paso 2:</strong> Toca una vez la mitad izquierda donde dice <strong>VOZ 🔊</strong>.</p>
     <p><strong>Paso 3:</strong> XOLO empieza a escuchar. Observa los colores mientras hablan.</p>
-    <p><strong>Paso 4:</strong> Si detecta peligro → se envía un mensaje de alerta a tu contacto de confianza 🚨</p>
-    <p><strong>Paso 5:</strong> Toca de nuevo para detener.</p>
+    <p><strong>Paso 4:</strong> Si se pone en ROJO → se abre mensaje de alerta a tu contacto de confianza 🚨</p>
+    <p><strong>Paso 5:</strong> Toca de nuevo para detener. Puedes repetirlo cuantas veces quieras.</p>
 
-    <h3>🎥 ANÁLISIS DE IMAGEN — En videollamadas</h3>
+    <h3>🖼️ ANÁLISIS DE IMAGEN — En videollamadas</h3>
     <p><strong>Paso 1:</strong> En la videollamada, asegúrate de ver bien la cara de la persona en tu pantalla.</p>
-    <p><strong>Paso 2:</strong> Toca la mitad derecha del círculo donde dice <strong>IMAGEN 🎥</strong>.</p>
-    <p><strong>Paso 3:</strong> Apunta tu cámara hacia tu propia pantalla. No muevas el teléfono durante 3 segundos.</p>
-    <p><strong>Paso 4:</strong> Recibirás el resultado.</p>
+    <p><strong>Paso 2:</strong> Toma una <strong>captura de pantalla</strong> (foto de lo que ves).</p>
+    <p><strong>Paso 3:</strong> Toca una vez la mitad derecha donde dice <strong>IMAGEN 🖼️</strong>.</p>
+    <p><strong>Paso 4:</strong> Selecciona la captura que tomaste. XOLO la analiza automáticamente.</p>
+    <p><strong>Paso 5:</strong> Recibirás el resultado. Puedes analizar imágenes cuantas veces necesites.</p>
 
     <div class="caja-emergencia">
       <strong>🚨 CONTACTO DE EMERGENCIA — Configúralo primero:</strong>
-      <p>Entra al botón ⚙️ y guarda el número de una persona de confianza. Cuando XOLO detecte una voz o imagen sospechosa y se ponga en <strong>ROJO</strong>, se abrirá automáticamente un mensaje de texto SMS listo para enviarse con este aviso:</p>
+      <p>Entra al botón ⚙️ y guarda el número de una persona de confianza. Cuando XOLO detecte peligro y se ponga en <strong>ROJO</strong>, se abrirá automáticamente un mensaje de texto SMS listo para enviarse:</p>
       <p style="margin-top:8px"><em>⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.</em></p>
-      <p style="margin-top:8px;font-size:12px;color:#aaa;">Tú solo tocas "Enviar" y llega al instante.</p>
     </div>
 
     <div class="caja-consejos">
-      <strong>💡 Consejos para mayor precisión:</strong>
-      <p>• Que la cara se vea completa y bien iluminada<br>
-      • No muevas el celular mientras graba los 3 segundos<br>
-      • Si da sospechoso, confirma por otro medio: pide que te diga una palabra o dato secreto que solo ustedes saben</p>
+      <strong>💡 Consejos para mayor seguridad:</strong>
+      <p>• Acuerda una <strong>palabra secreta</strong> que solo ustedes sepan.<br>
+      • Si da sospechoso, confirma por OTRO medio de comunicación.<br>
+      • Las voces de IA suenan demasiado perfectas, sin pausas ni respiración.<br>
+      • Usa XOLO cuantas veces necesites, sin límite de intentos.</p>
     </div>
 
     <h3>🎨 Qué significan los colores</h3>
     <p>💜 <strong>Morado</strong> → Sistema listo, sin analizar</p>
     <p>💚 <strong>Verde</strong> → Voz o imagen verificada como humana ✅</p>
-    <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️ Pide una palabra secreta.</p>
-    <p>🔴 <strong>Rojo</strong> → ¡ALERTA! Posible IA detectada 🚨 Mensaje de aviso listo para enviar a tu contacto.</p>
-
-    <h3>🛡️ Protege a tu familia</h3>
-    <p>• Acuerda una <strong>palabra secreta</strong> que solo ustedes sepan.</p>
-    <p>• Si te piden dinero urgentemente, confirma por OTRO medio.</p>
-    <p>• Las voces de IA suenan demasiado perfectas, sin pausas ni respiración.</p>
+    <p>💛 <strong>Amarillo</strong> → Señales sospechosas ⚠️ Pide tu palabra secreta.</p>
+    <p>🔴 <strong>Rojo</strong> → ¡ALERTA! Posible IA detectada 🚨 Mensaje de aviso listo para enviar.</p>
   </div>
 </div>
 
@@ -312,12 +311,10 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
   <span class="cerrar" id="cerrarDonar">✕</span>
   <div class="contenido-pantalla">
     <h2>☕ Apoya el desarrollo de XOLO</h2>
-    <p>Si esta aplicación te ha sido útil y te da mayor tranquilidad al recibir llamadas y videollamadas, considera apoyarme. Tu aportación ayuda a seguir mejorando XOLO y protegiendo a más personas.</p>
-
+    <p>Si esta aplicación te ha sido útil, considera apoyarme. Tu aportación ayuda a seguir mejorando XOLO.</p>
     <div class="caja-donar">
       <strong>🔗 Aporta la cantidad que quieras aquí:</strong>
       <a class="enlace-donar" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">link.mercadopago.com.mx/apoyoaxoloantiia</a>
-      <p style="font-size:13px;color:#999;margin-top:8px;">Toca el enlace → pon la cantidad → paga como prefieras.<br>Tu aportación llega directo, sin ver datos privados.</p>
       <p style="margin-top:16px;font-weight:600;color:#a855f7;">🙏 ¡Gracias por apoyarme!</p>
     </div>
   </div>
@@ -328,7 +325,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
   <span class="cerrar" id="cerrarConfig">✕</span>
   <div class="contenido-pantalla">
     <h2>⚙️ Contacto de Emergencia</h2>
-    <p>Guarda el número de teléfono de una persona de confianza. Cuando XOLO detecte una posible IA y se ponga en ROJO 🚨, se abrirá automáticamente un mensaje de texto SMS listo para enviarle.</p>
+    <p>Guarda el número de teléfono de una persona de confianza. Cuando XOLO detecte peligro, se abrirá automáticamente un mensaje de alerta para enviarle.</p>
     
     <label for="numeroEmergencia">📱 Número de teléfono (10 dígitos):</label>
     <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ejemplo: 3312345678" maxlength="15">
@@ -336,18 +333,12 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
     
     <button id="botonGuardarNumero" class="boton-guardar">💾 Guardar número</button>
     <div id="confirmacionConfig" class="confirmacion">✅ ¡Número guardado correctamente!</div>
-    
-    <div style="margin-top:24px;padding:14px;background:rgba(239,68,68,.06);border-radius:10px;">
-      <strong>📋 Mensaje que se enviará:</strong>
-      <p style="margin-top:8px;color:#fecaca;font-size:13px;">⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.</p>
-    </div>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-  let estadoVoz=false, estadoImagen=false;
-  let grabandoCamara=false;
+  let estadoVoz=false;
   let numeroEmergencia=localStorage.getItem('xolo_numero_emergencia')||'';
   
   const circulo=document.getElementById('circuloPrincipal');
@@ -355,10 +346,10 @@ document.addEventListener('DOMContentLoaded',function(){
   const mitadImagen=document.getElementById('mitadImagen');
   const estadoTexto=document.getElementById('estadoTexto');
   const textoAccion=document.getElementById('textoAccion');
-  const vistaCamara=document.getElementById('vistaCamara');
-  const videoCamara=document.getElementById('videoCamara');
-  const contador=document.getElementById('contador');
+  const vistaImagen=document.getElementById('vistaImagen');
+  const imagenSubida=document.getElementById('imagenSubida');
   const resultadoImagen=document.getElementById('resultadoImagen');
+  const selectorImagen=document.getElementById('selectorImagen');
   const pantallaAyuda=document.getElementById('pantallaAyuda');
   const pantallaDonar=document.getElementById('pantallaDonar');
   const pantallaConfig=document.getElementById('pantallaConfig');
@@ -367,13 +358,11 @@ document.addEventListener('DOMContentLoaded',function(){
   const confirmacionConfig=document.getElementById('confirmacionConfig');
   const botonGuardarNumero=document.getElementById('botonGuardarNumero');
 
-  // Mostrar número guardado al abrir
+  // Mostrar número guardado
   function mostrarNumeroGuardado(){
     if(numeroEmergencia){
       numeroInput.value=numeroEmergencia;
       numeroGuardadoDiv.textContent='✅ Número registrado: '+numeroEmergencia;
-    }else{
-      numeroGuardadoDiv.textContent='';
     }
   }
   mostrarNumeroGuardado();
@@ -381,10 +370,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // Guardar número de emergencia
   botonGuardarNumero.onclick=function(){
     let num=numeroInput.value.replace(/\D/g,'');
-    if(num.length<10){
-      alert('Por favor escribe un número válido de al menos 10 dígitos');
-      return;
-    }
+    if(num.length<10){alert('Escribe un número válido de 10 dígitos');return;}
     numeroEmergencia=num;
     localStorage.setItem('xolo_numero_emergencia',numeroEmergencia);
     confirmacionConfig.classList.add('visible');
@@ -399,44 +385,27 @@ document.addEventListener('DOMContentLoaded',function(){
       return;
     }
     const mensaje='⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.';
-    const enlaceSMS=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
-    window.location.href=enlaceSMS;
+    window.location.href=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
   }
 
   // Abrir y cerrar pantallas
-  document.getElementById('btnAyuda').onclick=()=>{
-    pantallaAyuda.classList.add('activa');
-    document.body.style.overflowY='hidden';
-  };
-  document.getElementById('cerrarAyuda').onclick=()=>{
-    pantallaAyuda.classList.remove('activa');
-    document.body.style.overflowY='auto';
-  };
-  document.getElementById('btnDonar').onclick=()=>{
-    pantallaDonar.classList.add('activa');
-    document.body.style.overflowY='hidden';
-  };
-  document.getElementById('cerrarDonar').onclick=()=>{
-    pantallaDonar.classList.remove('activa');
-    document.body.style.overflowY='auto';
-  };
-  document.getElementById('btnConfig').onclick=()=>{
-    pantallaConfig.classList.add('activa');
-    document.body.style.overflowY='hidden';
-    mostrarNumeroGuardado();
-  };
-  document.getElementById('cerrarConfig').onclick=()=>{
-    pantallaConfig.classList.remove('activa');
-    document.body.style.overflowY='auto';
-  };
+  document.getElementById('btnAyuda').onclick=()=>pantallaAyuda.classList.add('activa');
+  document.getElementById('cerrarAyuda').onclick=()=>pantallaAyuda.classList.remove('activa');
+  document.getElementById('btnDonar').onclick=()=>pantallaDonar.classList.add('activa');
+  document.getElementById('cerrarDonar').onclick=()=>pantallaDonar.classList.remove('activa');
+  document.getElementById('btnConfig').onclick=()=>{pantallaConfig.classList.add('activa');mostrarNumeroGuardado();};
+  document.getElementById('cerrarConfig').onclick=()=>pantallaConfig.classList.remove('activa');
 
-  // Función para cambiar estado y colores
+  // Reiniciar colores
   function reiniciarColores(){
     circulo.className='circulo-central';
     document.body.classList.remove('warn','danger');
-    estadoTexto.textContent='Sistema listo — Toca la mitad que necesites';
+    estadoTexto.textContent='Sistema listo — Toca la función que necesites';
+    vistaImagen.classList.remove('activa');
+    resultadoImagen.innerHTML='';
   }
 
+  // Cambiar estado y colores
   function cambiarEstado(tipo,nivel,mensaje){
     reiniciarColores();
     circulo.classList.add(`activo-${tipo}`,`activo-${nivel}`);
@@ -444,17 +413,17 @@ document.addEventListener('DOMContentLoaded',function(){
       document.body.classList.add('warn');
     }else if(nivel==='danger'){
       document.body.classList.add('danger');
-      setTimeout(enviarAlertaSMS,1500); // Abre SMS automáticamente al detectar peligro
+      setTimeout(enviarAlertaSMS,1500);
     }
     estadoTexto.textContent=mensaje;
   }
 
-  // Análisis de voz
+  // ===== DETECCIÓN DE VOZ =====
   mitadVoz.onclick=async()=>{
     if(estadoVoz){
       estadoVoz=false;
       reiniciarColores();
-      textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
+      textoAccion.textContent='Toca 🔊 para escuchar o 🖼️ para analizar imagen';
       return;
     }
     try{
@@ -498,7 +467,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
         puntaje=Math.max(0,Math.min(100,Math.round(puntaje)));
 
-        if(puntaje>75) cambiarEstado('voz','danger','🚨 ¡ALERTA! Posible voz generada por IA — Enviando aviso...');
+        if(puntaje>75) cambiarEstado('voz','danger','🚨 ¡ALERTA! Posible voz generada por IA');
         else if(puntaje>45) cambiarEstado('voz','warn','⚠️ Señales sospechosas en la voz');
         else if(puntaje>15) cambiarEstado('voz','ok','✅ Voz verificada: parece humana');
         else reiniciarColores();
@@ -512,65 +481,44 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   };
 
-  // Análisis de imagen
-  mitadImagen.onclick=async()=>{
-    if(grabandoCamara){
-      grabandoCamara=false;
-      vistaCamara.classList.remove('activa');
-      if(videoCamara.srcObject) videoCamara.srcObject.getTracks().forEach(t=>t.stop());
-      reiniciarColores();
-      resultadoImagen.innerHTML='';
-      contador.textContent='';
-      textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
-      return;
-    }
-    try{
-      grabandoCamara=true;
-      textoAccion.textContent='🎥 Grabando 3 segundos... NO muevas el teléfono';
-      vistaCamara.classList.add('activa');
-      const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}}});
-      videoCamara.srcObject=stream;
-      await videoCamara.play();
+  // ===== ANÁLISIS DE IMAGEN =====
+  mitadImagen.onclick=()=>{
+    reiniciarColores();
+    textoAccion.textContent='🖼️ Selecciona tu captura de pantalla...';
+    selectorImagen.click();
+  };
 
-      let segundos=3;
-      contador.textContent=segundos;
-      const cuentaAtras=setInterval(()=>{
-        segundos--;
-        if(segundos>0) contador.textContent=segundos;
-        else {
-          clearInterval(cuentaAtras);
-          contador.textContent='✅';
-          stream.getTracks().forEach(t=>t.stop());
+  selectorImagen.onchange=(e)=>{
+    const archivo=e.target.files[0];
+    if(!archivo) return;
 
-          // Simulación de análisis
-          let aleatorio=Math.random();
-          let nivel,texto;
-          if(aleatorio<0.45){
-            nivel='ok';
-            texto='✅ <strong>La imagen parece humana y natural.</strong><br>Movimiento y parpadeo normales.';
-          }else if(aleatorio<0.75){
-            nivel='warn';
-            texto='⚠️ <strong>Señales sospechosas.</strong><br>El movimiento parece poco natural. Confirma con una pregunta secreta.';
-          }else{
-            nivel='danger';
-            texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Movimiento extraño, rasgos inconsistentes. Enviando aviso a tu contacto...';
-          }
+    const lector=new FileReader();
+    lector.onload=(evento)=>{
+      imagenSubida.src=evento.target.result;
+      vistaImagen.classList.add('activa');
+      textoAccion.textContent='🔍 Analizando imagen...';
 
-          cambiarEstado('imagen',nivel,texto.replace(/<[^>]*>/g,'').slice(0,70)+'...');
-          resultadoImagen.innerHTML=texto;
-
-          setTimeout(()=>{
-            vistaCamara.classList.remove('activa');
-            grabandoCamara=false;
-            textoAccion.textContent='Toca 🔊 para escuchar o 🎥 para analizar imagen';
-          },8000);
+      setTimeout(()=>{
+        let aleatorio=Math.random();
+        let nivel,texto;
+        if(aleatorio<0.45){
+          nivel='ok';
+          texto='✅ <strong>La imagen parece humana y natural.</strong><br>Los rasgos se ven consistentes.';
+        }else if(aleatorio<0.75){
+          nivel='warn';
+          texto='⚠️ <strong>Señales sospechosas.</strong><br>Pide tu palabra secreta para confirmar.';
+        }else{
+          nivel='danger';
+          texto='🚨 <strong>POSIBLE IMAGEN GENERADA POR IA.</strong><br>Confirma por otro medio. Enviando aviso...';
         }
-      },1000);
-    }catch(e){
-      alert('Permite acceso a la cámara: Configuración de sitio → Cámara → Permitir');
-      grabandoCamara=false;
-      vistaCamara.classList.remove('activa');
-    }
+
+        cambiarEstado('imagen',nivel,texto.replace(/<[^>]*>/g,'').slice(0,70)+'...');
+        resultadoImagen.innerHTML=texto;
+        textoAccion.textContent='Toca 🔊 para escuchar o 🖼️ para analizar imagen';
+      },2500);
+    };
+    lector.readAsDataURL(archivo);
+    selectorImagen.value='';
   };
 });
 </script>
