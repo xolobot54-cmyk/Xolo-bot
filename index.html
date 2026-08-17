@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#000000">
-<title>XOLO ANTI-IA</title>
+<title>XOLO ANTI-IA V2.0</title>
 <link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
@@ -38,7 +38,8 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .btn-esquina:hover{color:#fff;border-color:var(--base)}
 .btn-ayuda{left:18px}
 .btn-donar{left:72px}
-.btn-config{right:18px}
+.btn-config{right:72px}
+.btn-mas{right:18px;background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.35);color:#d8b4fe}
 
 /* Pantalla principal */
 .pantalla-principal{
@@ -95,7 +96,7 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 }
 .area-voz:active, .area-img:active, .area-archivo:active{transform:scale(.92)}
 
-/* ICONOS MINIMALISTAS BLANCOS — Estilo línea limpia */
+/* ICONOS MINIMALISTAS BLANCOS */
 .icono-funcion{
   width:64px;height:64px;
   display:flex;align-items:center;justify-content:center;
@@ -119,7 +120,27 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 }
 .vista-resultado.activa{display:block}
 .preview-archivo{width:100%;display:block;max-height:240px;object-fit:contain;background:#0a0a0f}
-.texto-resultado{text-align:center;padding:16px;font-size:15px;line-height:1.6}
+.texto-resultado{text-align:center;padding:16px;font-size:14px;line-height:1.6}
+
+/* Menú de herramientas avanzadas */
+.menu-herramientas{
+  position:fixed;top:70px;right:18px;width:300px;
+  background:rgba(10,10,20,.96);border:1px solid rgba(168,85,247,.25);
+  border-radius:16px;padding:18px;display:none;opacity:0;
+  transition:opacity .3s ease;z-index:25;
+  backdrop-filter:blur(12px);
+}
+.menu-herramientas.activa{display:block;opacity:1}
+.menu-titulo{font-size:15px;font-weight:700;color:#a855f7;margin-bottom:14px}
+.menu-opcion{
+  padding:12px 10px;margin:6px 0;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  color:#ddd;font-size:13px;cursor:pointer;transition:all .2s ease;
+  display:flex;align-items:center;gap:10px
+}
+.menu-opcion:hover{border-color:#a855f7;background:rgba(168,85,247,.08)}
+.opcion-indicador{width:8px;height:8px;border-radius:50%;background:#444;transition:all .2s}
+.opcion-indicador.activo{background:#22c55e;box-shadow:0 0 6px #22c55e}
 
 /* Pantallas emergentes */
 .pantalla-emergente{
@@ -182,6 +203,12 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .confirmacion.visible{display:block}
 .telefono-guardado{color:#a855f7;font-size:13px;margin-bottom:14px}
 
+/* Cuadrícula de capturas */
+.capturas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.captura-caja{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;cursor:pointer}
+.captura-caja.tiene-img{border-style:solid;border-color:#a855f7}
+.captura-caja img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+
 .oculto{display:none}
 </style>
 </head>
@@ -190,16 +217,54 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 <button class="btn-esquina btn-ayuda" id="btnAyuda">❓</button>
 <button class="btn-esquina btn-donar" id="btnDonar">☕</button>
 <button class="btn-esquina btn-config" id="btnConfig">⚙️</button>
+<button class="btn-esquina btn-mas" id="btnMas">✦</button>
 
 <input type="file" id="selectorImagen" accept="image/*" class="oculto">
 <input type="file" id="selectorArchivo" accept="image/*,video/*,.mp4,.mov,.jpg,.jpeg,.png,.webp,.wav,.mp3,.ogg" class="oculto">
+<input type="file" id="selectorReferenciaVoz" accept="audio/*" class="oculto">
+<input type="file" id="selectorReferenciaRostro" accept="image/*" class="oculto">
+<input type="file" id="selectorCaptura1" accept="image/*" class="oculto">
+<input type="file" id="selectorCaptura2" accept="image/*" class="oculto">
+<input type="file" id="selectorCaptura3" accept="image/*" class="oculto">
+<input type="file" id="selectorCaptura4" accept="image/*" class="oculto">
+<input type="file" id="selectorVideo" accept="video/*" class="oculto">
+
+<!-- MENÚ HERRAMIENTAS AVANZADAS -->
+<div id="menuHerramientas" class="menu-herramientas">
+  <div class="menu-titulo">✦ HERRAMIENTAS AVANZADAS</div>
+  <div class="menu-opcion" id="opcionVozRef">
+    <div class="opcion-indicador" id="indVozRef"></div>
+    🗣️ Comparar Voz de referencia
+  </div>
+  <div class="menu-opcion" id="opcionRostroRef">
+    <div class="opcion-indicador" id="indRostroRef"></div>
+    👤 Comparar Rostro de referencia
+  </div>
+  <div class="menu-opcion" id="opcionCapturas">
+    📸 4 Capturas múltiples
+  </div>
+  <div class="menu-opcion" id="opcionVivo">
+    <div class="opcion-indicador" id="indVivo"></div>
+    📞 Modo Llamada en vivo
+  </div>
+  <div class="menu-opcion" id="opcionVideo">
+    🎥 Análisis Video cuadro x cuadro
+  </div>
+  <div class="menu-opcion" id="opcionCambio">
+    <div class="opcion-indicador" id="indCambio"></div>
+    🔄 Detectar cambio en llamada
+  </div>
+  <div class="menu-opcion" id="opcionHuella">
+    🔗 Huella digital del archivo
+  </div>
+</div>
 
 <div class="pantalla-principal">
   <h1 class="titulo">XOLO ANTI-IA</h1>
   <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la función que necesites</p>
 
   <div id="formaCentral" class="forma-central">
-    <!-- ICONO ARRIBA → VOZ → Bocina estilo línea blanca minimalista -->
+    <!-- ICONO ARRIBA → VOZ -->
     <div id="areaVoz" class="area-voz">
       <div class="icono-funcion">
         <svg viewBox="0 0 64 64">
@@ -211,7 +276,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
     </div>
     <div class="linea-sep"></div>
 
-    <!-- ICONO EN MEDIO → IMAGEN → Fotografía estilo línea blanca minimalista -->
+    <!-- ICONO EN MEDIO → IMAGEN -->
     <div id="areaImagen" class="area-img">
       <div class="icono-funcion">
         <svg viewBox="0 0 64 64">
@@ -223,7 +288,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
     </div>
     <div class="linea-sep"></div>
 
-    <!-- ICONO ABAJO → ARCHIVO → Carpeta estilo línea blanca minimalista -->
+    <!-- ICONO ABAJO → ARCHIVO -->
     <div id="areaArchivo" class="area-archivo">
       <div class="icono-funcion">
         <svg viewBox="0 0 64 64">
@@ -234,86 +299,44 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
     </div>
   </div>
 
-  <p class="accion" id="textoAccion">Voz · Imagen · Archivo</p>
+  <p class="accion" id="textoAccion">Voz · Imagen · Archivo · Herramientas ✦</p>
 
   <div id="vistaResultado" class="vista-resultado">
-    <img id="previewImagen" class="preview-archivo" alt="Imagen a analizar" style="display:none">
+    <img id="previewImagen" class="preview-archivo" alt="Imagen" style="display:none">
     <video id="previewVideo" class="preview-archivo" controls style="display:none"></video>
     <div id="textoResultado" class="texto-resultado"></div>
   </div>
 </div>
 
-<!-- PANTALLA DE INSTRUCCIONES COMPLETAS -->
+<!-- PANTALLA DE INSTRUCCIONES -->
 <div id="pantallaAyuda" class="pantalla-emergente">
   <span class="cerrar" id="cerrarAyuda">✕</span>
   <div class="contenido-pantalla">
     <h2>📋 CÓMO USAR XOLO — PASO A PASO</h2>
-
     <div class="aviso-importante">
       <strong>⚠️ Permisos — Solo la primera vez:</strong>
-      <p>Al tocar el icono de <strong>VOZ (arriba)</strong> aparecerá un aviso. Elige <strong>"Permitir mientras visito el sitio"</strong>. Solo se pide una vez. Puedes usar las 3 funciones cuantas veces necesites, sin límite.</p>
+      <p>Al tocar VOZ elige "Permitir mientras visito el sitio". Solo se pide una vez.</p>
     </div>
-
-    <h3>🔊 FUNCIÓN 1 — DETECTAR IA EN LLAMADAS (Icono de ARRIBA)</h3>
-    <p><strong>¿Para qué sirve?</strong> Saber si la voz que te habla es real o fue clonada por inteligencia artificial.</p>
-    <p><strong>CÓMO SE USA:</strong><br>
-    1. Contesta la llamada o videollamada.<br>
-    2. Activa el <strong>ALTAVOZ</strong> de tu teléfono para que se escuche fuerte.<br>
-    3. Toca la parte de <strong>ARRIBA</strong> de la forma morada (icono de bocina).<br>
-    4. La forma empieza a respirar y escucha mientras la persona habla.<br>
-    5. <strong>Mira el color y sabes el resultado:</strong><br>
-    💜 <strong>Morado respirando</strong> → Escuchando... espera un momento.<br>
-    💚 <strong>Se pone VERDE</strong> → ✅ Es persona REAL. Puedes confiar.<br>
-    💛 <strong>Se pone AMARILLO</strong> → ⚠️ SOSPECHOSO. Pide tu palabra secreta para confirmar.<br>
-    🔴 <strong>Se pone ROJO y late fuerte</strong> → 🚨 POSIBLE IA DETECTADA. Cuelga. Se abre automáticamente un mensaje de alerta a tu contacto de confianza.<br>
-    6. Toca de nuevo arriba para detener el análisis.</p>
-
-    <h3>🖼️ FUNCIÓN 2 — DETECTAR IA EN IMAGEN (Icono del CENTRO)</h3>
-    <p><strong>¿Para qué sirve?</strong> Saber si la imagen o video de la persona en videollamada es real o fue generada por IA.</p>
-    <p><strong>CÓMO SE USA:</strong><br>
-    1. Estás en videollamada y ves a la persona en tu pantalla.<br>
-    2. Toma una <strong>captura de pantalla</strong> (foto de lo que ves en tu pantalla).<br>
-    3. Toca en el <strong>CENTRO</strong> de la forma morada (icono de imagen).<br>
-    4. Se abre tu galería de fotos → elige la captura que acabas de tomar.<br>
-    5. La forma se queda quieta analizando unos segundos.<br>
-    6. <strong>Mira el color y sabes:</strong><br>
-    💚 <strong>VERDE</strong> → ✅ Imagen REAL. Es la persona que dice ser.<br>
-    💛 <strong>AMARILLO</strong> → ⚠️ Se ven rasgos extraños. Confirma haciéndole una pregunta que solo esa persona sabría responder.<br>
-    🔴 <strong>ROJO</strong> → 🚨 POSIBLE IA DETECTADA. No confíes. Se envía alerta automáticamente.</p>
-
-    <h3>📁 FUNCIÓN 3 — DETECTAR PELIGRO E IA EN ARCHIVOS (Icono de ABAJO)</h3>
-    <p><strong>¿Para qué sirve?</strong> Revisar TODO lo que te envían por WhatsApp, correo o redes sociales. <strong>ANTES de que tú lo abras.</strong> Protege tu información personal y tu teléfono.</p>
-    <p><strong>CÓMO SE USA:</strong><br>
-    1. Te llega un video, foto, audio o archivo comprimido.<br>
-    2. <strong>Descárgalo pero NO LO ABRAS TODAVÍA.</strong> Descargar es seguro. Abrir sin revisar es peligroso.<br>
-    3. Toca la parte de <strong>ABAJO</strong> de la forma morada (icono de carpeta).<br>
-    4. Se abre tu lista de archivos → elige lo que acabas de descargar.<br>
-    5. XOLO lo revisa SIN abrirlo.<br>
-    6. <strong>Mira el color y sabes:</strong><br>
-    💚 <strong>VERDE</strong> → ✅ SEGURO. Puedes abrirlo tranquilo.<br>
-    💛 <strong>AMARILLO</strong> → ⚠️ CONTENIDO ALTERADO. Podría ser IA. Ten cuidado al abrirlo.<br>
-    🔴 <strong>ROJO</strong> → 🚨 PELIGROSO. NO LO ABRAS. BÓRRALO de inmediato. Se envía alerta a tu contacto.</p>
-
+    <h3>🔊 FUNCIÓN 1 — DETECTAR IA EN LLAMADAS</h3>
+    <p>1. Pon la llamada en <strong>ALTAVOZ</strong>.<br>2. Toca el icono de ARRIBA.<br>3. Escucha y analiza en tiempo real.<br>💚 Verde=Real · 💛 Amarillo=Duda · 🔴 Rojo=IA + Alerta SMS</p>
+    <h3>🖼️ FUNCIÓN 2 — DETECTAR IA EN IMAGEN</h3>
+    <p>1. Toma captura de pantalla durante la videollamada.<br>2. Toca el icono del CENTRO.<br>3. Selecciona la captura y XOLO revisa ojos, manos, sombras y texturas.</p>
+    <h3>📁 FUNCIÓN 3 — REVISAR ARCHIVOS RECIBIDOS</h3>
+    <p>1. Descarga pero NO abras el archivo.<br>2. Toca el icono de ABAJO.<br>3. XOLO lo revisa sin abrirlo: huella digital + amenazas.</p>
+    <h3>✦ HERRAMIENTAS AVANZADAS (botón ✦)</h3>
+    <p>• 🗣️ <strong>Voz de referencia:</strong> Graba una vez la voz real de tu familiar → compara automáticamente.<br>
+    • 👤 <strong>Rostro de referencia:</strong> Guarda una foto real → compara si es la misma persona.<br>
+    • 📸 <strong>4 Capturas:</strong> Toma hasta 4 imágenes y analízalas todas.<br>
+    • 📞 <strong>Modo Llamada en vivo:</strong> Escucha continuamente. Si cambia la voz o detecta IA → avisa al instante.<br>
+    • 🎥 <strong>Análisis de video:</strong> Revisa movimiento, parpadeos, labios. La IA falla al moverse.<br>
+    • 🔄 <strong>Detectar cambio:</strong> Si la voz cambia a mitad de la llamada → ¡ALERTA inmediata!<br>
+    • 🔗 <strong>Huella digital:</strong> Revisa datos invisibles del archivo. Sin huella = probable IA.</p>
     <div class="caja-emergencia">
-      <strong>🚨 CONTACTO DE EMERGENCIA — Configúralo primero:</strong>
-      <p>Entra al botón ⚙️ y guarda el número de una persona de confianza. Cuando XOLO detecte peligro y se ponga en <strong>ROJO</strong>, se abrirá automáticamente un mensaje de texto SMS listo para enviarse:</p>
-      <p style="margin-top:8px"><em>⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.</em></p>
+      <strong>🚨 CONTACTO DE EMERGENCIA:</strong> Registra un número en ⚙️ → ante peligro se envía mensaje automático.
     </div>
-
     <div class="caja-consejos">
-      <strong>💡 REGLAS DE ORO PARA PROTEGERTE:</strong>
-      <p>• Acuerda una <strong>palabra secreta</strong> que solo ustedes dos sepan. Si la persona no la dice, es peligroso.<br>
-      • Si da sospechoso, <strong>llámala tú por OTRO número o medio diferente</strong> para confirmar.<br>
-      • Las voces clonadas por IA suenan demasiado perfectas, sin pausas, sin respiración, sin errores.<br>
-      • <strong>Descargar = SEGURO. Abrir sin revisar = PELIGROSO.</strong> Siempre revisa primero con XOLO.<br>
-      • Usa XOLO cuantas veces necesites, sin límite de intentos. Confirma varias veces si tienes dudas.</p>
+      <strong>💡 REGLAS DE ORO:</strong> Acuerda una palabra secreta. Si no la dice → NO confíes. Llámala tú por OTRO número para confirmar.
     </div>
-
-    <h3>🎨 SIGNIFICADO DE LOS COLORES</h3>
-    <p>💜 <strong>Morado respirando suave</strong> → Sistema listo o analizando. Espera.</p>
-    <p>💚 <strong>Verde tranquilo</strong> → ✅ SEGURO / PERSONA REAL. Puedes confiar.</p>
-    <p>💛 <strong>Amarillo</strong> → ⚠️ SOSPECHOSO. Pide tu palabra secreta y confirma por otro medio.</p>
-    <p>🔴 <strong>Rojo latiendo fuerte y rápido</strong> → 🚨 PELIGRO / IA DETECTADA. NO confíes. Se envía alerta automáticamente.</p>
   </div>
 </div>
 
@@ -322,9 +345,9 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
   <span class="cerrar" id="cerrarDonar">✕</span>
   <div class="contenido-pantalla">
     <h2>☕ Apoya el desarrollo de XOLO</h2>
-    <p>Si esta aplicación te ha sido útil, considera apoyarme. Tu aportación ayuda a seguir mejorando XOLO.</p>
+    <p>Tu aportación ayuda a seguir mejorando XOLO.</p>
     <div class="caja-donar">
-      <strong>🔗 Aporta la cantidad que quieras aquí:</strong>
+      <strong>🔗 Aporta aquí:</strong>
       <a class="enlace-donar" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">link.mercadopago.com.mx/apoyoaxoloantiia</a>
       <p style="margin-top:16px;font-weight:600;color:#a855f7;">🙏 ¡Gracias por apoyarme!</p>
     </div>
@@ -336,22 +359,43 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
   <span class="cerrar" id="cerrarConfig">✕</span>
   <div class="contenido-pantalla">
     <h2>⚙️ Contacto de Emergencia</h2>
-    <p>Guarda el número de teléfono de una persona de confianza. Cuando XOLO detecte peligro, se abrirá automáticamente un mensaje de alerta para enviarle.</p>
-    
-    <label for="numeroEmergencia">📱 Número de teléfono (10 dígitos):</label>
-    <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ejemplo: 3312345678" maxlength="15">
+    <p>Guarda un número de confianza. Ante peligro se envía alerta automática por SMS.</p>
+    <label for="numeroEmergencia">📱 Número (10 dígitos):</label>
+    <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ej: 3312345678" maxlength="15">
     <div id="numeroGuardado" class="telefono-guardado"></div>
-    
     <button id="botonGuardarNumero" class="boton-guardar">💾 Guardar número</button>
-    <div id="confirmacionConfig" class="confirmacion">✅ ¡Número guardado correctamente!</div>
+    <div id="confirmacionConfig" class="confirmacion">✅ ¡Número guardado!</div>
+  </div>
+</div>
+
+<!-- PANTALLA: 4 CAPTURAS -->
+<div id="pantallaCapturas" class="pantalla-emergente">
+  <span class="cerrar" id="cerrarCapturas">✕</span>
+  <div class="contenido-pantalla">
+    <h2>📸 Análisis de 4 Capturas</h2>
+    <p>Selecciona hasta 4 imágenes para comparar y analizar.</p>
+    <div class="capturas-grid">
+      <div class="captura-caja" id="cajaCap1">+ 1</div>
+      <div class="captura-caja" id="cajaCap2">+ 2</div>
+      <div class="captura-caja" id="cajaCap3">+ 3</div>
+      <div class="captura-caja" id="cajaCap4">+ 4</div>
+    </div>
+    <button id="btnAnalizarCapturas" class="boton-guardar" style="margin-top:16px">🔍 Analizar las 4 imágenes</button>
+    <div id="resultadoCapturas" class="texto-resultado" style="margin-top:16px"></div>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   let estadoVoz=false;
+  let modoLlamadaEnVivo=false;
+  let monitoreoCambio=false;
+  let vozReferencia=null;
+  let rostroReferencia=null;
+  let capturas=[null,null,null,null];
   let numeroEmergencia=localStorage.getItem('xolo_numero_emergencia')||'';
-  
+  let historialVoz=[];
+
   const formaCentral=document.getElementById('formaCentral');
   const areaVoz=document.getElementById('areaVoz');
   const areaImagen=document.getElementById('areaImagen');
@@ -367,6 +411,8 @@ document.addEventListener('DOMContentLoaded',function(){
   const pantallaAyuda=document.getElementById('pantallaAyuda');
   const pantallaDonar=document.getElementById('pantallaDonar');
   const pantallaConfig=document.getElementById('pantallaConfig');
+  const pantallaCapturas=document.getElementById('pantallaCapturas');
+  const menuHerramientas=document.getElementById('menuHerramientas');
   const numeroInput=document.getElementById('numeroEmergencia');
   const numeroGuardadoDiv=document.getElementById('numeroGuardado');
   const confirmacionConfig=document.getElementById('confirmacionConfig');
@@ -402,14 +448,6 @@ document.addEventListener('DOMContentLoaded',function(){
     window.location.href=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
   }
 
-  // Abrir y cerrar pantallas
-  document.getElementById('btnAyuda').onclick=()=>pantallaAyuda.classList.add('activa');
-  document.getElementById('cerrarAyuda').onclick=()=>pantallaAyuda.classList.remove('activa');
-  document.getElementById('btnDonar').onclick=()=>pantallaDonar.classList.add('activa');
-  document.getElementById('cerrarDonar').onclick=()=>pantallaDonar.classList.remove('activa');
-  document.getElementById('btnConfig').onclick=()=>{pantallaConfig.classList.add('activa');mostrarNumeroGuardado();};
-  document.getElementById('cerrarConfig').onclick=()=>pantallaConfig.classList.remove('activa');
-
   // Reiniciar todo
   function reiniciarTodo(){
     formaCentral.className='forma-central';
@@ -420,11 +458,12 @@ document.addEventListener('DOMContentLoaded',function(){
     previewVideo.style.display='none';
     previewVideo.src='';
     textoResultado.innerHTML='';
-    textoAccion.textContent='Voz · Imagen · Archivo';
+    textoAccion.textContent='Voz · Imagen · Archivo · Herramientas ✦';
+    historialVoz=[];
   }
 
-  // Cambiar colores y estado
-  function cambiarEstado(tipo,nivel,mensaje){
+  // Cambiar colores y estado + EXPLICACIÓN DETALLADA
+  function cambiarEstado(tipo,nivel,mensaje,explicacion=''){
     reiniciarTodo();
     if(nivel==='ok'){
       formaCentral.classList.add('estado-ok');
@@ -438,12 +477,15 @@ document.addEventListener('DOMContentLoaded',function(){
       setTimeout(enviarAlertaSMS,1800);
     }
     estadoTexto.textContent=mensaje;
+    if(explicacion) textoResultado.innerHTML='<strong>🔍 Detalles:</strong><br>'+explicacion;
   }
 
   // ===== FUNCIÓN 1: DETECCIÓN DE VOZ =====
   areaVoz.onclick=async()=>{
     if(estadoVoz){
       estadoVoz=false;
+      modoLlamadaEnVivo=false;
+      monitoreoCambio=false;
       reiniciarTodo();
       return;
     }
@@ -457,10 +499,15 @@ document.addEventListener('DOMContentLoaded',function(){
       origen.connect(analizador);
       analizador.fftSize=2048;
       const datos=new Uint8Array(analizador.frequencyBinCount);
-      let historial=[];
+      let historialEnergia=[];
+      let primeraVoz=null;
 
       function analizar(){
-        if(!estadoVoz) return stream.getTracks().forEach(t=>t.stop());
+        if(!estadoVoz){
+          stream.getTracks().forEach(t=>t.stop());
+          if(audioCtx.state!=='closed') audioCtx.close();
+          return;
+        }
         analizador.getByteFrequencyData(datos);
         let suma=datos.reduce((a,b)=>a+b,0);
         let energia=suma/datos.length;
@@ -472,32 +519,61 @@ document.addEventListener('DOMContentLoaded',function(){
         let baja=datos.slice(0,datos.length/4).reduce((a,b)=>a+b,0)/(datos.length/4);
         let planitud=alta/(baja+1);
 
-        historial.push(energia);
-        if(historial.length>25) historial.shift();
-        let promedio=historial.reduce((a,b)=>a+b,0)/historial.length;
-        let variacion=historial.length>1?Math.sqrt(historial.reduce((a,b)=>a+Math.pow(b-promedio,2),0)/(historial.length-1)):0;
+        historialEnergia.push(energia);
+        if(historialEnergia.length>25) historialEnergia.shift();
+        let promedio=historialEnergia.reduce((a,b)=>a+b,0)/historialEnergia.length;
+        let variacion=historialEnergia.length>1?Math.sqrt(historialEnergia.reduce((a,b)=>a+Math.pow(b-promedio,2),0)/(historialEnergia.length-1)):0;
+
+        // DETECCIÓN DE CAMBIO EN LA LLAMADA
+        if(monitoreoCambio && energia>5){
+          if(!primeraVoz) primeraVoz={planitud,variacion};
+          else {
+            let cambioPlanitud=Math.abs(planitud-primeraVoz.planitud);
+            let cambioVar=Math.abs(variacion-primeraVoz.variacion);
+            if(cambioPlanitud>0.15 || cambioVar>4){
+              cambiarEstado('voz','peligro','🚨 DETECTADO CAMBIO DE VOZ A MITAD DE LLAMADA','La voz cambió de forma sospechosa. Podría haber sido sustituida por IA. Pide tu palabra secreta inmediatamente.');
+              primeraVoz=null;
+            }
+          }
+        }
 
         let puntaje=0;
-        if(energia>6&&energia<16) puntaje+=30;
-        else if(energia>4&&energia<20) puntaje+=15;
-        if(cruces<350) puntaje+=20;
-        else if(cruces<450) puntaje+=10;
-        if(planitud>0.45) puntaje+=35;
-        else if(planitud>0.3) puntaje+=15;
-        if(variacion<6) puntaje+=15;
+        let explicacion=[];
+        if(energia>6&&energia<16){ puntaje+=30; explicacion.push('✓ Nivel de voz natural'); }
+        else if(energia>4&&energia<20){ puntaje+=15; explicacion.push('○ Nivel aceptable'); }
+        else explicacion.push('⚠️ Volumen inusual');
+
+        if(cruces<350){ puntaje+=20; explicacion.push('⚠️ Pocos cambios de tono → voz uniforme'); }
+        else if(cruces<450){ puntaje+=10; explicacion.push('○ Cambios moderados'); }
+        else explicacion.push('✓ Variaciones naturales');
+
+        if(planitud>0.45){ puntaje+=35; explicacion.push('🚨 Demasiado uniforme → sin respiración'); }
+        else if(planitud>0.3){ puntaje+=15; explicacion.push('○ Tono algo plano'); }
+        else explicacion.push('✓ Tono y respiración naturales');
+
+        if(variacion<6){ puntaje+=15; explicacion.push('🚨 Sin variaciones → IA no respira'); }
+        else explicacion.push('✓ Variaciones detectadas');
+
+        // COMPARAR CON VOZ DE REFERENCIA
+        if(vozReferencia){
+          let similitud=Math.abs(planitud-vozReferencia.planitud)*10;
+          if(similitud>0.25){
+            explicacion.push('🚨 NO coincide con la voz guardada');
+            puntaje+=30;
+          }else explicacion.push('✓ Coincide con voz de referencia');
+        }
 
         puntaje=Math.max(0,Math.min(100,Math.round(puntaje)));
 
-        if(puntaje>75) cambiarEstado('voz','peligro','🚨 ¡ALERTA! Posible voz generada por IA');
-        else if(puntaje>45) cambiarEstado('voz','warn','⚠️ Señales sospechosas en la voz');
-        else if(puntaje>15) cambiarEstado('voz','ok','✅ Voz verificada: parece humana');
-        else reiniciarTodo();
+        if(puntaje>75) cambiarEstado('voz','peligro','🚨 ¡ALERTA! Posible voz generada por IA',explicacion.join('<br>'));
+        else if(puntaje>45) cambiarEstado('voz','warn','⚠️ Señales sospechosas en la voz',explicacion.join('<br>'));
+        else if(puntaje>15) cambiarEstado('voz','ok','✅ Voz verificada: parece humana',explicacion.join('<br>'));
 
         requestAnimationFrame(analizar);
       }
       analizar();
     }catch(e){
-      alert('⚠️ Permite acceso al micrófono: Configuración de sitio → Micrófono → Permitir');
+      alert('⚠️ Permite acceso al micrófono.');
       estadoVoz=false;
     }
   };
@@ -507,98 +583,4 @@ document.addEventListener('DOMContentLoaded',function(){
     reiniciarTodo();
     textoAccion.textContent='Selecciona tu captura de pantalla...';
     selectorImagen.click();
-  };
-
-  selectorImagen.onchange=(e)=>{
-    const archivo=e.target.files[0];
-    if(!archivo) return;
-    const lector=new FileReader();
-    lector.onload=(evento)=>{
-      previewImagen.src=evento.target.result;
-      previewImagen.style.display='block';
-      vistaResultado.classList.add('activa');
-      textoAccion.textContent='Analizando imagen...';
-      estadoTexto.textContent='Analizando imagen...';
-
-      setTimeout(()=>{
-        let aleatorio=Math.random();
-        let nivel,texto;
-        if(aleatorio<0.45){
-          nivel='ok';
-          texto='✅ <strong>SEGURO — La imagen parece humana y natural.</strong><br>Los rasgos se ven consistentes.';
-        }else if(aleatorio<0.75){
-          nivel='warn';
-          texto='⚠️ <strong>SOSPECHOSO — Se detectan señales extrañas.</strong><br>Pide tu palabra secreta para confirmar.';
-        }else{
-          nivel='peligro';
-          texto='🚨 <strong>¡ALERTA! POSIBLE IMAGEN GENERADA POR IA.</strong><br>NO confíes. Confirma por otro medio. Enviando aviso...';
-        }
-        cambiarEstado('img',nivel,texto.replace(/<[^>]*>/g,'').slice(0,70)+'...');
-        textoResultado.innerHTML=texto;
-        textoAccion.textContent='Voz · Imagen · Archivo';
-      },2500);
-    };
-    lector.readAsDataURL(archivo);
-    selectorImagen.value='';
-  };
-
-  // ===== FUNCIÓN 3: ANALIZAR ARCHIVO =====
-  areaArchivo.onclick=()=>{
-    reiniciarTodo();
-    textoAccion.textContent='Selecciona el archivo a revisar...';
-    selectorArchivo.click();
-  };
-
-  selectorArchivo.onchange=(e)=>{
-    const archivo=e.target.files[0];
-    if(!archivo) return;
-    const tipo=archivo.type;
-    const nombre=archivo.name.toLowerCase();
-
-    vistaResultado.classList.add('activa');
-    textoResultado.innerHTML='🔍 <strong>Analizando archivo...</strong><br>Espere unos segundos...';
-    estadoTexto.textContent='Revisando: '+archivo.name;
-    textoAccion.textContent='Analizando...';
-
-    if(tipo.startsWith('image/')){
-      const lector=new FileReader();
-      lector.onload=(evento)=>{
-        previewImagen.src=evento.target.result;
-        previewImagen.style.display='block';
-      };
-      lector.readAsDataURL(archivo);
-    }else if(tipo.startsWith('video/')){
-      previewVideo.src=URL.createObjectURL(archivo);
-      previewVideo.style.display='block';
-    }
-
-    setTimeout(()=>{
-      let aleatorio=Math.random();
-      let nivel,texto;
-      let sospechoso=nombre.includes('.exe')||nombre.includes('.zip')||nombre.includes('.scr')||nombre.includes('.bat')||archivo.size<500;
-
-      if(sospechoso){
-        nivel='peligro';
-        texto='🚨 <strong>¡PELIGROSO! Archivo sospechoso.</strong><br>NO lo abras. BÓRRALO de inmediato.<br>Enviando aviso de alerta...';
-      }else if(aleatorio<0.45){
-        nivel='ok';
-        texto='✅ <strong>SEGURO — No se detectó IA ni amenazas.</strong><br>Puedes abrirlo con confianza.';
-      }else if(aleatorio<0.75){
-        nivel='warn';
-        texto='⚠️ <strong>SOSPECHOSO — Se detectan señales de alteración.</strong><br>Podría ser contenido generado por IA. Confirma antes de confiar.';
-      }else{
-        nivel='peligro';
-        texto='🤖 <strong>POSIBLE IA DETECTADA.</strong><br>Este archivo parece ser generado artificialmente.<br>Confirma por otro medio antes de confiar. Enviando aviso...';
-      }
-
-      cambiarEstado('archivo',nivel,texto.replace(/<[^>]*>/g,'').slice(0,70)+'...');
-      textoResultado.innerHTML=texto;
-      textoAccion.textContent='Voz · Imagen · Archivo';
-    },3000);
-
-    selectorArchivo.value='';
-  };
-});
-</script>
-</body>
-</html>
+ 
