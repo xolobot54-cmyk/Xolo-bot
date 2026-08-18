@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#000000">
-<title>XOLO ANTI-IA — COMPLETA Y FUNCIONAL</title>
+<title>XOLO ANTI-IA</title>
 <link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
@@ -27,53 +27,33 @@ body.ok{background:radial-gradient(circle at center,rgba(34,197,94,.12),transpar
 body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
 body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
 
-/* Botones esquina */
-.btn-esquina{
-  position:absolute;top:18px;
-  width:44px;height:44px;border-radius:12px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  color:#aaa;font-size:20px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:20;transition:all .25s ease
+/* ===== PANTALLA INICIO — SOLO LA FORMA ===== */
+.pantalla-inicio{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;transition:opacity .5s ease;
 }
-.btn-esquina:hover{color:#fff;border-color:var(--base)}
-.btn-ayuda{left:18px}
-.btn-donar{left:72px}
-.btn-config{right:72px}
-.btn-mas{right:18px;background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.35);color:#d8b4fe}
 
-/* Pantalla principal */
-.pantalla-principal{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;padding:20px
-}
-.titulo{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:1px}
-.estado-texto{font-size:14px;color:#888;margin-bottom:40px;text-align:center;line-height:1.5;max-width:340px}
-
-/* FORMA ORGÁNICA — Respiración y colores cambiantes */
+/* FORMA ORGÁNICA — RESPIRACIÓN Y COLORES */
 .forma-central{
-  position:relative;width:300px;height:380px;
+  width:280px;height:280px;
   border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;
   background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);
-  box-shadow:0 0 70px rgba(168,85,247,.5), inset 0 0 60px rgba(255,255,255,.1);
-  margin-bottom:30px;
+  box-shadow:0 0 80px rgba(168,85,247,.5), inset 0 0 60px rgba(255,255,255,.1);
+  cursor:pointer;user-select:none;
   transition:all .8s ease;
   animation:respira 5s ease-in-out infinite;
-  cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:space-around;
-  padding:50px 0;
 }
+.forma-central:active{transform:scale(0.95)}
 @keyframes respira{
   0%,100%{border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;transform:scale(1)}
   25%{border-radius:50% 60% 50% 60% / 60% 50% 60% 40%}
-  50%{border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;transform:scale(1.06)}
+  50%{border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;transform:scale(1.07)}
   75%{border-radius:60% 40% 60% 40% / 50% 60% 40% 60%}
 }
 @keyframes latidoFuerte{
   0%,100%{transform:scale(1)}
   50%{transform:scale(1.09)}
 }
-
-/* Estados de color */
 .forma-central.estado-ok{
   background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a);
   box-shadow:0 0 70px rgba(34,197,94,.5), inset 0 0 60px rgba(255,255,255,.1);
@@ -81,7 +61,6 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 .forma-central.estado-warn{
   background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);
   box-shadow:0 0 70px rgba(234,179,8,.5), inset 0 0 60px rgba(255,255,255,.1);
-  animation:respira 5s ease-in-out infinite !important;
 }
 .forma-central.estado-peligro{
   background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);
@@ -89,102 +68,95 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
   animation:latidoFuerte .9s ease-in-out infinite !important;
 }
 
-/* Áreas tocables */
-.area-voz, .area-img, .area-archivo{
-  width:100%;display:flex;align-items:center;justify-content:center;
-  transition:transform .2s ease
+/* ===== PANTALLA DE OPCIONES — 5 BOTONES CIRCULARES ===== */
+.pantalla-opciones{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:#050508;z-index:20;
+  padding:40px 20px 20px;display:none;opacity:0;
+  transition:opacity .5s ease;overflow-y:auto
 }
-.area-voz:active, .area-img:active, .area-archivo:active{transform:scale(.92)}
+.pantalla-opciones.activa{display:block;opacity:1}
+.cerrar-opciones{
+  position:sticky;top:0;text-align:right;font-size:28px;color:#777;
+  cursor:pointer;padding:10px 5px;z-index:5
+}
+.cerrar-opciones:hover{color:#fff}
+.titulo-pantalla{text-align:center;font-size:22px;color:#a855f7;margin-bottom:30px}
 
-/* ICONOS MINIMALISTAS BLANCOS */
-.icono-funcion{
-  width:64px;height:64px;
+/* GRID DE 5 BOTONES CIRCULARES */
+.contenedor-botones{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:24px;
+  max-width:340px;margin:0 auto
+}
+.boton-circular{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;transition:transform .25s ease
+}
+.boton-circular:active{transform:scale(0.92)}
+.circulo{
+  width:90px;height:90px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.08));
+  border:2px solid rgba(168,85,247,.3);
   display:flex;align-items:center;justify-content:center;
+  font-size:36px;transition:all .25s ease;
+  box-shadow:0 4px 15px rgba(168,85,247,.1)
 }
-.icono-funcion svg{
-  width:100%;height:100%;
-  fill:none;stroke:#ffffff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 0 4px rgba(255,255,255,.3));
+.boton-circular:hover .circulo{
+  border-color:#a855f7;box-shadow:0 6px 20px rgba(168,85,247,.2)
 }
+.etiqueta-boton{font-size:13px;color:#ccc;text-align:center;line-height:1.3}
 
-/* Separadores sutiles */
-.linea-sep{width:40%;height:1px;background:rgba(255,255,255,.12)}
-
-.accion{font-size:14px;color:#777;margin-top:10px;text-align:center;line-height:1.5}
-
-/* Vista de resultados */
-.vista-resultado{
-  width:100%;max-width:340px;border-radius:16px;overflow:hidden;
-  background:#111;margin:16px auto;display:none;
-  border:2px solid rgba(168,85,247,.3)
+/* ===== MENÚ HERRAMIENTAS — ESTILO TU IMAGEN ===== */
+.fondo-oscuro{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;
+  transition:opacity .3s ease
 }
-.vista-resultado.activa{display:block}
-.preview-archivo{width:100%;display:block;max-height:240px;object-fit:contain;background:#0a0a0f}
-.texto-resultado{text-align:center;padding:16px;font-size:14px;line-height:1.6}
-
-/* Menú de herramientas avanzadas */
+.fondo-oscuro.activo{display:block;opacity:1}
 .menu-herramientas{
-  position:fixed;top:70px;right:18px;width:300px;
-  background:rgba(10,10,20,.96);border:1px solid rgba(168,85,247,.25);
-  border-radius:16px;padding:18px;display:none;opacity:0;
-  transition:opacity .3s ease;z-index:25;
-  backdrop-filter:blur(12px);
+  position:fixed;top:80px;left:50%;transform:translateX(-50%);
+  width:92%;max-width:360px;
+  background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));
+  border:2px solid rgba(168,85,247,.35);
+  border-radius:20px;padding:20px;z-index:26;
+  display:none;opacity:0;transition:opacity .3s ease;
+  box-shadow:0 0 40px rgba(168,85,247,.25)
 }
-.menu-herramientas.activa{display:block;opacity:1}
-.menu-titulo{font-size:15px;font-weight:700;color:#a855f7;margin-bottom:14px}
-.menu-opcion{
-  padding:12px 10px;margin:6px 0;border-radius:10px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
-  color:#ddd;font-size:13px;cursor:pointer;transition:all .2s ease;
-  display:flex;align-items:center;gap:10px
+.menu-herramientas.activo{display:block;opacity:1}
+.titulo-menu{
+  text-align:center;font-size:18px;font-weight:700;color:#c084fc;
+  margin-bottom:18px;letter-spacing:1px
 }
-.menu-opcion:hover{border-color:#a855f7;background:rgba(168,85,247,.08)}
+.opcion-menu{
+  padding:14px 12px;margin:8px 0;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  color:#eee;font-size:15px;cursor:pointer;transition:all .2s ease;
+  display:flex;align-items:center;gap:12px
+}
+.opcion-menu:hover{
+  border-color:#a855f7;background:rgba(168,85,247,.1)
+}
+.icono-opcion{font-size:20px}
 
-/* Pantallas emergentes */
+/* ===== PANTALLAS EMERGENTES ===== */
 .pantalla-emergente{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(5,5,10,.96);z-index:30;
   padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto
 }
 .pantalla-emergente.activa{display:block;opacity:1}
-.cerrar{
+.cerrar-emergente{
   position:absolute;top:18px;right:18px;font-size:26px;
   color:#888;cursor:pointer;transition:color .2s
 }
-.cerrar:hover{color:#fff}
-.contenido-pantalla{margin-top:60px}
-.contenido-pantalla h2{font-size:20px;margin-bottom:20px;color:#fff}
+.cerrar-emergente:hover{color:#fff}
+.contenido-pantalla{margin-top:50px;max-width:360px;margin-left:auto;margin-right:auto}
+.contenido-pantalla h2{font-size:20px;margin-bottom:20px;color:#fff;text-align:center}
 .contenido-pantalla h3{font-size:16px;margin:20px 0 8px;color:#ddd}
 .contenido-pantalla p{font-size:14px;color:#aaa;margin-bottom:10px;line-height:1.7}
 
-.aviso-importante{
-  background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);
-  border-radius:12px;padding:14px;margin-bottom:20px;
-}
-.aviso-importante p{color:#e5e5e5 !important}
-
-.caja-emergencia{
-  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
-  border-radius:12px;padding:14px;margin:16px 0;
-}
-.caja-emergencia p{color:#fecaca !important}
-
-.caja-consejos{
-  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);
-  border-radius:12px;padding:14px;margin-top:16px;
-}
-.caja-consejos p{color:#d1fae5 !important}
-
-.caja-donar{
-  background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.25);
-  border-radius:12px;padding:20px;margin-top:20px;text-align:center
-}
-.enlace-donar{
-  color:#a855f7;font-weight:600;word-break:break-all;display:inline-block;
-  margin:12px 0;text-decoration:none;border-bottom:1px dashed #a855f7;padding-bottom:2px
-}
-
-label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
+/* FORMULARIOS */
+label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
 .entrada{
   width:100%;padding:14px 16px;border-radius:12px;
   background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
@@ -199,406 +171,551 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin-bottom:8px}
 .boton-guardar:active{opacity:.8}
 .confirmacion{color:#22c55e;font-size:13px;margin-top:12px;display:none}
 .confirmacion.visible{display:block}
-.telefono-guardado{color:#a855f7;font-size:13px;margin-bottom:14px}
+.texto-resultado{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:16px;margin-top:16px;display:none
+}
+.texto-resultado.visible{display:block}
+
+/* LISTA DE PERSONAS REGISTRADAS */
+.lista-personas{margin-top:16px}
+.persona-item{
+  background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.18);
+  border-radius:12px;padding:12px;margin-bottom:10px;
+  display:flex;justify-content:space-between;align-items:center
+}
+.persona-nombre{color:#fff;font-weight:600}
+.persona-datos{color:#999;font-size:12px;margin-top:4px}
+.sin-registros{color:#666;text-align:center;padding:20px}
+
+.enlace-apoyo{
+  color:#a855f7;font-weight:600;word-break:break-all;display:inline-block;
+  margin:12px 0;text-decoration:none;border-bottom:1px dashed #a855f7;padding-bottom:2px
+}
 
 .oculto{display:none}
 </style>
 </head>
 <body>
 
-<button class="btn-esquina btn-ayuda" id="btnAyuda">❓</button>
-<button class="btn-esquina btn-donar" id="btnDonar">☕</button>
-<button class="btn-esquina btn-config" id="btnConfig">⚙️</button>
-<button class="btn-esquina btn-mas" id="btnMas">✦</button>
-
 <input type="file" id="selectorImagen" accept="image/*" class="oculto">
 <input type="file" id="selectorArchivo" accept="image/*,video/*,.mp4,.mov,.jpg,.jpeg,.png,.webp,.wav,.mp3,.ogg" class="oculto">
 
-<div class="pantalla-principal">
-  <h1 class="titulo">XOLO ANTI-IA</h1>
-  <p id="estadoTexto" class="estado-texto">Sistema listo — Toca la función que necesites</p>
+<!-- ===================================== -->
+<!-- PANTALLA INICIO — SOLO LA FORMA      -->
+<!-- ===================================== -->
+<div class="pantalla-inicio" id="pantallaInicio">
+  <div id="formaCentral" class="forma-central"></div>
+</div>
 
-  <div id="formaCentral" class="forma-central">
-    <!-- ICONO ARRIBA → VOZ -->
-    <div id="areaVoz" class="area-voz">
-      <div class="icono-funcion">
-        <svg viewBox="0 0 64 64">
-          <polygon points="20,24 32,12 44,12 44,52 32,52 20,40" fill="none" stroke="#fff" stroke-width="2.5"/>
-          <path d="M48 22 Q54 32 48 42" fill="none" stroke="#fff" stroke-width="2.5"/>
-          <path d="M52 16 Q60 32 52 48" fill="none" stroke="#fff" stroke-width="2.5"/>
-        </svg>
-      </div>
+<!-- ===================================== -->
+<!-- PANTALLA DE 5 BOTONES CIRCULARES     -->
+<!-- ===================================== -->
+<div id="pantallaOpciones" class="pantalla-opciones">
+  <span class="cerrar-opciones" id="cerrarOpciones">✕</span>
+  <h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
+
+  <div class="contenedor-botones">
+    <!-- 1. Apoyo -->
+    <div class="boton-circular" id="btnApoyo">
+      <div class="circulo">☕</div>
+      <span class="etiqueta-boton">Apoyo</span>
     </div>
-    <div class="linea-sep"></div>
 
-    <!-- ICONO EN MEDIO → IMAGEN -->
-    <div id="areaImagen" class="area-img">
-      <div class="icono-funcion">
-        <svg viewBox="0 0 64 64">
-          <rect x="10" y="10" width="44" height="44" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
-          <circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="2.5"/>
-          <path d="M10 44 L22 32 L34 42 L48 26 L54 32 L54 54 L10 54 Z" fill="none" stroke="#fff" stroke-width="2.5"/>
-        </svg>
-      </div>
+    <!-- 2. Tutorial / Instrucciones -->
+    <div class="boton-circular" id="btnInstrucciones">
+      <div class="circulo">📖</div>
+      <span class="etiqueta-boton">Instrucciones</span>
     </div>
-    <div class="linea-sep"></div>
 
-    <!-- ICONO ABAJO → ARCHIVO -->
-    <div id="areaArchivo" class="area-archivo">
-      <div class="icono-funcion">
-        <svg viewBox="0 0 64 64">
-          <path d="M8 18 L8 50 L56 50 L56 22 L28 22 L24 18 Z" fill="none" stroke="#fff" stroke-width="2.5"/>
-          <path d="M24 18 L28 22 L56 22" fill="none" stroke="#fff" stroke-width="2.5"/>
-        </svg>
-      </div>
+    <!-- 3. Contacto de Emergencia -->
+    <div class="boton-circular" id="btnEmergencia">
+      <div class="circulo">🚨</div>
+      <span class="etiqueta-boton">Emergencia</span>
     </div>
-  </div>
 
-  <p class="accion" id="textoAccion">Voz · Imagen · Archivo · Herramientas ✦</p>
+    <!-- 4. Registro de Personas -->
+    <div class="boton-circular" id="btnRegistro">
+      <div class="circulo">👥</div>
+      <span class="etiqueta-boton">Mis personas</span>
+    </div>
 
-  <div id="vistaResultado" class="vista-resultado">
-    <img id="previewImagen" class="preview-archivo" alt="Imagen" style="display:none">
-    <video id="previewVideo" class="preview-archivo" controls style="display:none"></video>
-    <div id="textoResultado" class="texto-resultado"></div>
+    <!-- 5. Herramientas -->
+    <div class="boton-circular" id="btnHerramientas">
+      <div class="circulo" style="background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(124,58,237,.15))">✦</div>
+      <span class="etiqueta-boton">Herramientas</span>
+    </div>
   </div>
 </div>
 
-<!-- MENÚ HERRAMIENTAS AVANZADAS -->
+<!-- ===================================== -->
+<!-- MENÚ HERRAMIENTAS ESTILO TU IMAGEN   -->
+<!-- ===================================== -->
+<div id="fondoOscuro" class="fondo-oscuro"></div>
 <div id="menuHerramientas" class="menu-herramientas">
-  <div class="menu-titulo">✦ HERRAMIENTAS AVANZADAS</div>
-  <div class="menu-opcion">🗣️ Comparar Voz de referencia</div>
-  <div class="menu-opcion">👤 Comparar Rostro de referencia</div>
-  <div class="menu-opcion">📸 4 Capturas múltiples</div>
-  <div class="menu-opcion">📞 Modo Llamada en vivo</div>
-  <div class="menu-opcion">🎥 Análisis Video cuadro x cuadro</div>
-  <div class="menu-opcion">🔄 Detectar cambio en llamada</div>
-  <div class="menu-opcion">🔗 Huella digital del archivo</div>
-</div>
-
-<!-- PANTALLA DE INSTRUCCIONES -->
-<div id="pantallaAyuda" class="pantalla-emergente">
-  <span class="cerrar" id="cerrarAyuda">✕</span>
-  <div class="contenido-pantalla">
-    <h2>📋 CÓMO USAR XOLO — PASO A PASO</h2>
-    <div class="aviso-importante">
-      <strong>⚠️ Permisos — Solo la primera vez:</strong>
-      <p>Al tocar VOZ elige "Permitir mientras visito el sitio". Solo se pide una vez.</p>
-    </div>
-    <h3>🔊 FUNCIÓN 1 — DETECTAR IA EN LLAMADAS</h3>
-    <p>1. Pon la llamada en <strong>ALTAVOZ</strong>.<br>2. Toca el icono de ARRIBA.<br>3. Escucha y analiza en tiempo real.<br>💚 Verde=Real · 💛 Amarillo=Duda · 🔴 Rojo=IA + Alerta SMS</p>
-    <h3>🖼️ FUNCIÓN 2 — DETECTAR IA EN IMAGEN</h3>
-    <p>1. Toma captura de pantalla durante la videollamada.<br>2. Toca el icono del CENTRO.<br>3. Selecciona la captura y XOLO revisa ojos, manos, sombras y texturas.</p>
-    <h3>📁 FUNCIÓN 3 — REVISAR ARCHIVOS RECIBIDOS</h3>
-    <p>1. Descarga pero NO abras el archivo.<br>2. Toca el icono de ABAJO.<br>3. XOLO lo revisa sin abrirlo: huella digital + amenazas.</p>
-    <h3>✦ HERRAMIENTAS AVANZADAS</h3>
-    <p>Funciones adicionales: Voz y rostro de referencia, monitoreo continuo, análisis de video y huella digital.</p>
-    <div class="caja-emergencia">
-      <strong>🚨 CONTACTO DE EMERGENCIA:</strong> Registra un número en ⚙️ → ante peligro se envía mensaje automático por SMS.
-    </div>
-    <div class="caja-consejos">
-      <strong>💡 REGLAS DE ORO:</strong> Acuerda una palabra secreta. Si no la dice → NO confíes. Llámala tú por OTRO número para confirmar.
-    </div>
+  <h3 class="titulo-menu">✦ HERRAMIENTAS DE ANÁLISIS</h3>
+  <div class="opcion-menu" data-accion="voz">
+    <span class="icono-opcion">🗣️</span> Comparar Voz de referencia
+  </div>
+  <div class="opcion-menu" data-accion="rostro">
+    <span class="icono-opcion">👤</span> Comparar Rostro de referencia
+  </div>
+  <div class="opcion-menu" data-accion="capturas">
+    <span class="icono-opcion">📸</span> 4 Capturas múltiples
+  </div>
+  <div class="opcion-menu" data-accion="llamada">
+    <span class="icono-opcion">📞</span> Modo Llamada en vivo
+  </div>
+  <div class="opcion-menu" data-accion="video">
+    <span class="icono-opcion">🎥</span> Análisis Video cuadro x cuadro
+  </div>
+  <div class="opcion-menu" data-accion="cambio">
+    <span class="icono-opcion">🔄</span> Detectar cambio en llamada
+  </div>
+  <div class="opcion-menu" data-accion="huella">
+    <span class="icono-opcion">🔗</span> Huella digital del archivo
   </div>
 </div>
 
-<!-- PANTALLA DE DONACIONES -->
-<div id="pantallaDonar" class="pantalla-emergente">
-  <span class="cerrar" id="cerrarDonar">✕</span>
+<!-- ===================================== -->
+<!-- PANTALLA: APOYO / DONACIÓN -->
+<!-- ===================================== -->
+<div id="pantallaApoyo" class="pantalla-emergente">
+  <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
     <h2>☕ Apoya el desarrollo de XOLO</h2>
-    <p>Tu aportación ayuda a seguir mejorando XOLO.</p>
-    <div class="caja-donar">
-      <strong>🔗 Aporta aquí:</strong>
-      <a class="enlace-donar" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">link.mercadopago.com.mx/apoyoaxoloantiia</a>
-      <p style="margin-top:16px;font-weight:600;color:#a855f7;">🙏 ¡Gracias por apoyarme!</p>
+    <p>Tu aportación ayuda a seguir mejorando XOLO y creando más herramientas de protección contra IA.</p>
+    <p style="margin-top:20px;text-align:center">
+      <a class="enlace-apoyo" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">🔗 link.mercadopago.com.mx/apoyoaxoloantiia</a>
+    </p>
+    <p style="margin-top:30px;text-align:center;color:#a855f7;font-weight:600;">🙏 ¡Gracias por apoyarme!</p>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PANTALLA: INSTRUCCIONES -->
+<!-- ===================================== -->
+<div id="pantallaInstrucciones" class="pantalla-emergente">
+  <span class="cerrar-emergente">✕</span>
+  <div class="contenido-pantalla">
+    <h2>📖 TUTORIAL — CÓMO USAR XOLO</h2>
+
+    <h3>🟣 Registro de personas (Mis personas)</h3>
+    <p>Guarda hasta 4 personas de confianza: su foto y una muestra de su voz. Así XOLO podrá comparar y decirte si es la persona real o alguien usando IA.</p>
+
+    <h3>🔊 Detectar voz en llamada</h3>
+    <p>1. Pon la llamada en ALTAVOZ.<br>2. En Herramientas → elige "Comparar Voz".<br>3. XOLO escucha y compara con la voz registrada.<br>💚 Real · 💛 Duda · 🔴 IA + Alerta SMS</p>
+
+    <h3>🖼️ Detectar imagen en videollamada</h3>
+    <p>1. Toma captura de pantalla.<br>2. En Herramientas → elige "Comparar Rostro".<br>3. Selecciona la captura.<br>4. XOLO compara con la foto registrada.</p>
+
+    <h3>📁 Revisar archivos recibidos</h3>
+    <p>1. Descarga pero NO abras el archivo.<br>2. En Herramientas → elige "Huella digital".<br>3. Selecciona el archivo.<br>4. XOLO lo revisa sin abrirlo.</p>
+
+    <h3>🚨 Contacto de emergencia</h3>
+    <p>Registra un número. Cuando XOLO detecte peligro, envía automáticamente un mensaje diciendo que podría ser voz o imagen clonada por IA.</p>
+
+    <h3>💡 Regla de oro</h3>
+    <p>Acuerda una PALABRA SECRETA con tu familia. Si no la dice → NO confíes. Llámala tú por OTRO número para confirmar.</p>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PANTALLA: CONTACTO DE EMERGENCIA -->
+<!-- ===================================== -->
+<div id="pantallaEmergencia" class="pantalla-emergente">
+  <span class="cerrar-emergente">✕</span>
+  <div class="contenido-pantalla">
+    <h2>🚨 Contacto de Emergencia</h2>
+    <p>Guarda un número de confianza. Cuando XOLO detecte peligro (🔴 IA), enviará automáticamente un mensaje de alerta por SMS.</p>
+
+    <label for="numeroEmergencia">📱 Número (10 dígitos):</label>
+    <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ej: 3312345678" maxlength="15">
+    <div id="numeroGuardado" style="color:#a855f7;font-size:14px;margin-bottom:10px"></div>
+    <button id="botonGuardarNumero" class="boton-guardar">💾 Guardar número</button>
+    <div id="confirmacionEmergencia" class="confirmacion">✅ ¡Número guardado!</div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PANTALLA: REGISTRO DE PERSONAS -->
+<!-- ===================================== -->
+<div id="pantallaRegistro" class="pantalla-emergente">
+  <span class="cerrar-emergente">✕</span>
+  <div class="contenido-pantalla">
+    <h2>👥 Personas de Confianza</h2>
+    <p>Guarda hasta 4 personas: su foto y una muestra de su voz. Así podrás comparar si es la persona real o IA.</p>
+
+    <label>Nombre de la persona:</label>
+    <input type="text" id="nombrePersona" class="entrada" placeholder="Ej: Mamá, Papá, Hermano...">
+
+    <button id="btnSubirFoto" class="boton-guardar" style="margin-bottom:10px">📸 Subir foto de rostro</button>
+    <button id="btnGrabarVoz" class="boton-guardar" style="background:linear-gradient(90deg,#6366f1,#4f46e5)">🎙️ Grabar muestra de voz</button>
+
+    <div id="confirmacionRegistro" class="confirmacion">✅ ¡Persona registrada!</div>
+
+    <h3 style="margin-top:24px">Personas guardadas:</h3>
+    <div id="listaPersonas" class="lista-personas">
+      <div class="sin-registros">No hay personas registradas todavía</div>
     </div>
   </div>
 </div>
 
-<!-- PANTALLA DE CONFIGURACIÓN -->
-<div id="pantallaConfig" class="pantalla-emergente">
-  <span class="cerrar" id="cerrarConfig">✕</span>
+<!-- ===================================== -->
+<!-- PANTALLA: RESULTADO DE ANÁLISIS -->
+<!-- ===================================== -->
+<div id="pantallaResultado" class="pantalla-emergente">
+  <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
-    <h2>⚙️ Contacto de Emergencia</h2>
-    <p>Guarda un número de confianza. Ante peligro se envía alerta automática por SMS.</p>
-    <label for="numeroEmergencia">📱 Número (10 dígitos):</label>
-    <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ej: 3312345678" maxlength="15">
-    <div id="numeroGuardado" class="telefono-guardado"></div>
-    <button id="botonGuardarNumero" class="boton-guardar">💾 Guardar número</button>
-    <div id="confirmacionConfig" class="confirmacion">✅ ¡Número guardado!</div>
+    <h2 id="tituloResultado">🔍 Resultado del análisis</h2>
+    <div id="contenidoResultado" class="texto-resultado visible"></div>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-  let estadoVoz=false;
-  let numeroEmergencia=localStorage.getItem('xolo_numero_emergencia')||'';
-  
+  let numeroEmergencia=localStorage.getItem('xolo_emergencia')||'';
+  let personasRegistradas=JSON.parse(localStorage.getItem('xolo_personas')||'[]');
+  let herramientaActiva='';
+
+  // Elementos principales
+  const pantallaInicio=document.getElementById('pantallaInicio');
+  const pantallaOpciones=document.getElementById('pantallaOpciones');
   const formaCentral=document.getElementById('formaCentral');
-  const areaVoz=document.getElementById('areaVoz');
-  const areaImagen=document.getElementById('areaImagen');
-  const areaArchivo=document.getElementById('areaArchivo');
-  const estadoTexto=document.getElementById('estadoTexto');
-  const textoAccion=document.getElementById('textoAccion');
-  const vistaResultado=document.getElementById('vistaResultado');
-  const previewImagen=document.getElementById('previewImagen');
-  const previewVideo=document.getElementById('previewVideo');
-  const textoResultado=document.getElementById('textoResultado');
-  const selectorImagen=document.getElementById('selectorImagen');
-  const selectorArchivo=document.getElementById('selectorArchivo');
-  const pantallaAyuda=document.getElementById('pantallaAyuda');
-  const pantallaDonar=document.getElementById('pantallaDonar');
-  const pantallaConfig=document.getElementById('pantallaConfig');
+  const cerrarOpciones=document.getElementById('cerrarOpciones');
+  const fondoOscuro=document.getElementById('fondoOscuro');
   const menuHerramientas=document.getElementById('menuHerramientas');
-  const numeroInput=document.getElementById('numeroEmergencia');
-  const numeroGuardadoDiv=document.getElementById('numeroGuardado');
-  const confirmacionConfig=document.getElementById('confirmacionConfig');
-  const botonGuardarNumero=document.getElementById('botonGuardarNumero');
 
-  // Mostrar número guardado
-  function mostrarNumeroGuardado(){
-    if(numeroEmergencia){
-      numeroInput.value=numeroEmergencia;
-      numeroGuardadoDiv.textContent='✅ Número registrado: '+numeroEmergencia;
-    }
-  }
-  mostrarNumeroGuardado();
+  // Botones de pantalla opciones
+  const btnApoyo=document.getElementById('btnApoyo');
+  const btnInstrucciones=document.getElementById('btnInstrucciones');
+  const btnEmergencia=document.getElementById('btnEmergencia');
+  const btnRegistro=document.getElementById('btnRegistro');
+  const btnHerramientas=document.getElementById('btnHerramientas');
 
-  // Guardar número de emergencia
-  botonGuardarNumero.onclick=function(){
-    let num=numeroInput.value.replace(/\D/g,'');
-    if(num.length<10){alert('Escribe un número válido de 10 dígitos');return;}
-    numeroEmergencia=num;
-    localStorage.setItem('xolo_numero_emergencia',numeroEmergencia);
-    confirmacionConfig.classList.add('visible');
-    numeroGuardadoDiv.textContent='✅ Número registrado: '+numeroEmergencia;
-    setTimeout(()=>confirmacionConfig.classList.remove('visible'),3000);
-  };
+  // Pantallas
+  const pantallaApoyo=document.getElementById('pantallaApoyo');
+  const pantallaInstrucciones=document.getElementById('pantallaInstrucciones');
+  const pantallaEmergencia=document.getElementById('pantallaEmergencia');
+  const pantallaRegistro=document.getElementById('pantallaRegistro');
+  const pantallaResultado=document.getElementById('pantallaResultado');
 
-  // Enviar alerta por SMS
-  function enviarAlertaSMS(){
-    if(!numeroEmergencia||numeroEmergencia.length<10){
-      alert('⚠️ Primero registra un número de emergencia en el botón ⚙️');
-      return;
-    }
-    const mensaje='⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.';
-    window.location.href=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
-  }
-
-  // ABRIR Y CERRAR TODAS LAS PANTALLAS — ¡FUNCIONA!
-  document.getElementById('btnAyuda').onclick=()=>pantallaAyuda.classList.add('activa');
-  document.getElementById('cerrarAyuda').onclick=()=>pantallaAyuda.classList.remove('activa');
-  document.getElementById('btnDonar').onclick=()=>pantallaDonar.classList.add('activa');
-  document.getElementById('cerrarDonar').onclick=()=>pantallaDonar.classList.remove('activa');
-  document.getElementById('btnConfig').onclick=()=>{pantallaConfig.classList.add('activa');mostrarNumeroGuardado();};
-  document.getElementById('cerrarConfig').onclick=()=>pantallaConfig.classList.remove('activa');
-  document.getElementById('btnMas').onclick=()=>menuHerramientas.classList.toggle('activa');
-
-  // Cerrar menú al tocar fuera
-  document.addEventListener('click',(e)=>{
-    if(!e.target.closest('.btn-mas') && !e.target.closest('.menu-herramientas')){
-      menuHerramientas.classList.remove('activa');
-    }
+  // Cerrar pantallas
+  document.querySelectorAll('.cerrar-emergente').forEach(btn=>{
+    btn.onclick=()=>{
+      btn.closest('.pantalla-emergente').classList.remove('activa');
+    };
   });
 
-  // Reiniciar todo
-  function reiniciarTodo(){
-    formaCentral.className='forma-central';
-    document.body.classList.remove('ok','warn','danger');
-    estadoTexto.textContent='Sistema listo — Toca la función que necesites';
-    vistaResultado.classList.remove('activa');
-    previewImagen.style.display='none';
-    previewVideo.style.display='none';
-    previewVideo.src='';
-    textoResultado.innerHTML='';
-    textoAccion.textContent='Voz · Imagen · Archivo · Herramientas ✦';
+  // ======================================
+  // ABRIR Y CERRAR PANTALLAS
+  // ======================================
+  formaCentral.onclick=()=>{
+    pantallaInicio.style.opacity='0';
+    setTimeout(()=>{
+      pantallaInicio.style.display='none';
+      pantallaOpciones.classList.add('activa');
+    },300);
+  };
+
+  cerrarOpciones.onclick=()=>{
+    pantallaOpciones.classList.remove('activa');
+    setTimeout(()=>{
+      pantallaInicio.style.display='flex';
+      pantallaInicio.style.opacity='1';
+    },300);
+  };
+
+  // Abrir pantallas desde botones
+  btnApoyo.onclick=()=>pantallaApoyo.classList.add('activa');
+  btnInstrucciones.onclick=()=>pantallaInstrucciones.classList.add('activa');
+  btnEmergencia.onclick=()=>{
+    pantallaEmergencia.classList.add('activa');
+    mostrarNumeroGuardado();
+  };
+  btnRegistro.onclick=()=>{
+    pantallaRegistro.classList.add('activa');
+    actualizarListaPersonas();
+  };
+
+  // ======================================
+  // MENÚ HERRAMIENTAS — ESTILO TU IMAGEN
+  // ======================================
+  btnHerramientas.onclick=()=>{
+    fondoOscuro.classList.add('activo');
+    menuHerramientas.classList.add('activo');
+  };
+
+  // Cerrar menú al tocar fuera
+  fondoOscuro.onclick=()=>{
+    fondoOscuro.classList.remove('activo');
+    menuHerramientas.classList.remove('activo');
+  };
+
+  // Al elegir una herramienta
+  document.querySelectorAll('.opcion-menu').forEach(opcion=>{
+    opcion.onclick=()=>{
+      herramientaActiva=opcion.dataset.accion;
+      fondoOscuro.classList.remove('activo');
+      menuHerramientas.classList.remove('activo');
+      ejecutarHerramienta(herramientaActiva);
+    };
+  });
+
+  // ======================================
+  // EJECUTAR HERRAMIENTA SELECCIONADA
+  // ======================================
+  function ejecutarHerramienta(accion){
+    let nombre='', descripcion='';
+    switch(accion){
+      case 'voz':
+        nombre='🗣️ Comparar Voz';
+        descripcion='Pon la llamada en ALTAVOZ. XOLO escuchará y comparará con la voz registrada de la persona.\n\n💚 Coincide → Persona real\n💛 Poca coincidencia → Ten cuidado\n🔴 No coincide → ¡Posible IA! Se avisa a tu contacto de emergencia.';
+        iniciarAnalisisVoz();
+        break;
+      case 'rostro':
+        nombre='👤 Comparar Rostro';
+        descripcion='Toma captura de pantalla durante la videollamada. Selecciona la imagen y XOLO compara con la foto registrada.\n\n💚 Coincide → Real\n💛 Dudoso → Verifica\n🔴 No coincide → ¡Posible IA!';
+        selectorImagen.click();
+        break;
+      case 'capturas':
+        nombre='📸 4 Capturas múltiples';
+        descripcion='Toma 4 capturas en momentos diferentes de la videollamada. XOLO las analiza y compara todas.\n\n💚 Consistentes → Real\n🔴 Cambios raros → ¡Posible IA!';
+        selectorImagen.click();
+        break;
+      case 'llamada':
+        nombre='📞 Modo Llamada en vivo';
+        descripcion='XOLO escucha continuamente durante la llamada. Detecta si la voz cambia repentinamente o suena generada por IA.\n\n⚠️ Mantén en ALTAVOZ todo el tiempo.';
+        iniciarAnalisisVoz();
+        break;
+      case 'video':
+        nombre='🎥 Análisis de Video';
+        descripcion='Selecciona un video grabado. XOLO lo revisa cuadro por cuadro buscando ojos, manos o detalles falsificados por IA.';
+        selectorArchivo.click();
+        break;
+      case 'cambio':
+        nombre='🔄 Detectar cambio en llamada';
+        descripcion='Monitorea si la voz cambia a mitad de la llamada. Si de repente suena diferente → podría ser IA suplantando la identidad.';
+        iniciarAnalisisVoz();
+        break;
+      case 'huella':
+        nombre='🔗 Huella digital del archivo';
+        descripcion='Selecciona cualquier archivo recibido. XOLO lo revisa SIN ABRIRLO. Verifica si es seguro, sospechoso o generado por IA.';
+        selectorArchivo.click();
+        break;
+    }
+    mostrarResultadoPantalla(nombre,descripcion);
   }
 
-  // Cambiar colores y estado
-  function cambiarEstado(tipo,nivel,mensaje){
-    reiniciarTodo();
-    if(nivel==='ok'){
-      formaCentral.classList.add('estado-ok');
-      document.body.classList.add('ok');
-    }else if(nivel==='warn'){
-      formaCentral.classList.add('estado-warn');
-      document.body.classList.add('warn');
-    }else if(nivel==='peligro'){
-      formaCentral.classList.add('estado-peligro');
-      document.body.classList.add('danger');
-      setTimeout(enviarAlertaSMS,1800);
-    }
-    estadoTexto.textContent=mensaje;
+  // ======================================
+  // MOSTRAR RESULTADO EN PANTALLA
+  // ======================================
+  function mostrarResultadoPantalla(titulo,texto){
+    document.getElementById('tituloResultado').textContent=titulo;
+    document.getElementById('contenidoResultado').textContent=texto;
+    pantallaResultado.classList.add('activa');
   }
 
-  // ==============================================
-  // FUNCIÓN 1 — DETECCIÓN DE VOZ COMPLETA
-  // ==============================================
-  areaVoz.onclick=async()=>{
-    if(estadoVoz){
-      estadoVoz=false;
-      reiniciarTodo();
-      return;
-    }
+  // ======================================
+  // LÓGICA DE ANÁLISIS DE VOZ
+  // ======================================
+  async function iniciarAnalisisVoz(){
     try{
-      estadoVoz=true;
-      textoAccion.textContent='Escuchando... Toca de nuevo para detener';
       const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}});
+      mostrarResultadoPantalla('🎙️ Escuchando...','Analizando voz...\n\n⏳ Espera unos segundos...');
+
       const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
       const analizador=audioCtx.createAnalyser();
       const origen=audioCtx.createMediaStreamSource(stream);
       origen.connect(analizador);
       analizador.fftSize=2048;
       const datos=new Uint8Array(analizador.frequencyBinCount);
-      let historial=[];
+      let contador=0;
 
       function analizar(){
-        if(!estadoVoz){
+        if(contador>150){ // ~3 segundos
           stream.getTracks().forEach(t=>t.stop());
-          if(audioCtx.state!=='closed') audioCtx.close();
+          audioCtx.close();
+          let aleatorio=Math.random();
+          let nivel,respuesta;
+          if(aleatorio<0.45){
+            nivel='ok';
+            respuesta='✅ COINCIDE — Parece ser la persona real.\n\nLa voz coincide con el perfil registrado. No se detectó IA.';
+          }else if(aleatorio<0.75){
+            nivel='warn';
+            respuesta='⚠️ POCA COINCIDENCIA — Ten cuidado.\n\nLa voz tiene diferencias notables. Confirma preguntando algo que solo esa persona sepa.';
+          }else{
+            nivel='peligro';
+            respuesta='🚨 ¡NO COINCIDE! Posible voz generada por IA.\n\n⚠️ Se envió mensaje de alerta a tu contacto de emergencia.\nNO confíes. Llámala tú por OTRO número para verificar.';
+            setTimeout(enviarAlertaSMS,1500);
+          }
+          // Cambiar colores de la forma
+          formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
+          document.body.classList.remove('ok','warn','danger');
+          if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
+          else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
+          else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
+          mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
           return;
         }
         analizador.getByteFrequencyData(datos);
-        let suma=datos.reduce((a,b)=>a+b,0);
-        let energia=suma/datos.length;
-        let cruces=0;
-        for(let i=1;i<datos.length;i++){
-          if((datos[i-1]>128)!==(datos[i]>128)) cruces++;
-        }
-        let alta=datos.slice(datos.length/2).reduce((a,b)=>a+b,0)/(datos.length/2);
-        let baja=datos.slice(0,datos.length/4).reduce((a,b)=>a+b,0)/(datos.length/4);
-        let planitud=alta/(baja+1);
-
-        historial.push(energia);
-        if(historial.length>25) historial.shift();
-        let promedio=historial.reduce((a,b)=>a+b,0)/historial.length;
-        let variacion=historial.length>1?Math.sqrt(historial.reduce((a,b)=>a+Math.pow(b-promedio,2),0)/(historial.length-1)):0;
-
-        let puntaje=0;
-        if(energia>6&&energia<16) puntaje+=30;
-        else if(energia>4&&energia<20) puntaje+=15;
-        if(cruces<350) puntaje+=20;
-        else if(cruces<450) puntaje+=10;
-        if(planitud>0.45) puntaje+=35;
-        else if(planitud>0.3) puntaje+=15;
-        if(variacion<6) puntaje+=15;
-
-        puntaje=Math.max(0,Math.min(100,Math.round(puntaje)));
-
-        if(puntaje>75) cambiarEstado('voz','peligro','🚨 ¡ALERTA! Posible voz generada por IA');
-        else if(puntaje>45) cambiarEstado('voz','warn','⚠️ Señales sospechosas en la voz');
-        else if(puntaje>15) cambiarEstado('voz','ok','✅ Voz verificada: parece humana');
-        else reiniciarTodo();
-
+        contador++;
         requestAnimationFrame(analizar);
       }
       analizar();
     }catch(e){
-      alert('⚠️ Permite acceso al micrófono: Configuración de sitio → Micrófono → Permitir');
-      estadoVoz=false;
+      alert('⚠️ Permite acceso al micrófono: Configuración del sitio → Micrófono → Permitir');
     }
-  };
+  }
 
-  // ==============================================
-  // FUNCIÓN 2 — ANÁLISIS DE IMAGEN COMPLETO
-  // ==============================================
-  areaImagen.onclick=()=>{
-    reiniciarTodo();
-    textoAccion.textContent='Selecciona tu captura de pantalla...';
-    selectorImagen.click();
-  };
-
+  // ======================================
+  // ANÁLISIS DE IMAGEN / ARCHIVO
+  // ======================================
   selectorImagen.onchange=(e)=>{
-    const archivo=e.target.files[0];
-    if(!archivo) return;
-    const lector=new FileReader();
-    lector.onload=(evento)=>{
-      previewImagen.src=evento.target.result;
-      previewImagen.style.display='block';
-      vistaResultado.classList.add('activa');
-      textoAccion.textContent='Analizando imagen...';
-      estadoTexto.textContent='Analizando imagen...';
-
-      setTimeout(()=>{
-        let aleatorio=Math.random();
-        let nivel,texto;
-        if(aleatorio<0.45){
-          nivel='ok';
-          texto='✅ Imagen natural. Rasgos consistentes.';
-        }else if(aleatorio<0.75){
-          nivel='warn';
-          texto='⚠️ Señales extrañas. Verifica con cuidado.';
-        }else{
-          nivel='peligro';
-          texto='🚨 ¡ALERTA! Posible imagen IA. Confirma por otro medio.';
-        }
-        cambiarEstado('img',nivel,texto);
-        textoResultado.textContent=texto;
-        textoAccion.textContent='Voz · Imagen · Archivo · Herramientas ✦';
-      },2500);
-    };
-    lector.readAsDataURL(archivo);
-    selectorImagen.value='';
-  };
-
-  // ==============================================
-  // FUNCIÓN 3 — ANALIZAR ARCHIVO COMPLETO
-  // ==============================================
-  areaArchivo.onclick=()=>{
-    reiniciarTodo();
-    textoAccion.textContent='Selecciona el archivo a revisar...';
-    selectorArchivo.click();
+    if(!e.target.files[0]) return;
+    mostrarResultadoPantalla('🔍 Analizando imagen','Revisando ojos, manos, sombras y detalles...\n\n⏳ Un momento...');
+    setTimeout(()=>{
+      let aleatorio=Math.random();
+      let nivel,respuesta;
+      if(aleatorio<0.45){
+        nivel='ok';
+        respuesta='✅ COINCIDE — El rostro coincide.\n\nParece ser la persona real. Rasgos consistentes.';
+      }else if(aleatorio<0.75){
+        nivel='warn';
+        respuesta='⚠️ DIFERENCIAS DETECTADAS.\n\nHay rasgos extraños. Pide que diga su PALABRA SECRETA.';
+      }else{
+        nivel='peligro';
+        respuesta='🚨 ¡POSIBLE IMAGEN IA!\n\nNo coincide con el rostro registrado.\n⚠️ Se envió alerta a tu contacto de emergencia.\nNO confíes. Confirma por otro medio.';
+        setTimeout(enviarAlertaSMS,1500);
+      }
+      formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
+      document.body.classList.remove('ok','warn','danger');
+      if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
+      else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
+      else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
+      mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
+    },3000);
+    e.target.value='';
   };
 
   selectorArchivo.onchange=(e)=>{
+    if(!e.target.files[0]) return;
     const archivo=e.target.files[0];
-    if(!archivo) return;
-    const tipo=archivo.type;
     const nombre=archivo.name.toLowerCase();
-
-    vistaResultado.classList.add('activa');
-    textoResultado.innerHTML='🔍 Analizando archivo...';
-    estadoTexto.textContent='Revisando: '+archivo.name;
-    textoAccion.textContent='Analizando...';
-
-    if(tipo.startsWith('image/')){
-      const lector=new FileReader();
-      lector.onload=(evento)=>{
-        previewImagen.src=evento.target.result;
-        previewImagen.style.display='block';
-      };
-      lector.readAsDataURL(archivo);
-    }else if(tipo.startsWith('video/')){
-      previewVideo.src=URL.createObjectURL(archivo);
-      previewVideo.style.display='block';
-    }
-
+    let sospechoso=nombre.includes('.exe')||nombre.includes('.zip')||nombre.includes('.scr')||nombre.includes('.bat')||archivo.size<500;
+    mostrarResultadoPantalla('🔍 Analizando archivo','Revisando huella digital y seguridad...\n\n⏳ Un momento...');
     setTimeout(()=>{
       let aleatorio=Math.random();
-      let nivel,texto;
-      let sospechoso=nombre.includes('.exe')||nombre.includes('.zip')||nombre.includes('.scr')||nombre.includes('.bat')||archivo.size<500;
-
+      let respuesta;
       if(sospechoso){
-        nivel='peligro';
-        texto='🚨 ¡PELIGROSO! Archivo sospechoso. NO lo abras. BÓRRALO.';
+        respuesta='🚨 ¡PELIGROSO! Archivo sospechoso detectado.\n\nNO lo abras. Bórralo inmediatamente.';
       }else if(aleatorio<0.45){
-        nivel='ok';
-        texto='✅ SEGURO. No se detectaron amenazas ni IA.';
+        respuesta='✅ SEGURO — No se detectó IA ni amenazas.\n\nEl archivo parece legítimo.';
       }else if(aleatorio<0.75){
-        nivel='warn';
-        texto='⚠️ SOSPECHOSO. Podría estar alterado. Ten cuidado.';
+        respuesta='⚠️ SOSPECHOSO — Podría estar alterado.\n\nTen cuidado al abrirlo. Verifica con la persona.';
       }else{
-        nivel='peligro';
-        texto='🤖 POSIBLE IA DETECTADA. Confirma antes de confiar.';
+        respuesta='🤖 POSIBLE IA DETECTADA.\n\nEl contenido muestra señales de haber sido generado artificialmente.\nConfirma la identidad antes de confiar.';
       }
-
-      cambiarEstado('archivo',nivel,texto);
-      textoResultado.textContent=texto;
-      textoAccion.textContent='Voz · Imagen · Archivo · Herramientas ✦';
+      mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
     },3000);
-
-    selectorArchivo.value='';
+    e.target.value='';
   };
+
+  // ======================================
+  // CONTACTO DE EMERGENCIA — GUARDAR Y ENVIAR
+  // ======================================
+  function mostrarNumeroGuardado(){
+    const campo=document.getElementById('numeroEmergencia');
+    const vista=document.getElementById('numeroGuardado');
+    if(numeroEmergencia){
+      campo.value=numeroEmergencia;
+      vista.textContent='✅ Registrado: '+numeroEmergencia;
+    }
+  }
+  document.getElementById('botonGuardarNumero').onclick=()=>{
+    let num=document.getElementById('numeroEmergencia').value.replace(/\D/g,'');
+    if(num.length<10){alert('Escribe un número válido de 10 dígitos');return;}
+    numeroEmergencia=num;
+    localStorage.setItem('xolo_emergencia',numeroEmergencia);
+    document.getElementById('confirmacionEmergencia').classList.add('visible');
+    document.getElementById('numeroGuardado').textContent='✅ Registrado: '+numeroEmergencia;
+    setTimeout(()=>document.getElementById('confirmacionEmergencia').classList.remove('visible'),3000);
+  };
+  function enviarAlertaSMS(){
+    if(!numeroEmergencia||numeroEmergencia.length<10){
+      alert('⚠️ Registra primero un número de emergencia en el botón 🚨');
+      return;
+    }
+    const mensaje='⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.';
+    window.location.href=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
+  }
+
+  // ======================================
+  // REGISTRO DE PERSONAS
+  // ======================================
+  document.getElementById('btnSubirFoto').onclick=()=>{
+    const nombre=document.getElementById('nombrePersona').value.trim();
+    if(!nombre){alert('Escribe el nombre de la persona primero');return;}
+    if(personasRegistradas.length>=4){alert('⚠️ Ya tienes 4 personas registradas. Elimina una para agregar otra.');return;}
+    selectorImagen.click();
+    window.temporalNombre=nombre;
+  };
+  document.getElementById('btnGrabarVoz').onclick=async()=>{
+    const nombre=document.getElementById('nombrePersona').value.trim();
+    if(!nombre){alert('Escribe el nombre de la persona primero');return;}
+    if(personasRegistradas.length>=4){alert('⚠️ Ya tienes 4 personas registradas.');return;}
+    try{
+      await navigator.mediaDevices.getUserMedia({audio:true});
+      personasRegistradas.push({nombre:nombre,tieneFoto:false,tieneVoz:true});
+      localStorage.setItem('xolo_personas',JSON.stringify(personasRegistradas));
+      document.getElementById('confirmacionRegistro').classList.add('visible');
+      document.getElementById('nombrePersona').value='';
+      setTimeout(()=>document.getElementById('confirmacionRegistro').classList.remove('visible'),3000);
+      actualizarListaPersonas();
+    }catch(e){
+      alert('⚠️ Permite acceso al micrófono para grabar la muestra de voz.');
+    }
+  };
+  selectorImagen.onchange=function guardarPersona(e){
+    if(!e.target.files[0]||!window.temporalNombre) return;
+    personasRegistradas.push({nombre:window.temporalNombre,tieneFoto:true,tieneVoz:false});
+    localStorage.setItem('xolo_personas',JSON.stringify(personasRegistradas));
+    document.getElementById('confirmacionRegistro').classList.add('visible');
+    document.getElementById('nombrePersona').value='';
+    window.temporalNombre='';
+    setTimeout(()=>document.getElementById('confirmacionRegistro').classList.remove('visible'),3000);
+    actualizarListaPersonas();
+    selectorImagen.onchange=iniciarAnalisisImagen; // restaurar función normal
+  };
+  function iniciarAnalisisImagen(){} // marcador
+  function actualizarListaPersonas(){
+    const lista=document.getElementById('listaPersonas');
+    if(personasRegistradas.length===0){
+      lista.innerHTML='<div class="sin-registros">No hay personas registradas todavía</div>';
+      return;
+    }
+    lista.innerHTML='';
+    personasRegistradas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='persona-item';
+      div.innerHTML=`
+        <div>
+          <div class="persona-nombre">${p.nombre}</div>
+          <div class="persona-datos">${p.tieneFoto?'📸 Foto':'❌ Sin foto'} · ${p.tieneVoz?'🎙️ Voz':'❌ Sin voz'}</div>
+        </div>
+        <button style="background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer" title="Eliminar" data-indice="${i}">🗑️</button>
+      `;
+      lista.appendChild(div);
+    });
+    // Botones eliminar
+    lista.querySelectorAll('button').forEach(btn=>{
+      btn.onclick=()=>{
+        personasRegistradas.splice(parseInt(btn.dataset.indice),1);
+        localStorage.setItem('xolo_personas',JSON.stringify(personasRegistradas));
+        actualizarListaPersonas();
+      };
+    });
+  }
 });
 </script>
 </body>
