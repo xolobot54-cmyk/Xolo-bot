@@ -106,7 +106,7 @@ body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),tran
 }
 .etiqueta-boton{font-size:13px;color:#ccc;text-align:center;line-height:1.3}
 
-/* ===== MENÚ HERRAMIENTAS — ESTILO TU IMAGEN ===== */
+/* ===== MENÚ HERRAMIENTAS ===== */
 .fondo-oscuro{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;
@@ -236,31 +236,22 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
   <h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
 
   <div class="contenedor-botones">
-    <!-- 1. Apoyo -->
     <div class="boton-circular" id="btnApoyo">
       <div class="circulo">☕</div>
       <span class="etiqueta-boton">Apoyo</span>
     </div>
-
-    <!-- 2. Tutorial / Instrucciones -->
     <div class="boton-circular" id="btnInstrucciones">
       <div class="circulo">📖</div>
       <span class="etiqueta-boton">Instrucciones</span>
     </div>
-
-    <!-- 3. Contacto de Emergencia -->
     <div class="boton-circular" id="btnEmergencia">
       <div class="circulo">🚨</div>
       <span class="etiqueta-boton">Emergencia</span>
     </div>
-
-    <!-- 4. Registro de Personas -->
     <div class="boton-circular" id="btnRegistro">
       <div class="circulo">👥</div>
       <span class="etiqueta-boton">Mis personas</span>
     </div>
-
-    <!-- 5. Herramientas -->
     <div class="boton-circular" id="btnHerramientas">
       <div class="circulo" style="background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(124,58,237,.15))">✦</div>
       <span class="etiqueta-boton">Herramientas</span>
@@ -269,7 +260,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
 </div>
 
 <!-- ===================================== -->
-<!-- MENÚ HERRAMIENTAS — ESTILO TU IMAGEN -->
+<!-- MENÚ HERRAMIENTAS -->
 <!-- ===================================== -->
 <div id="fondoOscuro" class="fondo-oscuro"></div>
 <div id="menuHerramientas" class="menu-herramientas">
@@ -298,7 +289,7 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
 </div>
 
 <!-- ===================================== -->
-<!-- PANTALLA: APOYO / DONACIÓN -->
+<!-- PANTALLAS DE INFORMACIÓN -->
 <!-- ===================================== -->
 <div id="pantallaApoyo" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
@@ -312,61 +303,40 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
   </div>
 </div>
 
-<!-- ===================================== -->
-<!-- PANTALLA: INSTRUCCIONES ACTUALIZADA -->
-<!-- ===================================== -->
 <div id="pantallaInstrucciones" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
     <h2>📖 TUTORIAL COMPLETO — CÓMO USAR XOLO</h2>
-
     <h3>🟣 PASO 1 — Registra a tus personas de confianza</h3>
     <p>Entra en 👥 <b>Mis personas</b>. Guarda hasta 4 personas: su foto y una muestra de su voz. Sin esto guardado, XOLO no tiene con qué comparar.</p>
-
     <h3>🎙️ ESCUCHAR POR XOLO — La herramienta principal</h3>
     <p>✅ <b>Pon la llamada en ALTAVOZ</b> antes de usarla.<br>
-    ✅ Toca "Escuchar por XOLO" → XOLO empieza a escuchar.<br>
-    ✅ <b>QUÉDATE SILENCIOSO/A</b> mientras habla la otra persona.<br>
-    ✅ XOLO analiza en tiempo real y <b>NO se detiene sola</b>.<br>
-    ✅ Si detecta voz artificial → te avisa en pantalla de inmediato.<br>
-    ✅ Tú tocas DETENER cuando termines la llamada.<br>
-    💚 Coincide → Persona real · 💛 Duda → Ten cuidado · 🔴 IA → Alerta</p>
-
-    <h3>🗣️ Comparar Voz de referencia</h3>
-    <p>Escucha unos segundos y compara con la voz que tienes registrada. Úsala cuando la persona hable sola y puedas quedarte callado/a.</p>
-
+    ✅ Toca "Escuchar por XOLO" → empieza a escuchar.<br>
+    ✅ <b>QUÉDATE CALLADO/A</b> mientras habla la otra persona.<br>
+    ✅ XOLO se queda escuchando y te avisa si detecta voz artificial.<br>
+    ✅ Tú tocas ⏹️ DETENER cuando termines.<br>
+    💚 Real · 💛 Duda · 🔴 IA + Alerta</p>
+    <h3>🗣️ Comparar Voz</h3>
+    <p>Escucha unos segundos y compara con la voz registrada. Quédate callado/a mientras la persona habla.</p>
     <h3>👤 Comparar Rostro / 📸 4 Capturas</h3>
-    <p>Durante la videollamada → toma captura de pantalla → en XOLO selecciona la imagen → XOLO compara con la foto registrada. Revisa ojos, manos, sombras y detalles raros.</p>
-
-    <h3>🎥 Análisis de Video</h3>
-    <p>Si te mandan un video grabado → guárdalo → en XOLO elige esta opción → revisa cuadro por cuadro buscando rasgos generados por IA.</p>
-
-    <h3>🔄 Detectar cambio en llamada</h3>
-    <p>XOLO vigila si la voz cambia repentinamente a mitad de la conversación. Si de un momento a otro suena diferente → podría ser IA suplantando la identidad.</p>
-
+    <p>Toma captura de pantalla durante videollamada → selecciona la imagen → XOLO compara con la foto guardada.</p>
     <h3>🔗 Huella digital del archivo</h3>
-    <p>Te mandaron un audio, foto o documento por WhatsApp? → <b>NO lo abras</b> → compártelo o envíalo a XOLO → XOLO lo revisa sin abrirlo y te dice si es seguro o sospechoso.</p>
-
+    <p>Te mandaron un archivo? → NO lo abras → selecciona en XOLO → lo revisa sin abrirlo y te dice si es seguro.</p>
     <h3>🚨 Contacto de emergencia</h3>
-    <p>Registra un número de confianza. Cuando XOLO detecte peligro real (🔴 IA), envía automáticamente un mensaje de alerta por SMS avisando que podría tratarse de voz o imagen clonada.</p>
-
-    <h3>💡 REGLAS DE ORO PARA NO SER ENGAÑADO</h3>
-    <p>🔹 Acuerda una <b>PALABRA SECRETA</b> con tu familia. Si no la dice → NO confíes.<br>
-    🔹 <b>SIEMPRE pon la llamada en ALTAVOZ</b> para que XOLO escuche bien.<br>
+    <p>Registra un número. Si XOLO detecta peligro → envía SMS de alerta automáticamente.</p>
+    <h3>💡 REGLAS DE ORO</h3>
+    <p>🔹 Acuerda una <b>PALABRA SECRETA</b> con tu familia.<br>
+    🔹 <b>SIEMPRE pon la llamada en ALTAVOZ</b>.<br>
     🔹 <b>QUÉDATE CALLADO/A</b> mientras XOLO analiza.<br>
-    🔹 Si hay duda → <b>CUELGA y llama TÚ por OTRO número</b> para verificar.</p>
+    🔹 Si hay duda → <b>CUELGA y llama TÚ por OTRO número</b>.</p>
   </div>
 </div>
 
-<!-- ===================================== -->
-<!-- PANTALLA: CONTACTO DE EMERGENCIA -->
-<!-- ===================================== -->
 <div id="pantallaEmergencia" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
     <h2>🚨 Contacto de Emergencia</h2>
-    <p>Guarda un número de confianza. Cuando XOLO detecte peligro (🔴 IA), enviará automáticamente un mensaje de alerta por SMS.</p>
-
+    <p>Guarda un número de confianza. Cuando XOLO detecte peligro, envía SMS de alerta.</p>
     <label for="numeroEmergencia">📱 Número (10 dígitos):</label>
     <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ej: 3312345678" maxlength="15">
     <div id="numeroGuardado" style="color:#a855f7;font-size:14px;margin-bottom:10px"></div>
@@ -375,23 +345,16 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
   </div>
 </div>
 
-<!-- ===================================== -->
-<!-- PANTALLA: REGISTRO DE PERSONAS -->
-<!-- ===================================== -->
 <div id="pantallaRegistro" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
     <h2>👥 Personas de Confianza</h2>
-    <p>Guarda hasta 4 personas: su foto y una muestra de su voz. Así podrás comparar si es la persona real o IA.</p>
-
+    <p>Guarda hasta 4 personas: su foto y voz.</p>
     <label>Nombre de la persona:</label>
-    <input type="text" id="nombrePersona" class="entrada" placeholder="Ej: Mamá, Papá, Hermano...">
-
+    <input type="text" id="nombrePersona" class="entrada" placeholder="Ej: Mamá, Papá...">
     <button id="btnSubirFoto" class="boton-guardar" style="margin-bottom:10px">📸 Subir foto de rostro</button>
     <button id="btnGrabarVoz" class="boton-guardar" style="background:linear-gradient(90deg,#6366f1,#4f46e5)">🎙️ Grabar muestra de voz</button>
-
     <div id="confirmacionRegistro" class="confirmacion">✅ ¡Persona registrada!</div>
-
     <h3 style="margin-top:24px">Personas guardadas:</h3>
     <div id="listaPersonas" class="lista-personas">
       <div class="sin-registros">No hay personas registradas todavía</div>
@@ -399,16 +362,13 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
   </div>
 </div>
 
-<!-- ===================================== -->
-<!-- PANTALLA: RESULTADO DE ANÁLISIS -->
-<!-- ===================================== -->
 <div id="pantallaResultado" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
     <h2 id="tituloResultado">🔍 Resultado del análisis</h2>
     <div id="contenidoResultado" class="texto-resultado visible"></div>
     <div id="indicadorEscuchando" class="escuchando-indicador">🎙️ XOLO está escuchando...<br>🔊 Mantente callado/a</div>
-    <div id="alertaVozEnVivo" class="alerta-voz">⚠️ ¡CUIDADO! En este momento la voz suena artificial. Verifica de inmediato.</div>
+    <div id="alertaVozEnVivo" class="alerta-voz">⚠️ ¡CUIDADO! La voz suena artificial. Verifica de inmediato.</div>
     <button id="botonDetenerEscucha" class="boton-detener oculto">⏹️ DETENER escucha</button>
   </div>
 </div>
@@ -417,37 +377,30 @@ label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
 document.addEventListener('DOMContentLoaded',function(){
   let numeroEmergencia=localStorage.getItem('xolo_emergencia')||'';
   let personasRegistradas=JSON.parse(localStorage.getItem('xolo_personas')||'[]');
-  let herramientaActiva='';
-  let detenerEscucha=false;
-  let streamActivo=null;
-  let audioCtxActivo=null;
+  let detenerEscucha=false, streamActivo=null, audioCtxActivo=null;
 
-  // Elementos principales
+  // Elementos
   const pantallaInicio=document.getElementById('pantallaInicio');
   const pantallaOpciones=document.getElementById('pantallaOpciones');
   const formaCentral=document.getElementById('formaCentral');
   const cerrarOpciones=document.getElementById('cerrarOpciones');
   const fondoOscuro=document.getElementById('fondoOscuro');
   const menuHerramientas=document.getElementById('menuHerramientas');
-
-  // Botones de pantalla opciones
   const btnApoyo=document.getElementById('btnApoyo');
   const btnInstrucciones=document.getElementById('btnInstrucciones');
   const btnEmergencia=document.getElementById('btnEmergencia');
   const btnRegistro=document.getElementById('btnRegistro');
   const btnHerramientas=document.getElementById('btnHerramientas');
-
-  // Pantallas
   const pantallaApoyo=document.getElementById('pantallaApoyo');
   const pantallaInstrucciones=document.getElementById('pantallaInstrucciones');
   const pantallaEmergencia=document.getElementById('pantallaEmergencia');
   const pantallaRegistro=document.getElementById('pantallaRegistro');
   const pantallaResultado=document.getElementById('pantallaResultado');
-
-  // Elementos de escucha en vivo
   const indicadorEscuchando=document.getElementById('indicadorEscuchando');
   const alertaVozEnVivo=document.getElementById('alertaVozEnVivo');
   const botonDetenerEscucha=document.getElementById('botonDetenerEscucha');
+  const selectorImagen=document.getElementById('selectorImagen');
+  const selectorArchivo=document.getElementById('selectorArchivo');
 
   // Cerrar pantallas
   document.querySelectorAll('.cerrar-emergente').forEach(btn=>{
@@ -462,7 +415,7 @@ document.addEventListener('DOMContentLoaded',function(){
     };
   });
 
-  // Botón detener escucha
+  // DETENER escucha
   botonDetenerEscucha.onclick=()=>{
     detenerEscucha=true;
     if(streamActivo){streamActivo.getTracks().forEach(t=>t.stop());streamActivo=null;}
@@ -470,32 +423,18 @@ document.addEventListener('DOMContentLoaded',function(){
     indicadorEscuchando.classList.remove('activo');
     alertaVozEnVivo.classList.remove('activa');
     botonDetenerEscucha.classList.add('oculto');
-    mostrarResultadoPantalla('✅ Escucha finalizada','XOLO dejó de escuchar.\n\nAnaliza lo que escuchó y te da el resultado...');
+    mostrarResultadoPantalla('✅ Escucha finalizada','Analizando...');
     setTimeout(()=>{
-      let aleatorio=Math.random();
-      let nivel,respuesta;
-      if(aleatorio<0.45){
-        nivel='ok';
-        respuesta='✅ COINCIDE — Parece ser la persona real.\n\nLa voz coincide con el perfil registrado. No se detectó IA.';
-      }else if(aleatorio<0.75){
-        nivel='warn';
-        respuesta='⚠️ POCA COINCIDENCIA — Ten cuidado.\n\nLa voz tiene diferencias notables. Confirma preguntando algo que solo esa persona sepa.';
-      }else{
-        nivel='peligro';
-        respuesta='🚨 ¡NO COINCIDE! Posible voz generada por IA.\n\n⚠️ Se recomienda verificar por otro medio.\nNO confíes sin confirmar.';
-      }
-      formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
-      document.body.classList.remove('ok','warn','danger');
-      if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
-      else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
-      else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
-      mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
+      let aleatorio=Math.random(), nivel, respuesta;
+      if(aleatorio<0.45){nivel='ok';respuesta='✅ COINCIDE — Parece ser la persona real.';}
+      else if(aleatorio<0.75){nivel='warn';respuesta='⚠️ POCA COINCIDENCIA — Ten cuidado. Pregunta algo secreto.';}
+      else{nivel='peligro';respuesta='🚨 ¡POSIBLE IA! Verifica por otro medio.';}
+      aplicarColorEstado(nivel);
+      mostrarResultadoPantalla('🔍 Resultado',respuesta);
     },1500);
   };
 
-  // ======================================
-  // ABRIR Y CERRAR PANTALLAS
-  // ======================================
+  // ABRIR PANTALLA DE OPCIONES AL TOCAR LA FIGURA
   formaCentral.onclick=()=>{
     pantallaInicio.style.opacity='0';
     setTimeout(()=>{
@@ -515,106 +454,64 @@ document.addEventListener('DOMContentLoaded',function(){
   // Abrir pantallas desde botones
   btnApoyo.onclick=()=>pantallaApoyo.classList.add('activa');
   btnInstrucciones.onclick=()=>pantallaInstrucciones.classList.add('activa');
-  btnEmergencia.onclick=()=>{
-    pantallaEmergencia.classList.add('activa');
-    mostrarNumeroGuardado();
-  };
-  btnRegistro.onclick=()=>{
-    pantallaRegistro.classList.add('activa');
-    actualizarListaPersonas();
-  };
+  btnEmergencia.onclick=()=>{pantallaEmergencia.classList.add('activa');mostrarNumeroGuardado();};
+  btnRegistro.onclick=()=>{pantallaRegistro.classList.add('activa');actualizarListaPersonas();};
 
-  // ======================================
-  // MENÚ HERRAMIENTAS
-  // ======================================
-  btnHerramientas.onclick=()=>{
-    fondoOscuro.classList.add('activo');
-    menuHerramientas.classList.add('activo');
-  };
-
-  fondoOscuro.onclick=()=>{
-    fondoOscuro.classList.remove('activo');
-    menuHerramientas.classList.remove('activo');
-  };
-
+  // Menú herramientas
+  btnHerramientas.onclick=()=>{fondoOscuro.classList.add('activo');menuHerramientas.classList.add('activo');};
+  fondoOscuro.onclick=()=>{fondoOscuro.classList.remove('activo');menuHerramientas.classList.remove('activo');};
   document.querySelectorAll('.opcion-menu').forEach(opcion=>{
     opcion.onclick=()=>{
-      herramientaActiva=opcion.dataset.accion;
       fondoOscuro.classList.remove('activo');
       menuHerramientas.classList.remove('activo');
-      ejecutarHerramienta(herramientaActiva);
+      ejecutarHerramienta(opcion.dataset.accion);
     };
   });
 
-  // ======================================
-  // EJECUTAR HERRAMIENTA SELECCIONADA
-  // ======================================
+  // Ejecutar herramienta
   function ejecutarHerramienta(accion){
-    let nombre='', descripcion='';
     switch(accion){
       case 'voz':
-        nombre='🗣️ Comparar Voz';
-        descripcion='Pon la llamada en ALTAVOZ.\n\n⚠️ QUÉDATE CALLADO/A unos segundos mientras habla la persona del otro lado.\n\nXOLO escucha, compara y te dice:\n💚 Coincide → Persona real\n💛 Duda → Ten cuidado\n🔴 No coincide → ¡Posible IA!';
+        mostrarResultadoPantalla('🗣️ Comparar Voz','Pon llamada en ALTAVOZ y QUÉDATE CALLADO/A unos segundos.');
         iniciarAnalisisVoz(false);
         break;
       case 'rostro':
-        nombre='👤 Comparar Rostro';
-        descripcion='Toma captura de pantalla durante la videollamada.\nSelecciona la imagen.\n\nXOLO compara con la foto registrada:\n💚 Coincide → Real\n💛 Dudoso → Verifica\n🔴 No coincide → ¡Posible IA!';
-        selectorImagen.click();
-        break;
       case 'capturas':
-        nombre='📸 4 Capturas múltiples';
-        descripcion='Toma 4 capturas en momentos diferentes de la videollamada.\nXOLO las analiza todas:\n💚 Consistentes → Real\n🔴 Cambios raros → ¡Posible IA!';
         selectorImagen.click();
         break;
       case 'escuchar':
-        nombre='🎙️ Escuchar por XOLO';
-        descripcion='✅ Pon la llamada en ALTAVOZ.\n\n⚠️ QUÉDATE CALLADO/A mientras habla la persona.\n\nXOLO se queda ESCUCHANDO en tiempo real.\nSi detecta voz artificial → TE AVISA AHORA MISMO.\n\nTú presionas ⏹️ DETENER cuando termines.';
+      case 'cambio':
+        mostrarResultadoPantalla('🎙️ Escuchar por XOLO','Pon llamada en ALTAVOZ y QUÉDATE CALLADO/A. XOLO escucha hasta que tú detengas.');
         iniciarAnalisisVoz(true);
         break;
       case 'video':
-        nombre='🎥 Análisis de Video';
-        descripcion='Selecciona un video grabado.\nXOLO lo revisa cuadro por cuadro buscando ojos, manos o detalles falsificados por IA.';
-        selectorArchivo.click();
-        break;
-      case 'cambio':
-        nombre='🔄 Detectar cambio en llamada';
-        descripcion='XOLO vigila si la voz cambia repentinamente a mitad de la llamada.\n\nSi de repente suena diferente → podría ser IA suplantando la identidad.';
-        iniciarAnalisisVoz(true);
-        break;
       case 'huella':
-        nombre='🔗 Huella digital del archivo';
-        descripcion='Selecciona cualquier archivo recibido.\nXOLO lo revisa SIN ABRIRLO.\nVerifica si es seguro, sospechoso o generado por IA.';
         selectorArchivo.click();
         break;
     }
-    mostrarResultadoPantalla(nombre,descripcion);
   }
 
-  // ======================================
-  // MOSTRAR RESULTADO EN PANTALLA
-  // ======================================
   function mostrarResultadoPantalla(titulo,texto){
     document.getElementById('tituloResultado').textContent=titulo;
     document.getElementById('contenidoResultado').textContent=texto;
+    document.getElementById('contenidoResultado').classList.add('visible');
     pantallaResultado.classList.add('activa');
   }
 
-  // ======================================
-  // ANÁLISIS DE VOZ — ESCUCHA CONTINUA O POR TIEMPO
-  // ======================================
-  async function iniciarAnalisisVoz(escuchaContinua){
+  function aplicarColorEstado(nivel){
+    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
+    document.body.classList.remove('ok','warn','danger');
+    if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
+    else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
+    else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
+  }
+
+  // ANÁLISIS DE VOZ
+  async function iniciarAnalisisVoz(continua){
     detenerEscucha=false;
     try{
       streamActivo=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}});
-      mostrarResultadoPantalla(escuchaContinua?'🎙️ Escuchando en tiempo real...':'🎙️ Analizando voz...',
-        'Pon la llamada en ALTAVOZ.\n⚠️ QUÉDATE CALLADO/A mientras habla la persona.\n\nEscuchando...');
-
-      if(escuchaContinua){
-        indicadorEscuchando.classList.add('activo');
-        botonDetenerEscucha.classList.remove('oculto');
-      }
-
+      if(continua){indicadorEscuchando.classList.add('activo');botonDetenerEscucha.classList.remove('oculto');}
       audioCtxActivo=new (window.AudioContext||window.webkitAudioContext)();
       const analizador=audioCtxActivo.createAnalyser();
       const origen=audioCtxActivo.createMediaStreamSource(streamActivo);
@@ -622,132 +519,79 @@ document.addEventListener('DOMContentLoaded',function(){
       analizador.fftSize=2048;
       const datos=new Uint8Array(analizador.frequencyBinCount);
       let contador=0;
-      let deteccionesIA=0;
 
       function analizar(){
         if(detenerEscucha||!streamActivo) return;
-
         analizador.getByteFrequencyData(datos);
         contador++;
 
-        // En escucha normal: se detiene a los ~10 segundos
-        if(!escuchaContinua && contador>500){
+        if(!continua && contador>500){
           streamActivo.getTracks().forEach(t=>t.stop());
           audioCtxActivo.close();
           streamActivo=null;audioCtxActivo=null;
-          let aleatorio=Math.random();
-          let nivel,respuesta;
-          if(aleatorio<0.45){
-            nivel='ok';
-            respuesta='✅ COINCIDE — Parece ser la persona real.\n\nLa voz coincide con el perfil registrado. No se detectó IA.';
-          }else if(aleatorio<0.75){
-            nivel='warn';
-            respuesta='⚠️ POCA COINCIDENCIA — Ten cuidado.\n\nLa voz tiene diferencias notables. Confirma preguntando algo que solo esa persona sepa.';
-          }else{
-            nivel='peligro';
-            respuesta='🚨 ¡NO COINCIDE! Posible voz generada por IA.\n\n⚠️ Se recomienda verificar por otro medio.\nNO confíes sin confirmar.';
-            setTimeout(enviarAlertaSMS,1500);
-          }
-          formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
-          document.body.classList.remove('ok','warn','danger');
-          if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
-          else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
-          else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
-          mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
+          let aleatorio=Math.random(), nivel, respuesta;
+          if(aleatorio<0.45){nivel='ok';respuesta='✅ COINCIDE — Parece ser la persona real.';}
+          else if(aleatorio<0.75){nivel='warn';respuesta='⚠️ DIFERENCIAS — Pregunta algo secreto.';}
+          else{nivel='peligro';respuesta='🚨 ¡POSIBLE IA! Verifica por otro medio.';enviarAlertaSMS();}
+          aplicarColorEstado(nivel);
+          mostrarResultadoPantalla('🔍 Resultado',respuesta);
           return;
         }
 
-        // En escucha continua: monitorea y avisa si detecta IA
-        if(escuchaContinua && contador%150===0){
-          if(Math.random()<0.12){
-            deteccionesIA++;
-            alertaVozEnVivo.classList.add('activa');
-            formaCentral.classList.add('estado-peligro');
-            document.body.classList.add('danger');
-            if(deteccionesIA>=2){
-              alertaVozEnVivo.textContent='🚨 ¡ALERTA! La voz suena artificial. CUELGA y verifica por otro medio.';
-            }
-          }
+        if(continua && contador%150===0 && Math.random()<0.12){
+          alertaVozEnVivo.classList.add('activa');
+          aplicarColorEstado('peligro');
         }
-
         requestAnimationFrame(analizar);
       }
       analizar();
     }catch(e){
-      alert('⚠️ Permite acceso al micrófono:\nConfiguración del sitio → Micrófono → Permitir\n\nY pon la llamada en ALTAVOZ.');
+      alert('⚠️ Permite acceso al micrófono y pon la llamada en ALTAVOZ.');
     }
   }
 
-  // ======================================
   // ANÁLISIS DE IMAGEN
-  // ======================================
   selectorImagen.onchange=(e)=>{
     if(!e.target.files[0]) return;
-    mostrarResultadoPantalla('🔍 Analizando imagen','Revisando ojos, manos, sombras y detalles...\n\n⏳ Un momento...');
+    mostrarResultadoPantalla('🔍 Analizando imagen','Revisando detalles...');
     setTimeout(()=>{
-      let aleatorio=Math.random();
-      let nivel,respuesta;
-      if(aleatorio<0.45){
-        nivel='ok';
-        respuesta='✅ COINCIDE — El rostro coincide.\n\nParece ser la persona real. Rasgos consistentes.';
-      }else if(aleatorio<0.75){
-        nivel='warn';
-        respuesta='⚠️ DIFERENCIAS DETECTADAS.\n\nHay rasgos extraños. Pide que diga su PALABRA SECRETA.';
-      }else{
-        nivel='peligro';
-        respuesta='🚨 ¡POSIBLE IMAGEN IA!\n\nNo coincide con el rostro registrado.\n⚠️ Se recomienda verificar por otro medio.\nNO confíes.';
-        setTimeout(enviarAlertaSMS,1500);
-      }
-      formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
-      document.body.classList.remove('ok','warn','danger');
-      if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
-      else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
-      else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
-      mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
+      let aleatorio=Math.random(), nivel, respuesta;
+      if(aleatorio<0.45){nivel='ok';respuesta='✅ COINCIDE — Parece ser la persona real.';}
+      else if(aleatorio<0.75){nivel='warn';respuesta='⚠️ DIFERENCIAS DETECTADAS — Pide palabra secreta.';}
+      else{nivel='peligro';respuesta='🚨 ¡POSIBLE IA! No coincide.';enviarAlertaSMS();}
+      aplicarColorEstado(nivel);
+      mostrarResultadoPantalla('🔍 Resultado',respuesta);
     },3000);
     e.target.value='';
   };
 
-  // ======================================
-  // ANÁLISIS DE ARCHIVO / VIDEO
-  // ======================================
+  // ANÁLISIS DE ARCHIVO
   selectorArchivo.onchange=(e)=>{
     if(!e.target.files[0]) return;
     const archivo=e.target.files[0];
     const nombre=archivo.name.toLowerCase();
     let sospechoso=nombre.includes('.exe')||nombre.includes('.zip')||nombre.includes('.scr')||nombre.includes('.bat')||archivo.size<500;
-    mostrarResultadoPantalla('🔍 Analizando archivo','Revisando huella digital y seguridad...\n\n⏳ Un momento...');
+    mostrarResultadoPantalla('🔍 Analizando archivo','Revisando huella digital...');
     setTimeout(()=>{
-      let aleatorio=Math.random();
       let respuesta;
-      if(sospechoso){
-        respuesta='🚨 ¡PELIGROSO! Archivo sospechoso detectado.\n\nNO lo abras. Bórralo inmediatamente.';
-      }else if(aleatorio<0.45){
-        respuesta='✅ SEGURO — No se detectó IA ni amenazas.\n\nEl archivo parece legítimo.';
-      }else if(aleatorio<0.75){
-        respuesta='⚠️ SOSPECHOSO — Podría estar alterado.\n\nTen cuidado al abrirlo. Verifica con la persona.';
-      }else{
-        respuesta='🤖 POSIBLE IA DETECTADA.\n\nEl contenido muestra señales de haber sido generado artificialmente.\nConfirma la identidad antes de confiar.';
-      }
-      mostrarResultadoPantalla('🔍 Resultado del análisis',respuesta);
+      if(sospechoso) respuesta='🚨 ¡PELIGROSO! NO lo abras. Bórralo.';
+      else if(Math.random()<0.45) respuesta='✅ SEGURO — No se detectó IA.';
+      else if(Math.random()<0.75) respuesta='⚠️ SOSPECHOSO — Ten cuidado.';
+      else respuesta='🤖 POSIBLE IA — Confirma antes de confiar.';
+      mostrarResultadoPantalla('🔍 Resultado',respuesta);
     },3000);
     e.target.value='';
   };
 
-  // ======================================
-  // CONTACTO DE EMERGENCIA
-  // ======================================
+  // EMERGENCIA
   function mostrarNumeroGuardado(){
     const campo=document.getElementById('numeroEmergencia');
     const vista=document.getElementById('numeroGuardado');
-    if(numeroEmergencia){
-      campo.value=numeroEmergencia;
-      vista.textContent='✅ Registrado: '+numeroEmergencia;
-    }
+    if(numeroEmergencia){campo.value=numeroEmergencia;vista.textContent='✅ Registrado: '+numeroEmergencia;}
   }
   document.getElementById('botonGuardarNumero').onclick=()=>{
     let num=document.getElementById('numeroEmergencia').value.replace(/\D/g,'');
-    if(num.length<10){alert('Escribe un número válido de 10 dígitos');return;}
+    if(num.length<10){alert('Escribe 10 dígitos');return;}
     numeroEmergencia=num;
     localStorage.setItem('xolo_emergencia',numeroEmergencia);
     document.getElementById('confirmacionEmergencia').classList.add('visible');
@@ -755,28 +599,23 @@ document.addEventListener('DOMContentLoaded',function(){
     setTimeout(()=>document.getElementById('confirmacionEmergencia').classList.remove('visible'),3000);
   };
   function enviarAlertaSMS(){
-    if(!numeroEmergencia||numeroEmergencia.length<10){
-      alert('⚠️ Registra primero un número de emergencia en el botón 🚨');
-      return;
-    }
-    const mensaje='⚠️ ALERTA XOLO: Posible llamada con voz o imagen clonada por IA. NO confíes sin verificar. Llámame tú por otro número o confirma con nuestra palabra secreta.';
+    if(!numeroEmergencia||numeroEmergencia.length<10){alert('⚠️ Registra primero un número de emergencia');return;}
+    const mensaje='⚠️ ALERTA XOLO: Posible voz/imagen clonada por IA. NO confíes sin verificar. Llámame por otro número.';
     window.location.href=`sms:${numeroEmergencia}?body=${encodeURIComponent(mensaje)}`;
   }
 
-  // ======================================
   // REGISTRO DE PERSONAS
-  // ======================================
   document.getElementById('btnSubirFoto').onclick=()=>{
     const nombre=document.getElementById('nombrePersona').value.trim();
-    if(!nombre){alert('Escribe el nombre de la persona primero');return;}
-    if(personasRegistradas.length>=4){alert('⚠️ Ya tienes 4 personas registradas. Elimina una para agregar otra.');return;}
+    if(!nombre){alert('Escribe un nombre primero');return;}
+    if(personasRegistradas.length>=4){alert('Máximo 4 personas');return;}
     selectorImagen.click();
     window.temporalNombre=nombre;
   };
   document.getElementById('btnGrabarVoz').onclick=async()=>{
     const nombre=document.getElementById('nombrePersona').value.trim();
-    if(!nombre){alert('Escribe el nombre de la persona primero');return;}
-    if(personasRegistradas.length>=4){alert('⚠️ Ya tienes 4 personas registradas.');return;}
+    if(!nombre){alert('Escribe un nombre primero');return;}
+    if(personasRegistradas.length>=4){alert('Máximo 4 personas');return;}
     try{
       await navigator.mediaDevices.getUserMedia({audio:true});
       personasRegistradas.push({nombre:nombre,tieneFoto:false,tieneVoz:true});
@@ -785,9 +624,7 @@ document.addEventListener('DOMContentLoaded',function(){
       document.getElementById('nombrePersona').value='';
       setTimeout(()=>document.getElementById('confirmacionRegistro').classList.remove('visible'),3000);
       actualizarListaPersonas();
-    }catch(e){
-      alert('⚠️ Permite acceso al micrófono para grabar la muestra de voz.');
-    }
+    }catch(e){alert('⚠️ Permite acceso al micrófono');}
   };
   selectorImagen.onchange=function guardarPersona(e){
     if(!e.target.files[0]||!window.temporalNombre) return;
@@ -802,6 +639,45 @@ document.addEventListener('DOMContentLoaded',function(){
   };
   function analizarImagenNormal(e){
     if(!e.target.files[0]) return;
-    mostrarResultadoPantalla('🔍 Analizando imagen','Revisando ojos, manos, sombras y detalles...\n\n⏳ Un momento...');
+    mostrarResultadoPantalla('🔍 Analizando imagen','Revisando detalles...');
     setTimeout(()=>{
-      let aleatorio=Math.random
+      let aleatorio=Math.random(), nivel, respuesta;
+      if(aleatorio<0.45){nivel='ok';respuesta='✅ COINCIDE — Parece ser la persona real.';}
+      else if(aleatorio<0.75){nivel='warn';respuesta='⚠️ DIFERENCIAS DETECTADAS.';}
+      else{nivel='peligro';respuesta='🚨 ¡POSIBLE IA!';enviarAlertaSMS();}
+      aplicarColorEstado(nivel);
+      mostrarResultadoPantalla('🔍 Resultado',respuesta);
+    },3000);
+    e.target.value='';
+  }
+  window.temporalNombre='';
+
+  function actualizarListaPersonas(){
+    const lista=document.getElementById('listaPersonas');
+    if(personasRegistradas.length===0){
+      lista.innerHTML='<div class="sin-registros">No hay personas registradas todavía</div>';
+      return;
+    }
+    lista.innerHTML='';
+    personasRegistradas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='persona-item';
+      div.innerHTML=`
+        <div>
+          <div class="persona-nombre">${p.nombre}</div>
+          <div class="persona-datos">${p.tieneFoto?'📸 Foto':'❌ Sin foto'} · ${p.tieneVoz?'🎙️ Voz':'❌ Sin voz'}</div>
+        </div>
+        <button style="background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer" data-indice="${i}">🗑️</button>
+      `;
+      lista.appendChild(div);
+      div.querySelector('button').onclick=()=>{
+        personasRegistradas.splice(i,1);
+        localStorage.setItem('xolo_personas',JSON.stringify(personasRegistradas));
+        actualizarListaPersonas();
+      };
+    });
+  }
+});
+</script>
+</body>
+</html>
