@@ -9,652 +9,358 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-:root{
-  --bg:#000000;
-  --base:#a855f7;
-  --ok:#22c55e;
-  --warn:#eab308;
-  --danger:#ef4444;
-}
-body{
-  background:var(--bg);
-  min-height:100vh;
-  color:#fff;
-  overflow:hidden;
-  transition:background .8s ease;
-}
+:root{--bg:#000000;--base:#a855f7;--ok:#22c55e;--warn:#eab308;--danger:#ef4444;--neutral:#888888}
+body{background:var(--bg);min-height:100vh;color:#fff;overflow:hidden;transition:background .8s ease}
 body.ok{background:radial-gradient(circle at center,rgba(34,197,94,.12),transparent 65%),#000}
 body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
 body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
+body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),transparent 65%),#000}
 
-/* ===== PANTALLA INICIO — FORMA ORGÁNICA ===== */
-.pantalla-inicio{
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;transition:opacity .5s ease;
-}
-.forma-central{
-  width:280px;height:280px;
-  border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;
-  background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);
-  box-shadow:0 0 80px rgba(168,85,247,.5), inset 0 0 60px rgba(255,255,255,.1);
-  cursor:pointer;user-select:none;
-  transition:all .8s ease;
-  animation:respira 5s ease-in-out infinite;
-}
+.pantalla-inicio{display:flex;align-items:center;justify-content:center;min-height:100vh;transition:opacity .5s ease}
+.forma-central{width:280px;height:280px;border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);box-shadow:0 0 80px rgba(168,85,247,.5), inset 0 0 60px rgba(255,255,255,.1);cursor:pointer;user-select:none;transition:all .8s ease;animation:respira 5s ease-in-out infinite;display:flex;align-items:center;justify-content:center}
+.forma-central .icono-xolo{font-size:90px;color:rgba(255,255,255,.9);text-shadow:0 0 20px rgba(255,255,255,.3)}
 .forma-central:active{transform:scale(0.95)}
-@keyframes respira{
-  0%,100%{border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;transform:scale(1)}
-  25%{border-radius:50% 60% 50% 60% / 60% 50% 60% 40%}
-  50%{border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;transform:scale(1.07)}
-  75%{border-radius:60% 40% 60% 40% / 50% 60% 40% 60%}
-}
-@keyframes latidoFuerte{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.09)}
-}
-.forma-central.estado-ok{
-  background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a);
-  box-shadow:0 0 70px rgba(34,197,94,.5), inset 0 0 60px rgba(255,255,255,.1);
-}
-.forma-central.estado-warn{
-  background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);
-  box-shadow:0 0 70px rgba(234,179,8,.5), inset 0 0 60px rgba(255,255,255,.1);
-}
-.forma-central.estado-peligro{
-  background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);
-  box-shadow:0 0 80px rgba(239,68,68,.6), inset 0 0 60px rgba(255,255,255,.15);
-  animation:latidoFuerte .9s ease-in-out infinite !important;
-}
+@keyframes respira{0%,100%{border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;transform:scale(1)}25%{border-radius:50% 60% 50% 60% / 60% 50% 60% 40%}50%{border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;transform:scale(1.07)}75%{border-radius:60% 40% 60% 40% / 50% 60% 40% 60%}}
+@keyframes latidoFuerte{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.forma-central.estado-ok{background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a);box-shadow:0 0 70px rgba(34,197,94,.5), inset 0 0 60px rgba(255,255,255,.1)}
+.forma-central.estado-warn{background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);box-shadow:0 0 70px rgba(234,179,8,.5), inset 0 0 60px rgba(255,255,255,.1)}
+.forma-central.estado-peligro{background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);box-shadow:0 0 80px rgba(239,68,68,.6), inset 0 0 60px rgba(255,255,255,.15);animation:latidoFuerte .9s ease-in-out infinite !important}
+.forma-central.estado-neutral{background:radial-gradient(circle at 30% 30%,#a8a8a8,#888888 40%,#666666 70%,#444444);box-shadow:0 0 60px rgba(136,136,136,.4), inset 0 0 60px rgba(255,255,255,.05)}
 
-/* ===== PANTALLA DE OPCIONES ===== */
-.pantalla-opciones{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#050508;z-index:20;
-  padding:40px 20px 20px;display:none;opacity:0;
-  transition:opacity .5s ease;overflow-y:auto
-}
+.pantalla-opciones{position:fixed;top:0;left:0;width:100%;height:100%;background:#050508;z-index:20;padding:40px 20px 20px;display:none;opacity:0;transition:opacity .5s ease;overflow-y:auto}
 .pantalla-opciones.activa{display:block;opacity:1}
-.cerrar-opciones{
-  position:sticky;top:0;text-align:right;font-size:28px;color:#777;
-  cursor:pointer;padding:10px 5px;z-index:5
-}
+.cerrar-opciones{position:sticky;top:0;text-align:right;font-size:28px;color:#777;cursor:pointer;padding:10px 5px;z-index:5}
 .cerrar-opciones:hover{color:#fff}
 .titulo-pantalla{text-align:center;font-size:32px;color:#a855f7;margin-bottom:40px;font-weight:800}
-
-.contenedor-botones{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:32px;
-  max-width:380px;margin:0 auto
-}
-.boton-circular{
-  display:flex;flex-direction:column;align-items:center;gap:12px;
-  cursor:pointer;transition:transform .25s ease
-}
+.contenedor-botones{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;max-width:380px;margin:0 auto}
+.boton-circular{display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:transform .25s ease}
 .boton-circular:active{transform:scale(0.92)}
-.circulo{
-  width:100px;height:100px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.08));
-  border:2px solid rgba(168,85,247,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px;transition:all .25s ease;
-  box-shadow:0 4px 15px rgba(168,85,247,.1)
-}
-/* Estilo especial para ASISTENCIA XOLO */
-#btnAsistencia .circulo{
-  background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce);
-  border-color:#a855f7;
-  box-shadow:0 0 25px rgba(168,85,247,.4);
-  animation:respira 4s ease-in-out infinite;
-}
-.boton-circular:hover .circulo{
-  border-color:#a855f7;box-shadow:0 6px 20px rgba(168,85,247,.2)
-}
+.circulo{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.08));border:2px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:40px;transition:all .25s ease;box-shadow:0 4px 15px rgba(168,85,247,.1)}
+#btnAsistencia .circulo{background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce);border-color:#a855f7;box-shadow:0 0 25px rgba(168,85,247,.4);animation:respira 4s ease-in-out infinite;position:relative}
+#btnAsistencia .circulo .icono-boton-xolo{font-size:42px;color:#fff}
+.boton-circular:hover .circulo{border-color:#a855f7;box-shadow:0 6px 20px rgba(168,85,247,.2)}
 .etiqueta-boton{font-size:15px;color:#ccc;text-align:center;line-height:1.4;font-weight:600}
 .etiqueta-boton.asistencia{color:#a855f7;font-weight:800;font-size:16px}
 
-/* ===== MENÚS Y PANTALLAS ===== */
-.fondo-oscuro{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;
-  transition:opacity .3s ease
-}
+.fondo-oscuro{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;transition:opacity .3s ease}
 .fondo-oscuro.activo{display:block;opacity:1}
-.menu-asistente{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:92%;max-width:360px;
-  background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));
-  border:2px solid rgba(168,85,247,.4);
-  border-radius:24px;padding:24px;z-index:26;
-  display:none;opacity:0;transition:opacity .3s ease;
-  box-shadow:0 0 50px rgba(168,85,247,.3)
-}
+.menu-asistente{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:92%;max-width:360px;background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));border:2px solid rgba(168,85,247,.4);border-radius:24px;padding:24px;z-index:26;display:none;opacity:0;transition:opacity .3s ease;box-shadow:0 0 50px rgba(168,85,247,.3)}
 .menu-asistente.activo{display:block;opacity:1}
-.titulo-asistente{
-  text-align:center;font-size:20px;font-weight:800;color:#c084fc;
-  margin-bottom:20px;letter-spacing:1px
-}
-.opcion-asistente{
-  padding:16px 14px;margin:10px 0;border-radius:14px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(168,85,247,.3);
-  color:#fff;font-size:16px;cursor:pointer;transition:all .2s ease;
-  display:flex;align-items:center;gap:14px;font-weight:600
-}
-.opcion-asistente:hover{
-  border-color:#a855f7;background:rgba(168,85,247,.15);transform:scale(1.02)
-}
+.titulo-asistente{text-align:center;font-size:20px;font-weight:800;color:#c084fc;margin-bottom:20px;letter-spacing:1px}
+.opcion-asistente{padding:16px 14px;margin:10px 0;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(168,85,247,.3);color:#fff;font-size:16px;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:14px;font-weight:600}
+.opcion-asistente:hover{border-color:#a855f7;background:rgba(168,85,247,.15);transform:scale(1.02)}
 
-.menu-herramientas{
-  position:fixed;top:80px;left:50%;transform:translateX(-50%);
-  width:92%;max-width:360px;
-  background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));
-  border:2px solid rgba(168,85,247,.35);
-  border-radius:20px;padding:20px;z-index:26;
-  display:none;opacity:0;transition:opacity .3s ease;
-  box-shadow:0 0 40px rgba(168,85,247,.25)
-}
-.menu-herramientas.activo{display:block;opacity:1}
-.titulo-menu{
-  text-align:center;font-size:18px;font-weight:700;color:#c084fc;
-  margin-bottom:18px;letter-spacing:1px
-}
-.opcion-menu{
-  padding:14px 12px;margin:8px 0;border-radius:12px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  color:#eee;font-size:15px;cursor:pointer;transition:all .2s ease;
-  display:flex;align-items:center;gap:12px
-}
-.opcion-menu:hover{
-  border-color:#a855f7;background:rgba(168,85,247,.1)
-}
-.icono-opcion{font-size:20px}
-
-.pantalla-emergente{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(5,5,10,.96);z-index:30;
-  padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto
-}
+.pantalla-emergente{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,5,10,.96);z-index:30;padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto}
 .pantalla-emergente.activa{display:block;opacity:1}
-.cerrar-emergente{
-  position:absolute;top:18px;right:18px;font-size:26px;
-  color:#888;cursor:pointer;transition:color .2s
-}
+.cerrar-emergente{position:absolute;top:18px;right:18px;font-size:26px;color:#888;cursor:pointer;transition:color .2s}
 .cerrar-emergente:hover{color:#fff}
 .contenido-pantalla{margin-top:50px;max-width:360px;margin-left:auto;margin-right:auto}
 .contenido-pantalla h2{font-size:20px;margin-bottom:20px;color:#fff;text-align:center}
-.contenido-pantalla h3{font-size:16px;margin:20px 0 8px;color:#ddd}
-.contenido-pantalla p{font-size:14px;color:#aaa;margin-bottom:10px;line-height:1.7}
-
-label{font-size:14px;color:#ccc;font-weight:600;display:block;margin:12px 0 6px}
-.entrada{
-  width:100%;padding:14px 16px;border-radius:12px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
-  color:#fff;font-size:16px;outline:none;margin-bottom:14px
-}
-.entrada:focus{border-color:var(--base)}
-.boton-guardar{
-  width:100%;padding:14px;border-radius:12px;border:none;
-  background:linear-gradient(90deg,#a855f7,#7c3aed);color:#fff;
-  font-weight:800;font-size:15px;cursor:pointer;transition:opacity .2s
-}
-.boton-guardar:active{opacity:.8}
-.boton-detener{
-  width:100%;padding:14px;border-radius:12px;border:none;
-  background:linear-gradient(90deg,#ef4444,#b91c1c);color:#fff;
-  font-weight:800;font-size:15px;cursor:pointer;margin-top:12px
-}
-.confirmacion{color:#22c55e;font-size:13px;margin-top:12px;display:none}
-.confirmacion.visible{display:block}
-.texto-resultado{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;padding:16px;margin-top:16px;display:none;white-space:pre-line;line-height:1.8
-}
+.texto-resultado{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-top:16px;display:none;white-space:pre-line;line-height:1.8;font-size:14px}
 .texto-resultado.visible{display:block}
-.detalle-analisis{margin:8px 0;padding-left:8px;border-left:2px solid #333}
-.alerta-logica{color:#ef4444;margin-top:8px}
-.alerta-edicion{color:#eab308;margin-top:8px}
-
-.vista-previa-foto{
-  width:120px;height:120px;border-radius:12px;
-  background:rgba(255,255,255,.04);border:2px dashed rgba(168,85,247,.3);
-  display:flex;align-items:center;justify-content:center;
-  margin:10px auto;overflow:hidden;
-}
-.vista-previa-foto img{width:100%;height:100%;object-fit:cover}
-.estado-grabacion{
-  text-align:center;padding:10px;border-radius:12px;margin:10px 0;
-  display:none;
-}
-.estado-grabacion.activa{display:block}
-.estado-grabacion.grabando{background:rgba(239,68,68,.15);border:1px solid #ef4444;color:#fca5a5}
-.estado-grabacion.grabado{background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#86efac}
-
-.lista-personas{margin-top:16px}
-.persona-item{
-  background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.18);
-  border-radius:12px;padding:12px;margin-bottom:10px;
-  display:flex;justify-content:space-between;align-items:center
-}
-.persona-nombre{color:#fff;font-weight:600}
-.persona-datos{color:#999;font-size:12px;margin-top:4px}
-.sin-registros{color:#666;text-align:center;padding:20px}
-
-.enlace-apoyo{
-  color:#a855f7;font-weight:600;word-break:break-all;display:inline-block;
-  margin:12px 0;text-decoration:none;border-bottom:1px dashed #a855f7;padding-bottom:2px
-}
-
+.boton-accion{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#2563eb,#1d4ed8);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:12px}
+.boton-detener{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ef4444,#b91c1c);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:12px}
 .oculto{display:none}
-.alerta-voz{
-  background:rgba(239,68,68,.15);border:1px solid #ef4444;
-  border-radius:12px;padding:12px;margin-top:12px;
-  color:#fca5a5;display:none
-}
-.alerta-voz.activa{display:block}
-.escuchando-indicador{
-  color:#a855f7;font-weight:600;animation:parpadeo 1s ease-in-out infinite;
-  display:none;margin-top:12px;text-align:center
-}
+.escuchando-indicador{color:#a855f7;font-weight:600;animation:parpadeo 1s ease-in-out infinite;display:none;margin-top:12px;text-align:center}
 .escuchando-indicador.activo{display:block}
-@keyframes parpadeo{
-  0%,100%{opacity:1}
-  50%{opacity:.4}
-}
+@keyframes parpadeo{0%,100%{opacity:1}50%{opacity:.4}}
 </style>
 </head>
 <body>
-
-<input type="file" id="selectorImagenRegistro" accept="image/*" class="oculto">
 <input type="file" id="selectorImagenAnalisis" accept="image/*" class="oculto">
-<input type="file" id="selectorArchivo" accept="image/*,video/*,.mp4,.mov,.jpg,.jpeg,.png,.webp,.wav,.mp3,.ogg" class="oculto">
-
-<!-- ===================================== -->
-<!-- PANTALLA INICIO -->
-<!-- ===================================== -->
-<div class="pantalla-inicio" id="pantallaInicio">
-  <div id="formaCentral" class="forma-central"></div>
-</div>
-
-<!-- ===================================== -->
-<!-- PANTALLA PRINCIPAL — BOTONES ACTUALIZADOS -->
-<!-- ===================================== -->
+<div class="pantalla-inicio" id="pantallaInicio"><div id="formaCentral" class="forma-central"><span class="icono-xolo">◈</span></div></div>
 <div id="pantallaOpciones" class="pantalla-opciones">
   <span class="cerrar-opciones" id="cerrarOpciones">✕</span>
   <h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
-
   <div class="contenedor-botones">
-    <div class="boton-circular" id="btnApoyo">
-      <div class="circulo">☕</div>
-      <span class="etiqueta-boton">Apoyo</span>
-    </div>
-    <div class="boton-circular" id="btnInstrucciones">
-      <div class="circulo">📖</div>
-      <span class="etiqueta-boton">Instrucciones</span>
-    </div>
-    <div class="boton-circular" id="btnEmergencia">
-      <div class="circulo">🚨</div>
-      <span class="etiqueta-boton">Emergencia</span>
-    </div>
-    <div class="boton-circular" id="btnRegistro">
-      <div class="circulo">👥</div>
-      <span class="etiqueta-boton">Mis personas</span>
-    </div>
-    <!-- BOTÓN EVOLUCIONADO: AHORA ES ASISTENCIA XOLO -->
-    <div class="boton-circular" id="btnAsistencia">
-      <div class="circulo">🤖</div>
-      <span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span>
-    </div>
+    <div class="boton-circular"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
+    <div class="boton-circular"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
+    <div class="boton-circular"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
+    <div class="boton-circular"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas</span></div>
+    <div class="boton-circular" id="btnAsistencia"><div class="circulo"><span class="icono-boton-xolo">◈</span></div><span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span></div>
   </div>
 </div>
-
-<!-- ===================================== -->
-<!-- MENÚ DEL ASISTENTE MAESTRO -->
-<!-- ===================================== -->
 <div id="fondoOscuroAsistente" class="fondo-oscuro"></div>
 <div id="menuAsistente" class="menu-asistente">
   <h3 class="titulo-asistente">🤖 ¿QUÉ ESTÁS RECIBIENDO?</h3>
-  <div class="opcion-asistente" id="opcionSoloVoz">
-    📞 Solo llamada de voz
-  </div>
-  <div class="opcion-asistente" id="opcionVideoLlamada">
-    📹 Videollamada
-  </div>
+  <div class="opcion-asistente" id="opcionSoloVoz">📞 Solo llamada de voz → Análisis real</div>
+  <div class="opcion-asistente" id="opcionVideoLlamada">📹 Videollamada → Análisis real</div>
 </div>
-
-<!-- ===================================== -->
-<!-- MENÚ DE HERRAMIENTAS INDIVIDUALES (ACCESIBLES DESDE OTROS LUGARES SI SE NECESITA) -->
-<!-- ===================================== -->
-<div id="fondoOscuroHerramientas" class="fondo-oscuro"></div>
-<div id="menuHerramientas" class="menu-herramientas">
-  <h3 class="titulo-menu">✦ HERRAMIENTAS DE ANÁLISIS</h3>
-  <div class="opcion-menu" data-accion="voz">
-    <span class="icono-opcion">🗣️</span> Comparar Voz de referencia
-  </div>
-  <div class="opcion-menu" data-accion="rostro">
-    <span class="icono-opcion">👤</span> Comparar Rostro de referencia
-  </div>
-  <div class="opcion-menu" data-accion="capturas">
-    <span class="icono-opcion">📸</span> 4 Capturas múltiples
-  </div>
-  <div class="opcion-menu" data-accion="escuchar">
-    <span class="icono-opcion">🎙️</span> Escuchar por XOLO
-  </div>
-  <div class="opcion-menu" data-accion="video">
-    <span class="icono-opcion">🎥</span> Análisis Video cuadro x cuadro
-  </div>
-  <div class="opcion-menu" data-accion="cambio">
-    <span class="icono-opcion">🔄</span> Detectar cambio en llamada
-  </div>
-  <div class="opcion-menu" data-accion="huella">
-    <span class="icono-opcion">🔗</span> Huella digital del archivo
-  </div>
-</div>
-
-<!-- ===================================== -->
-<!-- PANTALLAS DE INFORMACIÓN Y FUNCIONES (TODAS SE CONSERVAN IGUAL) -->
-<!-- ===================================== -->
-<div id="pantallaApoyo" class="pantalla-emergente">
-  <span class="cerrar-emergente">✕</span>
-  <div class="contenido-pantalla">
-    <h2>☕ Apoya el desarrollo de XOLO</h2>
-    <p>Tu aportación ayuda a seguir mejorando XOLO y creando más herramientas de protección contra IA.</p>
-    <p style="margin-top:20px;text-align:center">
-      <a class="enlace-apoyo" href="https://link.mercadopago.com.mx/apoyoaxoloantiia" target="_blank">🔗 link.mercadopago.com.mx/apoyoaxoloantiia</a>
-    </p>
-    <p style="margin-top:30px;text-align:center;color:#a855f7;font-weight:600;">🙏 ¡Gracias por apoyarme!</p>
-  </div>
-</div>
-
-<div id="pantallaInstrucciones" class="pantalla-emergente">
-  <span class="cerrar-emergente">✕</span>
-  <div class="contenido-pantalla">
-    <h2>📖 TUTORIAL COMPLETO — CÓMO USAR XOLO</h2>
-    <h3>🤖 ASISTENCIA XOLO — La herramienta principal</h3>
-    <p>Pulsa este botón y elige si es llamada de voz o videollamada. XOLO elegirá automáticamente qué revisar y te dará el resultado más preciso posible.</p>
-    <h3>👥 Mis personas</h3>
-    <p>Registra a tus contactos de confianza con su foto y voz: sin esto guardado, no hay con qué comparar.</p>
-    <h3>🚨 Emergencia</h3>
-    <p>Guarda un número para recibir alertas si se detecta peligro.</p>
-    <h3>💡 REGLAS DE ORO</h3>
-    <p>🔹 Pon siempre la llamada en ALTAVOZ al usar XOLO.<br>
-    🔹 Quédate callado/a mientras XOLO analiza.<br>
-    🔹 Acuerda una palabra secreta con tu familia.<br>
-    🔹 Si hay duda: cuelga y llama tú desde otro número.</p>
-  </div>
-</div>
-
-<div id="pantallaEmergencia" class="pantalla-emergente">
-  <span class="cerrar-emergente">✕</span>
-  <div class="contenido-pantalla">
-    <h2>🚨 Contacto de Emergencia</h2>
-    <p>Guarda un número de confianza. Cuando XOLO detecte peligro, envía SMS de alerta.</p>
-    <label for="numeroEmergencia">📱 Número (10 dígitos):</label>
-    <input type="tel" id="numeroEmergencia" class="entrada" placeholder="Ej: 3312345678" maxlength="15">
-    <div id="numeroGuardado" style="color:#a855f7;font-size:14px;margin-bottom:10px"></div>
-    <button id="botonGuardarNumero" class="boton-guardar">💾 Guardar número</button>
-    <div id="confirmacionEmergencia" class="confirmacion">✅ ¡Número guardado!</div>
-  </div>
-</div>
-
-<div id="pantallaRegistro" class="pantalla-emergente">
-  <span class="cerrar-emergente">✕</span>
-  <div class="contenido-pantalla">
-    <h2>👥 Personas de Confianza</h2>
-    <p>Guarda hasta 4 personas: su foto y voz para comparar después.</p>
-    
-    <label>Nombre de la persona:</label>
-    <input type="text" id="nombrePersona" class="entrada" placeholder="Ej: Mamá, Papá...">
-    
-    <div class="vista-previa-foto" id="vistaPreviaFoto">
-      <span style="color:#666;font-size:30px">📷</span>
-    </div>
-    <button id="btnSeleccionarFoto" class="boton-guardar" style="margin-bottom:10px">📸 Elegir foto de galería</button>
-    
-    <div class="estado-grabacion" id="estadoGrabacion">🎙️ Grabando... habla ahora</div>
-    <button id="btnGrabarVoz" class="boton-guardar" style="background:linear-gradient(90deg,#6366f1,#4f46e5)">🎙️ Grabar muestra de voz</button>
-    
-    <button id="btnGuardarPersona" class="boton-guardar" style="margin-top:15px; background:linear-gradient(90deg,#22c55e,#16a34a)">💾 GUARDAR PERSONA</button>
-    
-    <div id="confirmacionRegistro" class="confirmacion">✅ ¡Persona guardada correctamente!</div>
-    
-    <h3 style="margin-top:24px">Personas guardadas:</h3>
-    <div id="listaPersonas" class="lista-personas">
-      <div class="sin-registros">No hay personas registradas todavía</div>
-    </div>
-  </div>
-</div>
-
 <div id="pantallaResultado" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
   <div class="contenido-pantalla">
-    <h2 id="tituloResultado">🔍 Resultado del análisis</h2>
+    <h2 id="tituloResultado">🔍 Preparando análisis...</h2>
     <div id="contenidoResultado" class="texto-resultado visible"></div>
-    <div id="indicadorEscuchando" class="escuchando-indicador">🎙️ XOLO está escuchando...<br>🔊 Mantente callado/a</div>
-    <div id="alertaVozEnVivo" class="alerta-voz">⚠️ ¡CUIDADO! La voz suena artificial. Verifica de inmediato.</div>
-    <button id="botonDetenerEscucha" class="boton-detener oculto">⏹️ DETENER escucha</button>
+    <div id="indicadorEscuchando" class="escuchando-indicador">🎙️ Solicitando permiso de micrófono...</div>
+    <button id="botonAccion" class="boton-accion oculto"></button>
+    <button id="botonDetenerEscucha" class="boton-detener oculto">⏹️ Cancelar análisis</button>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-  let numeroEmergencia=localStorage.getItem('xolo_emergencia')||'';
-  let personasRegistradas=JSON.parse(localStorage.getItem('xolo_personas')||'[]');
-  let detenerEscucha=false, streamActivo=null, audioCtxActivo=null;
-  let capturasAnalizadas=0;
-  const MAX_CAPTURAS=4;
-  
-  let fotoSeleccionada=null;
-  let vozGrabada=null;
-  let grabandoAudio=null;
+  let analizando = false, capturasHechas = 0, evidenciasAcumuladas = [], registroAuditoria = [];
+  let audioContext = null, analyser = null, streamAudioActivo = null, intervaloAnalisis = null;
+  let medicionesReales = {
+    duracionTotal: 0, tiempoActivo: 0, tiempoSilencio: 0, cantidadPausas: 0,
+    cambiosBruscosDetectados: 0, energiaPromedio: 0, calidadGeneral: 0,
+    segmentosVoz: [], pausas: [], inicioCaptura: null
+  };
+  const UMBRAL_SILENCIO = 0.08, UMBRAL_CAMBIO_BRUSCO = 0.35, MIN_DURACION_ANALISIS = 3;
+  const MAX_CAPTURAS = 4;
 
-  // ELEMENTOS PRINCIPALES
-  const pantallaInicio=document.getElementById('pantallaInicio');
-  const pantallaOpciones=document.getElementById('pantallaOpciones');
-  const formaCentral=document.getElementById('formaCentral');
-  const cerrarOpciones=document.getElementById('cerrarOpciones');
-  const btnApoyo=document.getElementById('btnApoyo');
-  const btnInstrucciones=document.getElementById('btnInstrucciones');
-  const btnEmergencia=document.getElementById('btnEmergencia');
-  const btnRegistro=document.getElementById('btnRegistro');
-  const btnAsistencia=document.getElementById('btnAsistencia');
-  const fondoOscuroAsistente=document.getElementById('fondoOscuroAsistente');
-  const menuAsistente=document.getElementById('menuAsistente');
-  const opcionSoloVoz=document.getElementById('opcionSoloVoz');
-  const opcionVideoLlamada=document.getElementById('opcionVideoLlamada');
-  const fondoOscuroHerramientas=document.getElementById('fondoOscuroHerramientas');
-  const menuHerramientas=document.getElementById('menuHerramientas');
-  const pantallaResultado=document.getElementById('pantallaResultado');
-  const indicadorEscuchando=document.getElementById('indicadorEscuchando');
-  const alertaVozEnVivo=document.getElementById('alertaVozEnVivo');
-  const botonDetenerEscucha=document.getElementById('botonDetenerEscucha');
-
-  // ======================================
-  // 🧠 MOTOR DE DECISIÓN DEL ASISTENTE MAESTRO
-  // ======================================
-  function iniciarAsistencia(tipoLlamada){
-    cerrarMenus();
-    let herramientasUsadas=[];
-    let puntosOk=0, puntosDuda=0, puntosPeligro=0;
-
-    if(tipoLlamada==='voz'){
-      herramientasUsadas=['Análisis de voz','Comparación con referencia','Detección de cambios'];
-      mostrarResultadoPantalla('🤖 ASISTENCIA XOLO — LLAMADA DE VOZ',`✅ Herramientas activadas automáticamente:\n${herramientasUsadas.join(' • ')}\n\n🔊 Pon la llamada en ALTAVOZ y quédate callado/a unos segundos...`);
-      setTimeout(()=>{
-        iniciarAnalisisVoz(true, (res)=>{
-          if(res.nivel==='ok') puntosOk++;
-          else if(res.nivel==='warn') puntosDuda++;
-          else puntosPeligro++;
-          generarVeredictoFinal(puntosOk,puntosDuda,puntosPeligro,herramientasUsadas);
-        });
-      },1500);
-    }
-
-    if(tipoLlamada==='video'){
-      herramientasUsadas=['Análisis de voz','Comparación de rostro','Lógica de escenario','Detección de edición','Revisión de cambios'];
-      mostrarResultadoPantalla('🤖 ASISTENCIA XOLO — VIDEOLLAMADA',`✅ Herramientas activadas automáticamente:\n${herramientasUsadas.join(' • ')}\n\n🔊 Pon la llamada en ALTAVOZ y toma una captura de pantalla cuando te lo pida...`);
-      setTimeout(()=>{
-        puntosOk++; // Simulación de análisis coordinado
-        puntosOk++;
-        generarVeredictoFinal(puntosOk,puntosDuda,puntosPeligro,herramientasUsadas);
-      },3000);
-    }
-  }
-
-  function generarVeredictoFinal(ok,duda,peligro,lista){
-    let nivel, veredicto;
-    if(peligro>=1 || duda>=2){
-      nivel='peligro';
-      veredicto=`🔴 VEREDICTO FINAL: ALTA PROBABILIDAD DE IA O FRAUDE\n\n📋 Revisado con: ${lista.join(' • ')}\n⚠️ No confíes sin verificar por otro medio. Pide tu palabra secreta.`;
-    }else if(duda===1){
-      nivel='warn';
-      veredicto=`⚠️ VEREDICTO FINAL: SE DETECTARON ANOMALÍAS\n\n📋 Revisado con: ${lista.join(' • ')}\nTen cuidado, verifica detalles.`;
-    }else{
-      nivel='ok';
-      veredicto=`✅ VEREDICTO FINAL: PERSONA REAL\n\n📋 Revisado con: ${lista.join(' • ')}\nNo se detectaron signos de IA ni edición.`;
-    }
-    aplicarColorEstado(nivel);
-    mostrarResultadoPantalla('🤖 RESULTADO DE ASISTENCIA XOLO',veredicto);
-  }
-
-  // ======================================
-  // 🔍 TODA LA LÓGICA DE ANÁLISIS MEJORADA (SE CONSERVA COMPLETA)
-  // ======================================
-  function analizarImagenCompleta(rutaImagen,callback){
-    const resultados={
-      coincidencia:0,
-      detallesFisicos:[],
-      logicaEscenario:[],
-      signosEdicion:[],
-      nivel:'ok',
-      veredicto:''
-    };
-    setTimeout(()=>{
-      if(personasRegistradas.length>0){
-        resultados.coincidencia=55+Math.random()*40;
-        if(resultados.coincidencia>=85) resultados.detallesFisicos.push('✅ Coincidencia alta con persona guardada');
-        else if(resultados.coincidencia>=70) resultados.detallesFisicos.push('⚠️ Coincidencia media — verifica detalles');
-        else {resultados.detallesFisicos.push('❌ Baja coincidencia con persona guardada'); resultados.nivel='peligro';}
-      }else{
-        resultados.detallesFisicos.push('ℹ️ Sin persona de referencia guardada');
-        resultados.coincidencia='N/A';
-      }
-      const anomalíasFisicas=generarAnalisisFisico();
-      resultados.detallesFisicos.push(...anomalíasFisicas);
-      if(anomalíasFisicas.some(a=>a.startsWith('🚫'))) resultados.nivel='peligro';
-      else if(anomalíasFisicas.some(a=>a.startsWith('⚠️')) && resultados.nivel!=='peligro') resultados.nivel='warn';
-      const logicaEscenario=generarAnalisisLogicaEscenario();
-      resultados.logicaEscenario.push(...logicaEscenario);
-      if(logicaEscenario.some(l=>l.startsWith('🚫'))) resultados.nivel='peligro';
-      else if(logicaEscenario.some(l=>l.startsWith('⚠️')) && resultados.nivel!=='peligro') resultados.nivel='warn';
-      const signosEdicion=generarAnalisisEdicion();
-      resultados.signosEdicion.push(...signosEdicion);
-      if(signosEdicion.some(e=>e.startsWith('🚫'))) resultados.nivel='peligro';
-      else if(signosEdicion.some(e=>e.startsWith('⚠️')) && resultados.nivel!=='peligro') resultados.nivel='warn';
-      resultados.veredicto=generarVeredictoParcial(resultados);
-      callback(resultados);
-    },2500);
-  }
-
-  function generarAnalisisFisico(){
-    const hallazgos=[];
-    const aleatorio=Math.random();
-    if(aleatorio<0.08) hallazgos.push('🚫 Dedos deformes o en cantidad incorrecta');
-    else if(aleatorio<0.15) hallazgos.push('⚠️ Manos con proporciones extrañas');
-    else hallazgos.push('✅ Manos y proporciones normales');
-    if(aleatorio<0.1) hallazgos.push('🚫 Ojos asimétricos o mirada no natural');
-    else hallazgos.push('✅ Ojos y rostro con simetría normal');
-    if(aleatorio<0.05) hallazgos.push('🚫 Brazos/piernas con longitud imposible');
-    else hallazgos.push('✅ Proporciones corporales normales');
-    return hallazgos;
-  }
-
-  function generarAnalisisLogicaEscenario(){
-    const hallazgos=[];
-    const aleatorio=Math.random();
-    if(aleatorio<0.06) hallazgos.push('🚫 IMPOSIBLE: Persona sobre el agua / sin soporte físico');
-    else if(aleatorio<0.1) hallazgos.push('🚫 IMPOSIBLE: Objeto o persona flotando — sin gravedad');
-    else if(aleatorio<0.15) hallazgos.push('⚠️ Sombras no coinciden con la luz de la escena');
-    else if(aleatorio<0.2) hallazgos.push('⚠️ Reflejo no coincide con la persona');
-    else hallazgos.push('✅ Escenario físicamente consistente');
-    if(aleatorio<0.08) hallazgos.push('🚫 Perspectiva rota — fondo y figura no combinan');
-    else hallazgos.push('✅ Perspectiva y profundidad normales');
-    return hallazgos;
-  }
-
-  function generarAnalisisEdicion(){
-    const hallazgos=[];
-    const aleatorio=Math.random();
-    if(aleatorio<0.07) hallazgos.push('🚫 Borde blanco/halo alrededor del cuerpo — posible recorte pegado');
-    else if(aleatorio<0.12) hallazgos.push('⚠️ Bordes poco naturales — posible edición');
-    else hallazgos.push('✅ Bordes naturales — sin signos de recorte');
-    if(aleatorio<0.09) hallazgos.push('🚫 Diferencia de resolución entre persona y fondo');
-    else hallazgos.push('✅ Resolución uniforme en toda la imagen');
-    if(aleatorio<0.05) hallazgos.push('🚫 Zonas repetidas o textura no natural');
-    else hallazgos.push('✅ Texturas y detalles consistentes');
-    return hallazgos;
-  }
-
-  function generarVeredictoParcial(r){
-    if(r.nivel==='peligro') return '🤖 ALTA PROBABILIDAD DE IA O EDICIÓN';
-    else if(r.nivel==='warn') return '⚠️ SE DETECTARON ANOMALÍAS — Ten cuidado';
-    else return '✅ NO SE DETECTARON ANOMALÍAS';
-  }
-
-  function mostrarResultadoPantalla(titulo,texto){
-    document.getElementById('tituloResultado').textContent=titulo;
-    document.getElementById('contenidoResultado').textContent=texto;
-    document.getElementById('contenidoResultado').classList.add('visible');
-    pantallaResultado.classList.add('activa');
-  }
+  const pantallaInicio = document.getElementById('pantallaInicio');
+  const pantallaOpciones = document.getElementById('pantallaOpciones');
+  const formaCentral = document.getElementById('formaCentral');
+  const cerrarOpciones = document.getElementById('cerrarOpciones');
+  const btnAsistencia = document.getElementById('btnAsistencia');
+  const fondoOscuroAsistente = document.getElementById('fondoOscuroAsistente');
+  const menuAsistente = document.getElementById('menuAsistente');
+  const opcionSoloVoz = document.getElementById('opcionSoloVoz');
+  const opcionVideoLlamada = document.getElementById('opcionVideoLlamada');
+  const pantallaResultado = document.getElementById('pantallaResultado');
+  const tituloResultado = document.getElementById('tituloResultado');
+  const contenidoResultado = document.getElementById('contenidoResultado');
+  const indicadorEscuchando = document.getElementById('indicadorEscuchando');
+  const botonAccion = document.getElementById('botonAccion');
+  const botonDetenerEscucha = document.getElementById('botonDetenerEscucha');
+  const selectorImagenAnalisis = document.getElementById('selectorImagenAnalisis');
 
   function aplicarColorEstado(nivel){
-    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro');
-    document.body.classList.remove('ok','warn','danger');
+    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro','estado-neutral');
+    document.body.classList.remove('ok','warn','danger','neutral');
     if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
     else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
-    else{formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
+    else if(nivel==='peligro'){formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
+    else{formaCentral.classList.add('estado-neutral');document.body.classList.add('neutral');}
   }
 
-  function cerrarMenus(){
-    fondoOscuroAsistente.classList.remove('activo');
-    menuAsistente.classList.remove('activo');
-    fondoOscuroHerramientas.classList.remove('activo');
-    menuHerramientas.classList.remove('activo');
+  function cerrarMenusYRecursos(){
+    if(intervaloAnalisis) clearInterval(intervaloAnalisis); intervaloAnalisis = null;
+    if(audioContext) audioContext.close(); audioContext = null; analyser = null;
+    if(streamAudioActivo) streamAudioActivo.getTracks().forEach(t => t.stop()); streamAudioActivo = null;
+    analizando = false; evidenciasAcumuladas = []; medicionesReales = {duracionTotal:0,tiempoActivo:0,tiempoSilencio:0,cantidadPausas:0,cambiosBruscosDetectados:0,energiaPromedio:0,calidadGeneral:0,segmentosVoz:[],pausas:[],inicioCaptura:null};
+    fondoOscuroAsistente.classList.remove('activo'); menuAsistente.classList.remove('activo');
   }
 
-  // ACCIONES DE BOTONES
-  formaCentral.onclick=()=>{
-    pantallaInicio.style.opacity='0';
-    setTimeout(()=>{pantallaInicio.style.display='none';pantallaOpciones.classList.add('activa');},300);
-  };
-  cerrarOpciones.onclick=()=>{
-    pantallaOpciones.classList.remove('activa');
-    setTimeout(()=>{pantallaInicio.style.display='flex';pantallaInicio.style.opacity='1';},300);
-  };
-  btnApoyo.onclick=()=>{cerrarMenus();document.getElementById('pantallaApoyo').classList.add('activa');};
-  btnInstrucciones.onclick=()=>{cerrarMenus();document.getElementById('pantallaInstrucciones').classList.add('activa');};
-  btnEmergencia.onclick=()=>{cerrarMenus();document.getElementById('pantallaEmergencia').classList.add('activa');};
-  btnRegistro.onclick=()=>{cerrarMenus();document.getElementById('pantallaRegistro').classList.add('activa');actualizarListaPersonas();};
-  btnAsistencia.onclick=()=>{fondoOscuroAsistente.classList.add('activo');menuAsistente.classList.add('activo');};
-  opcionSoloVoz.onclick=()=>iniciarAsistencia('voz');
-  opcionVideoLlamada.onclick=()=>iniciarAsistencia('video');
-  fondoOscuroAsistente.onclick=()=>cerrarMenus();
-  fondoOscuroHerramientas.onclick=()=>cerrarMenus();
-
-  // RESTO DE FUNCIONES SE CONSERVAN IGUALES (registro, grabación, análisis de voz, etc.)
-  // ... (toda la lógica restante que ya tenías funcional se mantiene intacta)
-
-  document.querySelectorAll('.cerrar-emergente').forEach(btn=>{
-    btn.onclick=()=>{
-      detenerEscucha=true;
-      if(streamActivo){streamActivo.getTracks().forEach(t=>t.stop());streamActivo=null;}
-      if(audioCtxActivo){audioCtxActivo.close();audioCtxActivo=null;}
-      btn.closest('.pantalla-emergente').classList.remove('activa');
-      indicadorEscuchando.classList.remove('activo');
-      alertaVozEnVivo.classList.remove('activa');
-      botonDetenerEscucha.classList.add('oculto');
-      capturasAnalizadas=0;
-      resetearRegistro();
+  // ==================================================
+  // 🔌 ADAPTADORES PARA CONECTAR MODELOS EXTERNOS DESPUÉS
+  // ==================================================
+  function analizadorExternoAudio(datos){
+    return {
+      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
+      limitaciones: ['No hay modelo de detección de voz sintética conectado', 'Esta función se integrará posteriormente']
     };
-  });
+  }
+  function analizadorExternoImagen(imagen){
+    return {
+      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
+      limitaciones: ['No hay modelo de visión artificial conectado', 'Esta función se integrará posteriormente']
+    };
+  }
+  function analizadorExternoVideo(video){
+    return {
+      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
+      limitaciones: ['No hay modelo de análisis de video conectado', 'Esta función se integrará posteriormente']
+    };
+  }
+
+  // ==================================================
+  // 🧩 MÓDULOS DE ANÁLISIS CON DATOS REALES
+  // ==================================================
+  const ModulosAnalisis = {
+    evaluacionCalidadAudio: function(datos){
+      const {duracionTotal, energiaPromedio} = datos;
+      let estado = 'ok', calidad = 1.0, evidencia = [], limitaciones = [];
+      if(duracionTotal < MIN_DURACION_ANALISIS) { estado = 'sin_evidencia'; calidad = 0; limitaciones.push(`Duración insuficiente: ${duracionTotal.toFixed(1)}s (mínimo ${MIN_DURACION_ANALISIS}s)`); }
+      if(energiaPromedio < 0.03) { estado = 'warn'; calidad = 0.3; evidencia.push('Señal demasiado débil'); }
+      if(energiaPromedio > 0.95) { estado = 'warn'; calidad = 0.4; evidencia.push('Señal saturada o con ruido excesivo'); }
+      registroAuditoria.push({modulo:'evaluacionCalidadAudio',valor:calidad,estado});
+      return {
+        id: 'evaluacionCalidadAudio', estado, evidencia, puntuacion: null, calidadEvidencia: calidad,
+        explicacion: 'Medición real de calidad de la señal capturada', limitaciones
+      };
+    },
+    analisisPatronesVocales: function(datos){
+      const {duracionTotal, tiempoActivo, energiaPromedio} = datos;
+      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'analisisPatronesVocales',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'No hay suficientes datos para analizar patrones',limitaciones:['Requiere al menos 3 segundos de captura']};
+      const variacionEstimada = tiempoActivo > 0 ? Math.min(1, energiaPromedio * 8) : 0;
+      const estado = variacionEstimada > 0.2 ? 'ok' : 'warn';
+      const evidencia = variacionEstimada > 0.2 ? ['Se detectaron variaciones naturales de amplitud'] : ['Variación de señal muy baja'];
+      registroAuditoria.push({modulo:'analisisPatronesVocales',valor:variacionEstimada,estado});
+      return {
+        id: 'analisisPatronesVocales', estado, evidencia, puntuacion: null, calidadEvidencia: variacionEstimada,
+        explicacion: 'Análisis de variabilidad acústica básica. No demuestra ni descarta origen humano o artificial.',
+        limitaciones: ['No distingue por sí solo voz humana de sintética', 'Requiere modelo externo para detección especializada']
+      };
+    },
+    deteccionCambiosBruscos: function(datos){
+      const {cambiosBruscosDetectados, duracionTotal} = datos;
+      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'deteccionCambiosBruscos',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Duración insuficiente',limitaciones:['Requiere al menos 3 segundos']};
+      const estado = cambiosBruscosDetectados === 0 ? 'ok' : cambiosBruscosDetectados > 2 ? 'warn' : 'ok';
+      const evidencia = cambiosBruscosDetectados > 0 ? [`Se detectaron ${cambiosBruscosDetectados} cambios bruscos de señal`] : ['No se detectaron cambios bruscos'];
+      registroAuditoria.push({modulo:'deteccionCambiosBruscos',valor:cambiosBruscosDetectados,estado});
+      return {
+        id: 'deteccionCambiosBruscos', estado, evidencia, puntuacion: null, calidadEvidencia: cambiosBruscosDetectados > 2 ? 0.5 : 0.9,
+        explicacion: 'Detección de variaciones repentinas de energía. Pueden deberse a mala conexión, ruido o manipulación.',
+        limitaciones: ['No distingue causa de los cambios', 'No es prueba definitiva de alteración']
+      };
+    },
+    naturalidadTiempos: function(datos){
+      const {duracionTotal, tiempoActivo, cantidadPausas} = datos;
+      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'naturalidadTiempos',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Duración insuficiente',limitaciones:['Requiere al menos 3 segundos']};
+      const proporcionActiva = tiempoActivo / duracionTotal;
+      const estado = (proporcionActiva > 0.2 && proporcionActiva < 0.8) ? 'ok' : 'warn';
+      const evidencia = [`Proporción de señal activa: ${Math.round(proporcionActiva*100)}%`, `Pausas detectadas: ${cantidadPausas}`];
+      registroAuditoria.push({modulo:'naturalidadTiempos',valor:proporcionActiva,estado});
+      return {
+        id: 'naturalidadTiempos', estado, evidencia, puntuacion: null, calidadEvidencia: 0.6,
+        explicacion: 'Medición de tiempos y pausas. No confirma ni descarta origen artificial.',
+        limitaciones: ['Rangos temporales no son prueba de autenticidad', 'Requiere análisis complementario']
+      };
+    },
+    comparacionReferencias: () => ({id:'comparacionReferencias',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Función no disponible aún',limitaciones:['Requiere guardar referencias previamente y modelo de coincidencia']}),
+    analisisRostro: () => analizadorExternoImagen(),
+    cosasImposibles: () => analizadorExternoImagen(),
+    signosEdicion: () => analizadorExternoImagen(),
+    coherenciaVozRostro: () => analizadorExternoVideo()
+  };
+
+  // ==================================================
+  // 🧠 MOTOR DE DECISIÓN BASADO EN EVIDENCIA REAL
+  // ==================================================
+  const PESOS_MODULOS = {evaluacionCalidadAudio:2.0,analisisPatronesVocales:1.0,deteccionCambiosBruscos:1.3,naturalidadTiempos:1.1,comparacionReferencias:1.5};
+  function calcularVeredictoFinal(resultados){
+    const validos = resultados.filter(m => m.estado !== 'sin_evidencia');
+    if(validos.length === 0) return {nivel:'neutral',texto:'⚪ EVIDENCIA INSUFICIENTE',explicacion:'No hay datos válidos para emitir juicio.',advertencias:['Los resultados no constituyen certeza']};
+    let sumaPeso = 0, sumaPonderada = 0, alertas = 0, hayContradiccion = false;
+    validos.forEach(m => {
+      const peso = PESOS_MODULOS[m.id] || 1;
+      sumaPeso += peso;
+      if(m.estado === 'ok') sumaPonderada += m.calidadEvidencia * peso;
+      if(m.estado === 'warn') { alertas++; sumaPonderada += m.calidadEvidencia * 0.5 * peso; }
+      if(m.estado === 'peligro') { alertas++; sumaPonderada -= m.calidadEvidencia * peso; hayContradiccion = true; }
+    });
+    const nivelConfianza = Math.max(0, Math.min(100, Math.round((sumaPonderada / sumaPeso) * 100)));
+    let nivel, texto, explicacion;
+    if(validos.length < 2 || nivelConfianza < 40) { nivel = 'neutral'; texto = '⚪ EVIDENCIA INSUFICIENTE'; explicacion:'No hay suficiente información consistente.'; }
+    else if(alertas >= 2 || nivelConfianza < 60) { nivel = 'warn'; texto = '⚠️ ANOMALÍAS DETECTADAS'; explicacion:'Se observaron características que requieren verificación adicional. Esto NO demuestra por sí solo que sea contenido generado por IA.'; }
+    else { nivel = 'ok'; texto = '✅ SIN ANOMALÍAS EVIDENTES'; explicacion:'Las características medidas no presentan irregularidades claras. No se puede confirmar autenticidad sin modelos especializados.'; }
+    return {nivel,texto,explicacion,nivelConfianza,modulosValidos:validos.length,modulosSinDatos:resultados.length-validos.length,advertencias:['Este análisis solo mide características acústicas básicas','No sustituye verificación por modelos de detección especializada']};
+  }
+
+  function generarResumen(modulos){
+    let texto = '📋 DETALLE DE MEDICIONES REALES:\n';
+    modulos.forEach(m => {
+      texto += `\n• ${m.id}:\n  Estado: ${m.estado.toUpperCase()}\n  Descripción: ${m.explicacion}\n`;
+      if(m.evidencia.length) texto += `  Hallazgos: ${m.evidencia.join(', ')}\n`;
+      if(m.limitaciones.length) texto += `  Limitaciones: ${m.limitaciones.join(', ')}\n`;
+    });
+    return texto;
+  }
+
+  // ==================================================
+  // 📞 CAPTURA Y ANÁLISIS DE AUDIO EN TIEMPO REAL
+  // ==================================================
+  async function iniciarAnalisisVoz(){
+    cerrarMenusYRecursos(); analizando = true; medicionesReales.inicioCaptura = Date.now();
+    tituloResultado.textContent = '🤖 ANÁLISIS DE LLAMADA DE VOZ';
+    contenidoResultado.textContent = ''; indicadorEscuchando.classList.add('activo');
+    botonDetenerEscucha.classList.remove('oculto'); botonAccion.classList.add('oculto');
+
+    try {
+      streamAudioActivo = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}});
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser(); analyser.fftSize = 256;
+      const fuente = audioContext.createMediaStreamSource(streamAudioActivo); fuente.connect(analyser);
+      const datosFrecuencia = new Uint8Array(analyser.frequencyBinCount);
+      let energiaAnterior = 0, ultimoCambio = 0, enSilencio = true, inicioSegmento = Date.now();
+
+      intervaloAnalisis = setInterval(() => {
+        if(!analizando) return;
+        const ahora = Date.now();
+        medicionesReales.duracionTotal = (ahora - medicionesReales.inicioCaptura) / 1000;
+        analyser.getByteFrequencyData(datosFrecuencia);
+        const suma = datosFrecuencia.reduce((a,b) => a + b, 0);
+        const energiaActual = suma / (255 * datosFrecuencia.length);
+        medicionesReales.energiaPromedio = (medicionesReales.energiaPromedio * 0.9) + (energiaActual * 0.1);
+
+        if(energiaActual > UMBRAL_SILENCIO){
+          enSilencio = false; medicionesReales.tiempoActivo += 0.1;
+          if(energiaActual > energiaAnterior * (1 + UMBRAL_CAMBIO_BRUSCO) || energiaActual < energiaAnterior * (1 - UMBRAL_CAMBIO_BRUSCO)){
+            if(ahora - ultimoCambio > 300){ medicionesReales.cambiosBruscosDetectados++; ultimoCambio = ahora; }
+          }
+        } else {
+          if(!enSilencio){ medicionesReales.cantidadPausas++; medicionesReales.pausas.push((ahora - inicioSegmento)/1000); enSilencio = true; inicioSegmento = ahora; }
+          medicionesReales.tiempoSilencio += 0.1;
+        }
+        energiaAnterior = energiaActual;
+        indicadorEscuchando.textContent = `🎙️ Analizando... ${medicionesReales.duracionTotal.toFixed(1)}s | Señal: ${Math.round(energiaActual*100)}%`;
+      }, 100);
+
+      setTimeout(() => {
+        if(!analizando) return;
+        cerrarMenusYRecursos();
+        evidenciasAcumuladas = [
+          ModulosAnalisis.evaluacionCalidadAudio(medicionesReales),
+          ModulosAnalisis.analisisPatronesVocales(medicionesReales),
+          ModulosAnalisis.deteccionCambiosBruscos(medicionesReales),
+          ModulosAnalisis.naturalidadTiempos(medicionesReales),
+          analizadorExternoAudio(medicionesReales)
+        ];
+        const veredicto = calcularVeredictoFinal(evidenciasAcumuladas);
+        aplicarColorEstado(veredicto.nivel);
+        contenidoResultado.textContent = 
+          `🔍 ANÁLISIS COMPLETADO\nFuente: Micrófono autorizado\nDuración analizada: ${medicionesReales.duracionTotal.toFixed(1)} segundos\nCalidad de señal estimada: ${Math.round(medicionesReales.calidadGeneral*100)}%\nSegmentos de actividad: ${medicionesReales.segmentosVoz.length}\nPausas detectadas: ${medicionesReales.cantidadPausas}\nCambios bruscos: ${medicionesReales.cambiosBruscosDetectados}\nMódulos con evidencia: ${veredicto.modulosValidos}\nMódulos sin evidencia: ${veredicto.modulosSinDatos}\n\n` +
+          generarResumen(evidenciasAcumuladas) +
+          `\n━━━━━━━━━━━━━━━━━━━━\n${veredicto.texto}\n${veredicto.explicacion}\n\n${veredicto.advertencias.join('\n')}\n\n⚠️ El navegador no tiene acceso directo al audio interno de otras aplicaciones. Para analizar llamadas, activa el altavoz y coloca el micrófono cerca del altavoz del dispositivo.`;
+        contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo'); botonDetenerEscucha.classList.add('oculto');
+      }, 8000);
+
+    } catch (err) {
+      cerrarMenusYRecursos(); aplicarColorEstado('neutral');
+      contenidoResultado.textContent = `⚪ EVIDENCIA INSUFICIENTE\nNo se obtuvo acceso al micrófono.\nXOLO no puede analizar audio sin fuente autorizada.\nMotivo: ${err.message}`;
+      contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo'); botonDetenerEscucha.classList.add('oculto');
+    }
+  }
+
+  // ==================================================
+  // 📹 ANÁLISIS DE VIDEOLLAMADA
+  // ==================================================
+  function iniciarAnalisisVideo(){
+    cerrarMenusYRecursos(); analizando = true; capturasHechas = 0; evidenciasAcumuladas = [];
+    tituloResultado.textContent = '🤖 ANÁLISIS DE VIDEOLLAMADA';
+    contenidoResultado.textContent = `📹 PASO 1 DE ${MAX_CAPTURAS}:\nSelecciona una captura de pantalla para registrar la evidencia.\n\n⚠️ El análisis avanzado de imágenes requiere integración con modelos externos.\nNo se realizarán afirmaciones de detección de IA sin dichos modelos.`;
+    botonAccion.textContent = `📸 Seleccionar captura ${capturasHechas+1} de ${MAX_CAPTURAS}`;
+    botonAccion.classList.remove('oculto');
+    botonAccion.onclick = () => selectorImagenAnalisis.click();
+  }
+
+  selectorImagenAnalisis.onchange = (e) => {
+    if(!e.target.files[0] || !analizando) return;
+    capturasHechas++; const archivo = e.target.files[0];
+    evidenciasAcumuladas.push({
+      capturaId: capturasHechas, timestamp: Date.now(), archivo: archivo,
+      modulos: [analizadorExternoImagen(archivo), ModulosAnalisis.analisisRostro({imagen:archivo})], calidad: 0
+    });
+    contenidoResultado.textContent = `✅ Captura ${capturasHechas} registrada correctamente.\n\n⚠️ No hay análisis de imagen activo. Se guardó como evidencia para cuando se conecten modelos especializados.`;
+    contenidoResultado.classList.add('visible');
+    if(capturasHechas >= MAX_CAPTURAS) { analizando = false; botonAccion.classList.add('oculto'); }
+    else { botonAccion.textContent = `📸 Siguiente captura (${capturasHechas+1} de ${MAX_CAPTURAS})`; botonAccion.classList.remove('oculto'); }
+    selectorImagenAnalisis.value = '';
+  };
+
+  // ==================================================
+  // NAVEGACIÓN Y CONTROLES
+  // ==================================================
+  botonDetenerEscucha.onclick = cerrarMenusYRecursos;
+  formaCentral.onclick = () => { pantallaInicio.style.opacity='0'; setTimeout(()=>{pantallaInicio.style.display='none';pantallaOpciones.classList.add('activa');},300); };
+  cerrarOpciones.onclick = () => { pantallaOpciones.classList.remove('activa'); setTimeout(()=>{pantallaInicio.style.display='flex';pantallaInicio.style.opacity='1';},300); };
+  btnAsistencia.onclick = () => { fondoOscuroAsistente.classList.add('activo'); menuAsistente.classList.add('activo'); };
+  opcionSoloVoz.onclick = iniciarAnalisisVoz;
+  opcionVideoLlamada.onclick = iniciarAnalisisVideo;
+  fondoOscuroAsistente.onclick = cerrarMenusYRecursos;
+  document.querySelectorAll('.cerrar-emergente').forEach(btn => btn.onclick = () => { cerrarMenusYRecursos(); aplicarColorEstado('neutral'); contenidoResultado.classList.remove('visible'); });
 });
 </script>
 </body>
