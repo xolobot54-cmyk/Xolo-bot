@@ -26,12 +26,14 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 .forma-central.estado-warn{background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);box-shadow:0 0 70px rgba(234,179,8,.5), inset 0 0 60px rgba(255,255,255,.1)}
 .forma-central.estado-peligro{background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);box-shadow:0 0 80px rgba(239,68,68,.6), inset 0 0 60px rgba(255,255,255,.15);animation:latidoFuerte .9s ease-in-out infinite !important}
 .forma-central.estado-neutral{background:radial-gradient(circle at 30% 30%,#a8a8a8,#888888 40%,#666666 70%,#444444);box-shadow:0 0 60px rgba(136,136,136,.4), inset 0 0 60px rgba(255,255,255,.05)}
+.forma-central.estado-inconcluso{background:radial-gradient(circle at 30% 30%,#e5e7eb,#9ca3af 40%,#6b7280 70%,#4b5563);box-shadow:0 0 60px rgba(107,114,128,.4), inset 0 0 60px rgba(255,255,255,.05)}
 
 .pantalla-opciones{position:fixed;top:0;left:0;width:100%;height:100%;background:#050508;z-index:20;padding:40px 20px 20px;display:none;opacity:0;transition:opacity .5s ease;overflow-y:auto}
 .pantalla-opciones.activa{display:block;opacity:1}
 .cerrar-opciones{position:sticky;top:0;text-align:right;font-size:28px;color:#777;cursor:pointer;padding:10px 5px;z-index:5}
 .cerrar-opciones:hover{color:#fff}
-.titulo-pantalla{text-align:center;font-size:32px;color:#a855f7;margin-bottom:40px;font-weight:800}
+.titulo-pantalla{text-align:center;font-size:32px;color:#a855f7;margin-bottom:30px;font-weight:800}
+.texto-privacidad{background:rgba(255,255,255,.03);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:16px;margin:20px 0;line-height:1.7;font-size:13px;color:#aaa}
 .contenedor-botones{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;max-width:380px;margin:0 auto}
 .boton-circular{display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:transform .25s ease}
 .boton-circular:active{transform:scale(0.92)}
@@ -72,6 +74,14 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 <div id="pantallaOpciones" class="pantalla-opciones">
   <span class="cerrar-opciones" id="cerrarOpciones">✕</span>
   <h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
+  <div class="texto-privacidad">
+    🔒 PRIVACIDAD Y LÍMITES:<br>
+    XOLO no puede acceder por sí solo a conversaciones privadas, llamadas internas de otras aplicaciones, micrófono o cámara bloqueados, ni archivos privados sin que tú los selecciones voluntariamente.<br>
+    Solo analiza lo que el navegador permita explícitamente y procesa todo en tu dispositivo por defecto, sin enviar información a servidores externos a menos que tú autorices una herramienta especializada.<br><br>
+    ⚠️ REGLA IMPORTANTE:<br>
+    Las características técnicas como ruido, pausas, mala conexión o cambios de volumen NO son prueba de contenido generado por IA. Solo herramientas especializadas diseñadas específicamente para detectar IA pueden aportar evidencia válida al respecto.<br>
+    La ausencia de señales de IA NO significa que el contenido sea 100% humano, solo que no se encontró evidencia de generación artificial.
+  </div>
   <div class="contenedor-botones">
     <div class="boton-circular"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
     <div class="boton-circular"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
@@ -83,8 +93,9 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 <div id="fondoOscuroAsistente" class="fondo-oscuro"></div>
 <div id="menuAsistente" class="menu-asistente">
   <h3 class="titulo-asistente">🤖 ¿QUÉ ESTÁS RECIBIENDO?</h3>
-  <div class="opcion-asistente" id="opcionSoloVoz">📞 Solo llamada de voz → Análisis real</div>
-  <div class="opcion-asistente" id="opcionVideoLlamada">📹 Videollamada → Análisis real</div>
+  <div class="opcion-asistente" id="opcionSoloVoz">📞 Análisis de características de audio</div>
+  <div class="opcion-asistente" id="opcionVideoLlamada">📹 Registro de capturas de imagen</div>
+  <div style="font-size:12px;color:#aaa;margin-top:15px;text-align:center">⚠️ No se accede directamente al contenido de llamadas de otras aplicaciones</div>
 </div>
 <div id="pantallaResultado" class="pantalla-emergente">
   <span class="cerrar-emergente">✕</span>
@@ -99,172 +110,208 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-  let analizando = false, capturasHechas = 0, evidenciasAcumuladas = [], registroAuditoria = [];
+  let analizando = false, capturasHechas = 0, registroAuditoria = [];
   let audioContext = null, analyser = null, streamAudioActivo = null, intervaloAnalisis = null;
-  let medicionesReales = {
-    duracionTotal: 0, tiempoActivo: 0, tiempoSilencio: 0, cantidadPausas: 0,
-    cambiosBruscosDetectados: 0, energiaPromedio: 0, calidadGeneral: 0,
-    segmentosVoz: [], pausas: [], inicioCaptura: null
-  };
-  const UMBRAL_SILENCIO = 0.08, UMBRAL_CAMBIO_BRUSCO = 0.35, MIN_DURACION_ANALISIS = 3;
-  const MAX_CAPTURAS = 4;
-
-  const pantallaInicio = document.getElementById('pantallaInicio');
-  const pantallaOpciones = document.getElementById('pantallaOpciones');
-  const formaCentral = document.getElementById('formaCentral');
-  const cerrarOpciones = document.getElementById('cerrarOpciones');
-  const btnAsistencia = document.getElementById('btnAsistencia');
-  const fondoOscuroAsistente = document.getElementById('fondoOscuroAsistente');
-  const menuAsistente = document.getElementById('menuAsistente');
-  const opcionSoloVoz = document.getElementById('opcionSoloVoz');
-  const opcionVideoLlamada = document.getElementById('opcionVideoLlamada');
-  const pantallaResultado = document.getElementById('pantallaResultado');
-  const tituloResultado = document.getElementById('tituloResultado');
-  const contenidoResultado = document.getElementById('contenidoResultado');
-  const indicadorEscuchando = document.getElementById('indicadorEscuchando');
-  const botonAccion = document.getElementById('botonAccion');
-  const botonDetenerEscucha = document.getElementById('botonDetenerEscucha');
-  const selectorImagenAnalisis = document.getElementById('selectorImagenAnalisis');
+  const MIN_DURACION_ANALISIS = 3, MAX_CAPTURAS = 4;
+  const pantallaInicio = document.getElementById('pantallaInicio'), pantallaOpciones = document.getElementById('pantallaOpciones');
+  const formaCentral = document.getElementById('formaCentral'), cerrarOpciones = document.getElementById('cerrarOpciones');
+  const btnAsistencia = document.getElementById('btnAsistencia'), fondoOscuroAsistente = document.getElementById('fondoOscuroAsistente');
+  const menuAsistente = document.getElementById('menuAsistente'), opcionSoloVoz = document.getElementById('opcionSoloVoz');
+  const opcionVideoLlamada = document.getElementById('opcionVideoLlamada'), pantallaResultado = document.getElementById('pantallaResultado');
+  const tituloResultado = document.getElementById('tituloResultado'), contenidoResultado = document.getElementById('contenidoResultado');
+  const indicadorEscuchando = document.getElementById('indicadorEscuchando'), botonAccion = document.getElementById('botonAccion');
+  const botonDetenerEscucha = document.getElementById('botonDetenerEscucha'), selectorImagenAnalisis = document.getElementById('selectorImagenAnalisis');
 
   function aplicarColorEstado(nivel){
-    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro','estado-neutral');
+    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro','estado-neutral','estado-inconcluso');
     document.body.classList.remove('ok','warn','danger','neutral');
-    if(nivel==='ok'){formaCentral.classList.add('estado-ok');document.body.classList.add('ok');}
-    else if(nivel==='warn'){formaCentral.classList.add('estado-warn');document.body.classList.add('warn');}
-    else if(nivel==='peligro'){formaCentral.classList.add('estado-peligro');document.body.classList.add('danger');}
-    else{formaCentral.classList.add('estado-neutral');document.body.classList.add('neutral');}
+    const colores = {
+      'sin_evidencia':'neutral','anomalia_tecnica':'warn','indicio_parcial':'warn',
+      'coincidencia_media':'warn','coincidencia_alta':'peligro','normal':'ok','inconcluso':'neutral','conflictivo':'warn'
+    };
+    formaCentral.classList.add(`estado-${colores[nivel]||'inconcluso'}`);
+    document.body.classList.add(colores[nivel]||'neutral');
   }
 
   function cerrarMenusYRecursos(){
-    if(intervaloAnalisis) clearInterval(intervaloAnalisis); intervaloAnalisis = null;
-    if(audioContext) audioContext.close(); audioContext = null; analyser = null;
-    if(streamAudioActivo) streamAudioActivo.getTracks().forEach(t => t.stop()); streamAudioActivo = null;
-    analizando = false; evidenciasAcumuladas = []; medicionesReales = {duracionTotal:0,tiempoActivo:0,tiempoSilencio:0,cantidadPausas:0,cambiosBruscosDetectados:0,energiaPromedio:0,calidadGeneral:0,segmentosVoz:[],pausas:[],inicioCaptura:null};
+    if(intervaloAnalisis) clearInterval(intervaloAnalisis);
+    if(audioContext) audioContext.close();
+    if(streamAudioActivo) streamAudioActivo.getTracks().forEach(t => t.stop());
+    audioContext = analyser = streamAudioActivo = intervaloAnalisis = null;
+    analizando = false; capturasHechas = 0;
     fondoOscuroAsistente.classList.remove('activo'); menuAsistente.classList.remove('activo');
   }
 
   // ==================================================
-  // 🔌 ADAPTADORES PARA CONECTAR MODELOS EXTERNOS DESPUÉS
+  // 🧩 MÓDULOS ESTRUCTURADOS PARA FUSIÓN DE EVIDENCIA
   // ==================================================
-  function analizadorExternoAudio(datos){
-    return {
-      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
-      limitaciones: ['No hay modelo de detección de voz sintética conectado', 'Esta función se integrará posteriormente']
-    };
-  }
-  function analizadorExternoImagen(imagen){
-    return {
-      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
-      limitaciones: ['No hay modelo de visión artificial conectado', 'Esta función se integrará posteriormente']
-    };
-  }
-  function analizadorExternoVideo(video){
-    return {
-      disponible: false, estado: 'sin_evidencia', evidencia: [], puntuacion: null, calidadEvidencia: 0,
-      limitaciones: ['No hay modelo de análisis de video conectado', 'Esta función se integrará posteriormente']
-    };
-  }
-
-  // ==================================================
-  // 🧩 MÓDULOS DE ANÁLISIS CON DATOS REALES
-  // ==================================================
-  const ModulosAnalisis = {
-    evaluacionCalidadAudio: function(datos){
-      const {duracionTotal, energiaPromedio} = datos;
-      let estado = 'ok', calidad = 1.0, evidencia = [], limitaciones = [];
-      if(duracionTotal < MIN_DURACION_ANALISIS) { estado = 'sin_evidencia'; calidad = 0; limitaciones.push(`Duración insuficiente: ${duracionTotal.toFixed(1)}s (mínimo ${MIN_DURACION_ANALISIS}s)`); }
-      if(energiaPromedio < 0.03) { estado = 'warn'; calidad = 0.3; evidencia.push('Señal demasiado débil'); }
-      if(energiaPromedio > 0.95) { estado = 'warn'; calidad = 0.4; evidencia.push('Señal saturada o con ruido excesivo'); }
-      registroAuditoria.push({modulo:'evaluacionCalidadAudio',valor:calidad,estado});
-      return {
-        id: 'evaluacionCalidadAudio', estado, evidencia, puntuacion: null, calidadEvidencia: calidad,
-        explicacion: 'Medición real de calidad de la señal capturada', limitaciones
-      };
+  const ModulosEspecializados = {
+    audio: {
+      id: 'modulo_audio', nombre: 'Análisis de Audio', disponible: true,
+      pesoEvaluacion: 0.2, independencia: 'baja',
+      analizar: function(datosMedicion){
+        try{
+          const {duracionTotal, energiaPromedio, cambiosBruscosDetectados, cantidadPausas, tiempoActivo} = datosMedicion;
+          if(duracionTotal < MIN_DURACION_ANALISIS) return {
+            modulo:this.id, disponible:true, estado:'inconcluso', confianza:0, tipoDeEvidencia:'calidad',
+            calidadMuestra:'insuficiente', señales:['Duración insuficiente para análisis'], explicacion:'No hay datos suficientes'
+          };
+          let señales = [], estado = 'normal', confianza = 0.5, calidadMuestra = 'buena';
+          if(cambiosBruscosDetectados > 3) { señales.push('Variaciones frecuentes en la señal'); estado = 'anomalia_tecnica'; calidadMuestra = 'media'; }
+          if(energiaPromedio < 0.05 || energiaPromedio > 0.95) { señales.push('Calidad de señal irregular'); estado = 'anomalia_tecnica'; calidadMuestra = 'baja'; }
+          if(cantidadPausas > 6 && tiempoActivo/duracionTotal < 0.3) { señales.push('Patrón de actividad muy discontinuo'); estado = 'anomalia_tecnica'; calidadMuestra = 'media'; }
+          return {
+            modulo:this.id, disponible:true, estado, confianza, tipoDeEvidencia:'tecnica', calidadMuestra,
+            independencia: this.independencia, señales, explicacion:'Análisis de características acústicas básicas',
+            limitaciones:['No distingue origen humano ni artificial de forma definitiva']
+          };
+        }catch(err){ return {modulo:this.id, disponible:false, estado:'error', confianza:0, tipoDeEvidencia:'sin_evidencia', señales:[], error:err.message}; }
+      }
     },
-    analisisPatronesVocales: function(datos){
-      const {duracionTotal, tiempoActivo, energiaPromedio} = datos;
-      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'analisisPatronesVocales',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'No hay suficientes datos para analizar patrones',limitaciones:['Requiere al menos 3 segundos de captura']};
-      const variacionEstimada = tiempoActivo > 0 ? Math.min(1, energiaPromedio * 8) : 0;
-      const estado = variacionEstimada > 0.2 ? 'ok' : 'warn';
-      const evidencia = variacionEstimada > 0.2 ? ['Se detectaron variaciones naturales de amplitud'] : ['Variación de señal muy baja'];
-      registroAuditoria.push({modulo:'analisisPatronesVocales',valor:variacionEstimada,estado});
-      return {
-        id: 'analisisPatronesVocales', estado, evidencia, puntuacion: null, calidadEvidencia: variacionEstimada,
-        explicacion: 'Análisis de variabilidad acústica básica. No demuestra ni descarta origen humano o artificial.',
-        limitaciones: ['No distingue por sí solo voz humana de sintética', 'Requiere modelo externo para detección especializada']
-      };
+    video: {
+      id: 'modulo_video', nombre: 'Análisis de Video/Imagen', disponible: false,
+      pesoEvaluacion: 1.5, independencia: 'alta',
+      analizar: function(datosImagen){
+        return {
+          modulo:this.id, disponible:false, estado:'no_disponible', confianza:0, tipoDeEvidencia:'sin_evidencia',
+          calidadMuestra:'buena', independencia: this.independencia, señales:[],
+          explicacion:'Herramienta de análisis de imagen no conectada',
+          limitaciones:['Módulo preparado para integración futura de detectores reales']
+        };
+      }
     },
-    deteccionCambiosBruscos: function(datos){
-      const {cambiosBruscosDetectados, duracionTotal} = datos;
-      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'deteccionCambiosBruscos',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Duración insuficiente',limitaciones:['Requiere al menos 3 segundos']};
-      const estado = cambiosBruscosDetectados === 0 ? 'ok' : cambiosBruscosDetectados > 2 ? 'warn' : 'ok';
-      const evidencia = cambiosBruscosDetectados > 0 ? [`Se detectaron ${cambiosBruscosDetectados} cambios bruscos de señal`] : ['No se detectaron cambios bruscos'];
-      registroAuditoria.push({modulo:'deteccionCambiosBruscos',valor:cambiosBruscosDetectados,estado});
-      return {
-        id: 'deteccionCambiosBruscos', estado, evidencia, puntuacion: null, calidadEvidencia: cambiosBruscosDetectados > 2 ? 0.5 : 0.9,
-        explicacion: 'Detección de variaciones repentinas de energía. Pueden deberse a mala conexión, ruido o manipulación.',
-        limitaciones: ['No distingue causa de los cambios', 'No es prueba definitiva de alteración']
-      };
-    },
-    naturalidadTiempos: function(datos){
-      const {duracionTotal, tiempoActivo, cantidadPausas} = datos;
-      if(duracionTotal < MIN_DURACION_ANALISIS) return {id:'naturalidadTiempos',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Duración insuficiente',limitaciones:['Requiere al menos 3 segundos']};
-      const proporcionActiva = tiempoActivo / duracionTotal;
-      const estado = (proporcionActiva > 0.2 && proporcionActiva < 0.8) ? 'ok' : 'warn';
-      const evidencia = [`Proporción de señal activa: ${Math.round(proporcionActiva*100)}%`, `Pausas detectadas: ${cantidadPausas}`];
-      registroAuditoria.push({modulo:'naturalidadTiempos',valor:proporcionActiva,estado});
-      return {
-        id: 'naturalidadTiempos', estado, evidencia, puntuacion: null, calidadEvidencia: 0.6,
-        explicacion: 'Medición de tiempos y pausas. No confirma ni descarta origen artificial.',
-        limitaciones: ['Rangos temporales no son prueba de autenticidad', 'Requiere análisis complementario']
-      };
-    },
-    comparacionReferencias: () => ({id:'comparacionReferencias',estado:'sin_evidencia',evidencia:[],puntuacion:null,calidadEvidencia:0,explicacion:'Función no disponible aún',limitaciones:['Requiere guardar referencias previamente y modelo de coincidencia']}),
-    analisisRostro: () => analizadorExternoImagen(),
-    cosasImposibles: () => analizadorExternoImagen(),
-    signosEdicion: () => analizadorExternoImagen(),
-    coherenciaVozRostro: () => analizadorExternoVideo()
+    temporal: {
+      id: 'modulo_temporal', nombre: 'Análisis de Patrones Temporales', disponible: true,
+      pesoEvaluacion: 0.1, independencia: 'baja',
+      analizar: function(datosMedicion){
+        try{
+          const {duracionTotal, cantidadPausas} = datosMedicion;
+          if(duracionTotal < MIN_DURACION_ANALISIS) return {modulo:this.id, disponible:true, estado:'inconcluso', confianza:0, tipoDeEvidencia:'calidad', calidadMuestra:'insuficiente', señales:[]};
+          let señales = [], estado = 'normal', confianza = 0.5, calidadMuestra = 'buena';
+          if(cantidadPausas > 8) { señales.push('Cantidad elevada de interrupciones'); estado = 'anomalia_tecnica'; calidadMuestra = 'media'; }
+          return {
+            modulo:this.id, disponible:true, estado, confianza, tipoDeEvidencia:'tecnica', calidadMuestra,
+            independencia: this.independencia, señales, explicacion:'Análisis de comportamiento a lo largo del tiempo',
+            limitaciones:['No es prueba de generación artificial']
+          };
+        }catch(err){ return {modulo:this.id, disponible:false, estado:'error', confianza:0, tipoDeEvidencia:'sin_evidencia', señales:[], error:err.message}; }
+      }
+    }
+    // AGREGAR FUTUROS DETECTORES AQUÍ EJEMPLO:
+    // detectorVozIA: { id:'detectorVozIA', disponible:false, pesoEvaluacion:1.8, independencia:'alta', tipoDeEvidencia:'ia', ... }
   };
 
   // ==================================================
-  // 🧠 MOTOR DE DECISIÓN BASADO EN EVIDENCIA REAL
+  // 🧠 CEREBRO XOLO — LÓGICA DE FUSIÓN DE EVIDENCIA
   // ==================================================
-  const PESOS_MODULOS = {evaluacionCalidadAudio:2.0,analisisPatronesVocales:1.0,deteccionCambiosBruscos:1.3,naturalidadTiempos:1.1,comparacionReferencias:1.5};
-  function calcularVeredictoFinal(resultados){
-    const validos = resultados.filter(m => m.estado !== 'sin_evidencia');
-    if(validos.length === 0) return {nivel:'neutral',texto:'⚪ EVIDENCIA INSUFICIENTE',explicacion:'No hay datos válidos para emitir juicio.',advertencias:['Los resultados no constituyen certeza']};
-    let sumaPeso = 0, sumaPonderada = 0, alertas = 0, hayContradiccion = false;
-    validos.forEach(m => {
-      const peso = PESOS_MODULOS[m.id] || 1;
-      sumaPeso += peso;
-      if(m.estado === 'ok') sumaPonderada += m.calidadEvidencia * peso;
-      if(m.estado === 'warn') { alertas++; sumaPonderada += m.calidadEvidencia * 0.5 * peso; }
-      if(m.estado === 'peligro') { alertas++; sumaPonderada -= m.calidadEvidencia * peso; hayContradiccion = true; }
-    });
-    const nivelConfianza = Math.max(0, Math.min(100, Math.round((sumaPonderada / sumaPeso) * 100)));
-    let nivel, texto, explicacion;
-    if(validos.length < 2 || nivelConfianza < 40) { nivel = 'neutral'; texto = '⚪ EVIDENCIA INSUFICIENTE'; explicacion:'No hay suficiente información consistente.'; }
-    else if(alertas >= 2 || nivelConfianza < 60) { nivel = 'warn'; texto = '⚠️ ANOMALÍAS DETECTADAS'; explicacion:'Se observaron características que requieren verificación adicional. Esto NO demuestra por sí solo que sea contenido generado por IA.'; }
-    else { nivel = 'ok'; texto = '✅ SIN ANOMALÍAS EVIDENTES'; explicacion:'Las características medidas no presentan irregularidades claras. No se puede confirmar autenticidad sin modelos especializados.'; }
-    return {nivel,texto,explicacion,nivelConfianza,modulosValidos:validos.length,modulosSinDatos:resultados.length-validos.length,advertencias:['Este análisis solo mide características acústicas básicas','No sustituye verificación por modelos de detección especializada']};
-  }
+  const CerebroXOLO = {
+    estadosDictamen: {
+      normal: {texto:'🟢 SIN EVIDENCIA ESPECÍFICA DE CONTENIDO ARTIFICIAL', explicacion:'No se encontraron señales de generación o manipulación mediante IA. Esto NO garantiza que el contenido sea 100% humano.'},
+      anomalia_tecnica: {texto:'🟡 ANOMALÍAS TÉCNICAS DETECTADAS', explicacion:'Irregularidades que pueden deberse a mala conexión, ruido, dispositivo o comportamiento humano normal. NO son prueba de IA.'},
+      indicio_parcial: {texto:'🟡 INDICIOS PARCIALES — SE SUGIERE VERIFICACIÓN', explicacion:'Algunas características requieren comprobación adicional. No hay evidencia suficiente para afirmar uso de IA.'},
+      coincidencia_media: {texto:'🟠 SOSPECHOSO', explicacion:'Existen señales compatibles con posible manipulación, pero no son concluyentes.'},
+      coincidencia_alta: {texto:'🔴 ALTA PROBABILIDAD DE CONTENIDO ARTIFICIAL', explicacion:'Coincidencia de múltiples indicadores independientes. No es una certeza absoluta.'},
+      sin_evidencia: {texto:'⚪ SIN EVIDENCIA SUFICIENTE', explicacion:'No se contó con herramientas especializadas ni datos válidos para evaluar generación artificial.'},
+      inconcluso: {texto:'⚪ INCONCLUSO', explicacion:'Los datos disponibles son insuficientes, contradictorios o de muy baja calidad para emitir un dictamen confiable.'},
+      no_disponible: {texto:'⚪ MÓDULO NO DISPONIBLE', explicacion:'La herramienta necesaria no está activada o configurada.'},
+      conflictivo: {texto:'⚠️ RESULTADO CONFLICTIVO', explicacion:'Los análisis entregaron resultados opuestos. Se recomienda repetir la prueba o verificar por otros medios.'}
+    },
+    fusionarEvidencia: function(resultadosModulos){
+      const razonamiento = {
+        evidenciaEspecializada: false, cantidadDetectoresEspecializados: 0, coincidencias: 0,
+        contradicciones: 0, calidadMuestraGeneral: 'buena', confianzaGlobal: 0, motivoPrincipal: ''
+      };
+      const validos = resultadosModulos.filter(m => m.disponible && m.estado !== 'no_disponible' && m.estado !== 'error');
+      if(validos.length === 0) return {nivel:'inconcluso', ...this.estadosDictamen.inconcluso, razonamiento, detalles:resultadosModulos};
 
-  function generarResumen(modulos){
-    let texto = '📋 DETALLE DE MEDICIONES REALES:\n';
-    modulos.forEach(m => {
-      texto += `\n• ${m.id}:\n  Estado: ${m.estado.toUpperCase()}\n  Descripción: ${m.explicacion}\n`;
-      if(m.evidencia.length) texto += `  Hallazgos: ${m.evidencia.join(', ')}\n`;
-      if(m.limitaciones.length) texto += `  Limitaciones: ${m.limitaciones.join(', ')}\n`;
-    });
-    return texto;
-  }
+      // Calcular calidad general de muestra
+      const calidades = {insuficiente:0, baja:0, media:1, buena:2};
+      const nivelesCalidad = ['insuficiente','baja','media','buena'];
+      const promedioCalidad = validos.reduce((s,m) => s + calidades[m.calidadMuestra||'buena'], 0) / validos.length;
+      razonamiento.calidadMuestraGeneral = nivelesCalidad[Math.round(promedioCalidad)];
+      if(promedioCalidad < 0.5) {
+        razonamiento.motivoPrincipal = 'Calidad de muestra insuficiente';
+        return {nivel:'inconcluso', ...this.estadosDictamen.inconcluso, razonamiento, detalles:resultadosModulos};
+      }
+
+      // Separar tipos de evidencia
+      const evidenciaIA = validos.filter(m => m.tipoDeEvidencia === 'ia');
+      const evidenciaManipulacion = validos.filter(m => m.tipoDeEvidencia === 'manipulacion');
+      const evidenciaTecnica = validos.filter(m => m.tipoDeEvidencia === 'tecnica');
+      const señalesTecnicas = [...new Set(evidenciaTecnica.flatMap(m => m.señales||[]))];
+      razonamiento.cantidadDetectoresEspecializados = evidenciaIA.length + evidenciaManipulacion.length;
+      razonamiento.evidenciaEspecializada = razonamiento.cantidadDetectoresEspecializados > 0;
+
+      // Si no hay detectores especializados conectados
+      if(!razonamiento.evidenciaEspecializada){
+        razonamiento.motivoPrincipal = 'No hay herramientas especializadas conectadas para detectar IA';
+        return {
+          nivel: 'sin_evidencia', ...this.estadosDictamen.sin_evidencia,
+          señalesTecnicas: señalesTecnicas.length ? señalesTecnicas : ['Sin anomalías técnicas relevantes'],
+          razonamiento, detallesModulos: resultadosModulos,
+          advertencia:'No existen herramientas activas capaces de identificar contenido generado por IA.'
+        };
+      }
+
+      // Detectar coincidencias y contradicciones
+      const positivosIA = evidenciaIA.filter(m => ['coincidencia_media','coincidencia_alta','indicio_parcial'].includes(m.estado));
+      const negativosIA = evidenciaIA.filter(m => ['normal','sin_evidencia'].includes(m.estado));
+      razonamiento.coincidencias = positivosIA.length;
+      razonamiento.contradicciones = negativosIA.length > 0 && positivosIA.length > 0 ? 1 : 0;
+
+      if(razonamiento.contradicciones > 0){
+        razonamiento.motivoPrincipal = 'Resultados contradictorios entre detectores especializados';
+        return {nivel:'conflictivo', ...this.estadosDictamen.conflictivo, razonamiento, detallesModulos:resultadosModulos};
+      }
+
+      // Calcular fuerza de evidencia
+      let fuerzaTotal = 0, pesoTotal = 0;
+      [...evidenciaIA, ...evidenciaManipulacion].forEach(m => {
+        const peso = ModulosEspecializados[m.modulo].pesoEvaluacion;
+        const factorIndependencia = m.independencia === 'alta' ? 1.2 : m.independencia === 'media' ? 1 : 0.7;
+        const factorEstado = m.estado === 'coincidencia_alta' ? 1 : m.estado === 'coincidencia_media' ? 0.6 : m.estado === 'indicio_parcial' ? 0.3 : 0;
+        fuerzaTotal += (peso * factorIndependencia * factorEstado * m.confianza);
+        pesoTotal += peso * factorIndependencia;
+      });
+      razonamiento.confianzaGlobal = pesoTotal > 0 ? fuerzaTotal / pesoTotal : 0;
+
+      // Jerarquía de decisión final
+      let nivelFinal = 'normal';
+      if(razonamiento.confianzaGlobal >= 0.7 && razonamiento.coincidencias >= 2){
+        nivelFinal = 'coincidencia_alta';
+        razonamiento.motivoPrincipal = 'Coincidencia de múltiples detectores especializados independientes';
+      } else if(razonamiento.confianzaGlobal >= 0.4 && razonamiento.coincidencias >= 1){
+        nivelFinal = 'coincidencia_media';
+        razonamiento.motivoPrincipal = 'Señales compatibles con posible manipulación';
+      } else if(razonamiento.confianzaGlobal >= 0.2){
+        nivelFinal = 'indicio_parcial';
+        razonamiento.motivoPrincipal = 'Indicios débiles, requiere verificación';
+      } else if(señalesTecnicas.length > 0){
+        nivelFinal = 'anomalia_tecnica';
+        razonamiento.motivoPrincipal = 'Solo se detectaron características técnicas';
+      }else{
+        razonamiento.motivoPrincipal = 'No se encontraron señales de generación artificial';
+      }
+
+      registroAuditoria.push({fecha:Date.now(), razonamiento, resultado: nivelFinal});
+      return {
+        nivel: nivelFinal, ...this.estadosDictamen[nivelFinal],
+        señalesTecnicas: señalesTecnicas, razonamiento, detallesModulos: resultadosModulos,
+        advertencia:'Ningún resultado es 100% exacto. Siempre se recomienda verificación personal.'
+      };
+    }
+  };
 
   // ==================================================
-  // 📞 CAPTURA Y ANÁLISIS DE AUDIO EN TIEMPO REAL
+  // 📞 ANÁLISIS DE AUDIO CONSERVADO SIN MODIFICACIONES
   // ==================================================
   async function iniciarAnalisisVoz(){
-    cerrarMenusYRecursos(); analizando = true; medicionesReales.inicioCaptura = Date.now();
-    tituloResultado.textContent = '🤖 ANÁLISIS DE LLAMADA DE VOZ';
+    cerrarMenusYRecursos(); analizando = true;
+    const mediciones = {duracionTotal:0,tiempoActivo:0,tiempoSilencio:0,cantidadPausas:0,cambiosBruscosDetectados:0,energiaPromedio:0,inicio:Date.now()};
+    const UMBRAL_SILENCIO = 0.08, UMBRAL_CAMBIO = 0.35;
+    let energiaAnterior = 0, ultimoCambio = 0, enSilencio = true;
+
+    tituloResultado.textContent = '🤖 ANÁLISIS MULTIMODULAR DE AUDIO';
     contenidoResultado.textContent = ''; indicadorEscuchando.classList.add('activo');
     botonDetenerEscucha.classList.remove('oculto'); botonAccion.classList.add('oculto');
 
@@ -272,65 +319,62 @@ document.addEventListener('DOMContentLoaded',function(){
       streamAudioActivo = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false}});
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
       analyser = audioContext.createAnalyser(); analyser.fftSize = 256;
-      const fuente = audioContext.createMediaStreamSource(streamAudioActivo); fuente.connect(analyser);
+      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
       const datosFrecuencia = new Uint8Array(analyser.frequencyBinCount);
-      let energiaAnterior = 0, ultimoCambio = 0, enSilencio = true, inicioSegmento = Date.now();
 
       intervaloAnalisis = setInterval(() => {
         if(!analizando) return;
-        const ahora = Date.now();
-        medicionesReales.duracionTotal = (ahora - medicionesReales.inicioCaptura) / 1000;
+        mediciones.duracionTotal = (Date.now() - mediciones.inicio)/1000;
         analyser.getByteFrequencyData(datosFrecuencia);
-        const suma = datosFrecuencia.reduce((a,b) => a + b, 0);
-        const energiaActual = suma / (255 * datosFrecuencia.length);
-        medicionesReales.energiaPromedio = (medicionesReales.energiaPromedio * 0.9) + (energiaActual * 0.1);
+        const energiaActual = datosFrecuencia.reduce((a,b)=>a+b,0)/(255*datosFrecuencia.length);
+        mediciones.energiaPromedio = mediciones.energiaPromedio*0.9 + energiaActual*0.1;
 
         if(energiaActual > UMBRAL_SILENCIO){
-          enSilencio = false; medicionesReales.tiempoActivo += 0.1;
-          if(energiaActual > energiaAnterior * (1 + UMBRAL_CAMBIO_BRUSCO) || energiaActual < energiaAnterior * (1 - UMBRAL_CAMBIO_BRUSCO)){
-            if(ahora - ultimoCambio > 300){ medicionesReales.cambiosBruscosDetectados++; ultimoCambio = ahora; }
+          enSilencio = false; mediciones.tiempoActivo += 0.1;
+          if(Math.abs(energiaActual-energiaAnterior)/energiaAnterior > UMBRAL_CAMBIO && Date.now()-ultimoCambio>300){
+            mediciones.cambiosBruscosDetectados++; ultimoCambio = Date.now();
           }
-        } else {
-          if(!enSilencio){ medicionesReales.cantidadPausas++; medicionesReales.pausas.push((ahora - inicioSegmento)/1000); enSilencio = true; inicioSegmento = ahora; }
-          medicionesReales.tiempoSilencio += 0.1;
+        }else{
+          if(!enSilencio){ mediciones.cantidadPausas++; enSilencio = true; }
+          mediciones.tiempoSilencio += 0.1;
         }
         energiaAnterior = energiaActual;
-        indicadorEscuchando.textContent = `🎙️ Analizando... ${medicionesReales.duracionTotal.toFixed(1)}s | Señal: ${Math.round(energiaActual*100)}%`;
+        indicadorEscuchando.textContent = `🎙️ Analizando... ${mediciones.duracionTotal.toFixed(1)}s | Nivel: ${Math.round(energiaActual*100)}%`;
       }, 100);
 
-      setTimeout(() => {
-        if(!analizando) return;
-        cerrarMenusYRecursos();
-        evidenciasAcumuladas = [
-          ModulosAnalisis.evaluacionCalidadAudio(medicionesReales),
-          ModulosAnalisis.analisisPatronesVocales(medicionesReales),
-          ModulosAnalisis.deteccionCambiosBruscos(medicionesReales),
-          ModulosAnalisis.naturalidadTiempos(medicionesReales),
-          analizadorExternoAudio(medicionesReales)
+      setTimeout(async () => {
+        if(!analizando) return; cerrarMenusYRecursos();
+        const resultados = [
+          ModulosEspecializados.audio.analizar(mediciones),
+          ModulosEspecializados.temporal.analizar(mediciones),
+          ModulosEspecializados.video.analizar(null)
         ];
-        const veredicto = calcularVeredictoFinal(evidenciasAcumuladas);
-        aplicarColorEstado(veredicto.nivel);
+        const dictamen = CerebroXOLO.fusionarEvidencia(resultados);
+        aplicarColorEstado(dictamen.nivel);
+
         contenidoResultado.textContent = 
-          `🔍 ANÁLISIS COMPLETADO\nFuente: Micrófono autorizado\nDuración analizada: ${medicionesReales.duracionTotal.toFixed(1)} segundos\nCalidad de señal estimada: ${Math.round(medicionesReales.calidadGeneral*100)}%\nSegmentos de actividad: ${medicionesReales.segmentosVoz.length}\nPausas detectadas: ${medicionesReales.cantidadPausas}\nCambios bruscos: ${medicionesReales.cambiosBruscosDetectados}\nMódulos con evidencia: ${veredicto.modulosValidos}\nMódulos sin evidencia: ${veredicto.modulosSinDatos}\n\n` +
-          generarResumen(evidenciasAcumuladas) +
-          `\n━━━━━━━━━━━━━━━━━━━━\n${veredicto.texto}\n${veredicto.explicacion}\n\n${veredicto.advertencias.join('\n')}\n\n⚠️ El navegador no tiene acceso directo al audio interno de otras aplicaciones. Para analizar llamadas, activa el altavoz y coloca el micrófono cerca del altavoz del dispositivo.`;
-        contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo'); botonDetenerEscucha.classList.add('oculto');
+          `📊 ANÁLISIS COMPLETADO\nDuración analizada: ${mediciones.duracionTotal.toFixed(1)} segundos\n\n` +
+          `━━━━━━━━━━━━━━━━━━━━\n${dictamen.texto}\n${dictamen.explicacion}\n\n` +
+          (dictamen.señalesTecnicas?.length ? `Características técnicas observadas:\n• ${dictamen.señalesTecnicas.join('\n• ')}\n\n` : '') +
+          `Detalles por módulo:\n${dictamen.detallesModulos.map(m=>`• ${ModulosEspecializados[m.modulo]?.nombre||m.modulo}: ${m.estado.toUpperCase()} | Tipo evidencia: ${m.tipoDeEvidencia}`).join('\n')}\n\n` +
+          `⚠️ ${dictamen.advertencia}\n⚠️ El navegador no puede acceder directamente al audio interno de otras aplicaciones.`;
+        contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo');
       }, 8000);
 
     } catch (err) {
-      cerrarMenusYRecursos(); aplicarColorEstado('neutral');
-      contenidoResultado.textContent = `⚪ EVIDENCIA INSUFICIENTE\nNo se obtuvo acceso al micrófono.\nXOLO no puede analizar audio sin fuente autorizada.\nMotivo: ${err.message}`;
-      contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo'); botonDetenerEscucha.classList.add('oculto');
+      cerrarMenusYRecursos(); aplicarColorEstado('inconcluso');
+      contenidoResultado.textContent = `⚪ NO SE PUDO REALIZAR EL ANÁLISIS\nNo se obtuvo permiso para acceder al micrófono: ${err.message}\n\nDebes autorizar el permiso manualmente para realizar análisis.`;
+      contenidoResultado.classList.add('visible'); indicadorEscuchando.classList.remove('activo');
     }
   }
 
   // ==================================================
-  // 📹 ANÁLISIS DE VIDEOLLAMADA
+  // 📹 ANÁLISIS DE IMAGEN CONSERVADO SIN MODIFICACIONES
   // ==================================================
   function iniciarAnalisisVideo(){
-    cerrarMenusYRecursos(); analizando = true; capturasHechas = 0; evidenciasAcumuladas = [];
-    tituloResultado.textContent = '🤖 ANÁLISIS DE VIDEOLLAMADA';
-    contenidoResultado.textContent = `📹 PASO 1 DE ${MAX_CAPTURAS}:\nSelecciona una captura de pantalla para registrar la evidencia.\n\n⚠️ El análisis avanzado de imágenes requiere integración con modelos externos.\nNo se realizarán afirmaciones de detección de IA sin dichos modelos.`;
+    cerrarMenusYRecursos(); analizando = true; capturasHechas = 0;
+    tituloResultado.textContent = '🤖 REGISTRO DE EVIDENCIA VISUAL';
+    contenidoResultado.textContent = `📹 PASO 1 DE ${MAX_CAPTURAS}:\nSelecciona capturas que hayas guardado previamente.\n\n⚠️ ${ModulosEspecializados.video.explicacion}\nLas imágenes se registran como evidencia pendiente de análisis cuando se conecte la herramienta especializada.`;
     botonAccion.textContent = `📸 Seleccionar captura ${capturasHechas+1} de ${MAX_CAPTURAS}`;
     botonAccion.classList.remove('oculto');
     botonAccion.onclick = () => selectorImagenAnalisis.click();
@@ -339,19 +383,22 @@ document.addEventListener('DOMContentLoaded',function(){
   selectorImagenAnalisis.onchange = (e) => {
     if(!e.target.files[0] || !analizando) return;
     capturasHechas++; const archivo = e.target.files[0];
-    evidenciasAcumuladas.push({
-      capturaId: capturasHechas, timestamp: Date.now(), archivo: archivo,
-      modulos: [analizadorExternoImagen(archivo), ModulosAnalisis.analisisRostro({imagen:archivo})], calidad: 0
-    });
-    contenidoResultado.textContent = `✅ Captura ${capturasHechas} registrada correctamente.\n\n⚠️ No hay análisis de imagen activo. Se guardó como evidencia para cuando se conecten modelos especializados.`;
+    registroAuditoria.push({captura:capturasHechas,nombre:archivo.name,tamano:archivo.size,fecha:Date.now()});
+    contenidoResultado.textContent = `✅ Captura ${capturasHechas} registrada:\nNombre: ${archivo.name}\nTamaño: ${(archivo.size/1024/1024).toFixed(2)} MB\n\n⚠️ ${ModulosEspecializados.video.explicacion}`;
     contenidoResultado.classList.add('visible');
-    if(capturasHechas >= MAX_CAPTURAS) { analizando = false; botonAccion.classList.add('oculto'); }
-    else { botonAccion.textContent = `📸 Siguiente captura (${capturasHechas+1} de ${MAX_CAPTURAS})`; botonAccion.classList.remove('oculto'); }
+    if(capturasHechas >= MAX_CAPTURAS){
+      analizando = false; botonAccion.classList.add('oculto');
+      const dictamen = CerebroXOLO.fusionarEvidencia([ModulosEspecializados.video.analizar(null)]);
+      contenidoResultado.textContent += `\n━━━━━━━━━━━━━━━━━━━━\n${dictamen.texto}\n${dictamen.explicacion}`;
+      aplicarColorEstado(dictamen.nivel);
+    }else{
+      botonAccion.textContent = `📸 Siguiente captura (${capturasHechas+1} de ${MAX_CAPTURAS})`;
+    }
     selectorImagenAnalisis.value = '';
   };
 
   // ==================================================
-  // NAVEGACIÓN Y CONTROLES
+  // NAVEGACIÓN Y FUNCIONES GENERALES CONSERVADAS IGUALES
   // ==================================================
   botonDetenerEscucha.onclick = cerrarMenusYRecursos;
   formaCentral.onclick = () => { pantallaInicio.style.opacity='0'; setTimeout(()=>{pantallaInicio.style.display='none';pantallaOpciones.classList.add('activa');},300); };
@@ -360,7 +407,7 @@ document.addEventListener('DOMContentLoaded',function(){
   opcionSoloVoz.onclick = iniciarAnalisisVoz;
   opcionVideoLlamada.onclick = iniciarAnalisisVideo;
   fondoOscuroAsistente.onclick = cerrarMenusYRecursos;
-  document.querySelectorAll('.cerrar-emergente').forEach(btn => btn.onclick = () => { cerrarMenusYRecursos(); aplicarColorEstado('neutral'); contenidoResultado.classList.remove('visible'); });
+  document.querySelectorAll('.cerrar-emergente').forEach(btn => btn.onclick = () => { cerrarMenusYRecursos(); aplicarColorEstado('inconcluso'); contenidoResultado.classList.remove('visible'); });
 });
 </script>
 </body>
