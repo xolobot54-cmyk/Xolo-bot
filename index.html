@@ -69,6 +69,11 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 .indicador-proceso.activo{display:block}
 @keyframes parpadeo{0%,100%{opacity:1}50%{opacity:.4}}
 .nota-tecnica{font-size:12px;color:#888;margin-top:8px;text-align:center}
+  .tarjeta-voz{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.25);border-radius:14px;padding:14px;margin-top:14px;line-height:1.7}
+  .estado-voz{font-weight:800;margin-top:8px}
+  .estado-voz.ok{color:#22c55e}
+  .estado-voz.warn{color:#eab308}
+  .estado-voz.neutral{color:#aaa}
 </style>
 </head>
 
@@ -90,14 +95,15 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
     XOLO no puede acceder por sí solo a conversaciones privadas, llamadas de otras aplicaciones ni archivos sin tu autorización explícita.<br>
     ⚠️ REGLA FUNDAMENTAL:<br>
     Características como ruido, pausas o mala conexión NO son prueba de contenido manipulado. Solo los detectores especializados pueden aportar evidencia al respecto.<br>
-    XOLO NO adivina, no simula ni inventa resultados. Solo dictamina con la información real que recibe.
+    XOLO NO adivina, no simula ni inventa resultados. Solo dictamina con la información real que recibe.<br>
+    🎙️ La referencia de voz del propietario se guarda localmente como perfil acústico.
   </div>
 
   <div class="contenedor-botones">
     <div class="boton-circular" id="btnApoyo"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
     <div class="boton-circular" id="btnInstrucciones"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
     <div class="boton-circular" id="btnEmergencia"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
-    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas</span></div>
+    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas<br>y voz del dueño</span></div>
     <div class="boton-circular" id="btnAsistencia">
       <div class="circulo"><span class="icono-boton-xolo">◈</span></div>
       <span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span>
@@ -129,9 +135,13 @@ document.addEventListener('DOMContentLoaded',function(){
   // ==================================================
   const CONFIG = {
     aasistEndpoint: '', // DEJA VACÍO SI NO TIENES SERVICIO REAL. NO SIMULES NADA.
-    duracionFragmento: 4,
-    maxFragmentos: 4,
-    minDuracionAnalisis: 4
+    duracionFragmento: 5,
+    maxFragmentos: 12,
+    minDuracionAnalisis: 10,
+    duracionReferencia: 30,
+    minReferencia: 20,
+    voiceReferenceDB: 'xolo_voice_reference',
+    voiceReferenceStore: 'owner_profile'
   };
 
   // ==================================================
@@ -403,528 +413,880 @@ document.addEventListener('DOMContentLoaded',function(){
   const CerebroXOLO = {
 
     estadosValidos: {
-      AUTENTICO: {
-        texto: '🟢 COMPATIBLE CON CONTENIDO NATURAL',
-        nivel: 'ok'
-      },
-
-      EVALUACION_PRELIMINAR: {
-        texto: '🟢 SIN INDICIOS SUFICIENTES DE MANIPULACIÓN',
-        nivel: 'ok'
-      },
-
-      INDICIOS: {
-        texto: '🟡 INDICIOS PARCIALES — VERIFICA',
-        nivel: 'warn'
-      },
-
-      MANIPULACION_MEDIA: {
-        texto: '🟠 COMPATIBILIDAD MEDIA CON MANIPULACIÓN',
-        nivel: 'warn'
-      },
-
-      MANIPULACION_ALTA: {
-        texto: '🔴 ALTA COMPATIBILIDAD CON MANIPULACIÓN',
-        nivel: 'peligro'
-      },
-
-      CONFLICTIVO: {
-        texto: '⚠️ RESULTADOS CONFLICTIVOS',
-        nivel: 'conflictivo'
-      },
-
-      INCONCLUSO: {
-        texto: '⚪ INFORMACIÓN INSUFICIENTE PARA EVALUAR',
-        nivel: 'inconcluso'
-      },
-
-      NO_DISPONIBLE: {
-        texto: '⚪ SIN HERRAMIENTAS SUFICIENTES',
-        nivel: 'neutral'
-      },
-
-      ERROR: {
-        texto: '⚪ ERROR EN EL ANÁLISIS',
-        nivel: 'neutral'
-      }
+      AUTENTICO:{texto:'🟢 ALTA COMPATIBILIDAD CON CONTENIDO AUTÉNTICO',nivel:'ok'},
+      EVALUACION_PRELIMINAR:{texto:'🟢 SIN INDICIOS SUFICIENTES DE MANIPULACIÓN',nivel:'ok'},
+      INDICIOS:{texto:'🟡 INDICIOS PARCIALES — VERIFICA',nivel:'warn'},
+      MANIPULACION_MEDIA:{texto:'🟠 COMPATIBILIDAD MEDIA CON MANIPULACIÓN',nivel:'warn'},
+      MANIPULACION_ALTA:{texto:'🔴 ALTA COMPATIBILIDAD CON MANIPULACIÓN',nivel:'peligro'},
+      CONFLICTIVO:{texto:'⚠️ RESULTADOS CONFLICTIVOS',nivel:'conflictivo'},
+      INCONCLUSO:{texto:'⚪ RESULTADO INCONCLUSO',nivel:'inconcluso'},
+      NO_DISPONIBLE:{texto:'⚪ SIN DETECTOR ESPECIALIZADO — EVALUACIÓN PRELIMINAR',nivel:'neutral'},
+      ERROR:{texto:'⚪ ERROR EN EL ANÁLISIS',nivel:'neutral'}
     },
 
-    // La falta del detector especializado ya NO bloquea el dictamen.
-    // XOLO utiliza la evidencia técnica disponible y expresa su confianza.
-    dictaminar: function(resultadosHerramientas){
+    evaluarEspecializada:function(h){
+      const r=String(h.resultado||'').toUpperCase();
+      if(r==='AUTENTICO')return this.estadosValidos.AUTENTICO;
+      if(r==='INDICIOS')return this.estadosValidos.INDICIOS;
+      if(r==='MANIPULACION_MEDIA')return this.estadosValidos.MANIPULACION_MEDIA;
+      if(r==='MANIPULACION_ALTA')return this.estadosValidos.MANIPULACION_ALTA;
+      if(r==='CONFLICTIVO')return this.estadosValidos.CONFLICTIVO;
+      return this.estadosValidos.INCONCLUSO;
+    },
 
-      const herramientasTecnicas =
-        resultadosHerramientas.filter(h => h.tipo === 'tecnica');
+    dictaminar:function(resultadosHerramientas){
 
-      const herramientaEspecializada =
-        resultadosHerramientas.find(h => h.tipo === 'especializada');
+      const tecnicas=resultadosHerramientas.filter(h=>h.tipo==='tecnica');
+      const especializada=resultadosHerramientas.find(h=>h.tipo==='especializada');
+      const voz=resultadosHerramientas.find(h=>h.id==='voz_propietario');
 
-      const datosTecnicos = herramientasTecnicas.map(t => ({
-        nombre: t.nombre,
-        resultado: t.resultado,
-        calidad: String(t.calidadMuestra || '').toUpperCase(),
-        datos: t.datosObtenidos || {}
-      }));
+      const datosTecnicos=tecnicas.map(t=>
+        `${t.nombre}: ${t.resultado} - Calidad: ${t.calidadMuestra}`
+      ).join(' | ');
 
-      const especialDisponible =
-        !!herramientaEspecializada &&
-        herramientaEspecializada.disponible === true &&
-        herramientaEspecializada.resultado !== 'NO DISPONIBLE' &&
-        herramientaEspecializada.resultado !== 'ERROR';
+      const propietarioReconocido=voz?.resultado==='COINCIDENCIA_PROPIETARIO';
+      const segundaVoz=!!voz?.datosObtenidos?.segundaVoz;
 
-      // ==========================================================
-      // CASO 1: DETECTOR ESPECIALIZADO DISPONIBLE
-      // ==========================================================
-      if(especialDisponible){
+      // 1. Buscar primero la voz compatible con el propietario.
+      // 2. Darle luz verde como compatibilidad de referencia.
+      // 3. Priorizar recursos en la segunda voz cuando exista.
+      // 4. Nunca convertir "no coincide" en "es IA".
 
-        if(
-          herramientaEspecializada.resultado === 'ERROR' ||
-          herramientaEspecializada.calidadMuestra === 'INSUFICIENTE'
-        ){
-          return {
-            ...this.estadosValidos.INCONCLUSO,
-            explicacionFinal:
-              herramientaEspecializada.explicacion ||
-              'El detector especializado no pudo completar el análisis.',
-            confianza:
-              herramientaEspecializada.confianza || 'NO DISPONIBLE',
-            datosTecnicos:
-              datosTecnicos.map(t =>
-                `${t.nombre}: ${t.resultado} - Calidad: ${t.calidad}`
-              ).join(' | '),
-            datosEspecializados:
-              'Detector especializado: resultado no concluyente',
-            fuentes:
-              'Herramientas técnicas + detector especializado',
-            limitacion:
-              'El resultado no constituye certeza absoluta.'
-          };
-        }
+      if(propietarioReconocido){
 
-        const resultadoEspecial =
-          String(herramientaEspecializada.resultado || '').toUpperCase();
+        let base=this.estadosValidos.EVALUACION_PRELIMINAR;
 
-        let estadoEspecializado;
-
-        if(
-          resultadoEspecial.includes('IA') ||
-          resultadoEspecial.includes('SINTET') ||
-          resultadoEspecial.includes('MANIPUL')
-        ){
-          estadoEspecializado = this.estadosValidos.MANIPULACION_ALTA;
-        }else if(
-          resultadoEspecial.includes('REAL') ||
-          resultadoEspecial.includes('AUTENT') ||
-          resultadoEspecial.includes('NATURAL')
-        ){
-          estadoEspecializado = this.estadosValidos.AUTENTICO;
-        }else{
-          estadoEspecializado = this.estadosValidos.INDICIOS;
+        if(especializada &&
+           especializada.resultado!=='NO DISPONIBLE' &&
+           especializada.resultado!=='ERROR'){
+          base=this.evaluarEspecializada(especializada);
         }
 
         return {
-          ...estadoEspecializado,
+          ...base,
           explicacionFinal:
-            herramientaEspecializada.explicacion ||
-            'Resultado aportado por el detector especializado.',
-          confianza:
-            herramientaEspecializada.confianza || 'NO DISPONIBLE',
-          datosTecnicos:
-            datosTecnicos.map(t =>
-              `${t.nombre}: ${t.resultado} - Calidad: ${t.calidad}`
-            ).join(' | '),
+            (base.explicacionFinal||'XOLO realizó una evaluación preliminar.')+
+            ' 🟢 Una voz fue encontrada compatible con la referencia del propietario.'+
+            (segundaVoz
+              ?' 🔎 XOLO priorizó el análisis de la segunda voz.'
+              :' ⚠️ No se pudo separar una segunda voz con suficiente claridad.'),
+          confianza:voz.confianza||'MODERADA',
+          datosTecnicos,
           datosEspecializados:
-            `Detector especializado: ${herramientaEspecializada.resultado}`,
-          fuentes:
-            'Herramientas técnicas + detector especializado',
-          limitacion:
-            'El resultado es probabilístico y no constituye certeza absoluta.'
+            especializada
+              ?`Resultado: ${especializada.resultado} | Confianza: ${especializada.confianza}`
+              :'Detector especializado: NO DISPONIBLE',
+          datosVoz:voz.datosObtenidos,
+          fuentes:'Referencia de voz + herramientas técnicas'+
+            (especializada&&especializada.resultado!=='NO DISPONIBLE'
+              ?' + detector especializado':''),
+          limitacion:'La coincidencia de voz es compatibilidad acústica preliminar, no prueba absoluta de identidad.'
         };
       }
 
-      // ==========================================================
-      // CASO 2: SIN DETECTOR ESPECIALIZADO
-      // ==========================================================
-      if(herramientasTecnicas.length === 0){
-
+      if(voz?.resultado==='REFERENCIA_NO_ENCONTRADA'){
         return {
-          ...this.estadosValidos.NO_DISPONIBLE,
-          explicacionFinal:
-            'No hay herramientas de análisis disponibles para emitir una evaluación.',
-          confianza: 'MUY BAJA',
-          datosTecnicos: 'No se obtuvieron mediciones técnicas.',
+          ...this.estadosValidos.INDICIOS,
+          explicacionFinal:'XOLO no encontró una coincidencia suficiente con la referencia guardada del propietario. Esto NO significa que la otra voz sea IA: puede ser otra persona, una muestra deficiente o condiciones acústicas adversas.',
+          confianza:voz.confianza||'BAJA',
+          datosTecnicos,
           datosEspecializados:
-            'Detector especializado: NO DISPONIBLE',
-          fuentes:
-            'Sin evidencia de análisis',
-          limitacion:
-            'XOLO no puede evaluar una muestra sin datos de análisis.'
+            especializada
+              ?`Resultado: ${especializada.resultado} | Confianza: ${especializada.confianza}`
+              :'Detector especializado: NO DISPONIBLE',
+          datosVoz:voz.datosObtenidos,
+          fuentes:'Referencia de voz + herramientas técnicas',
+          limitacion:'No encontrar la voz del propietario no demuestra suplantación ni generación por IA.'
         };
       }
 
-      const calidadMuestras =
-        datosTecnicos.map(t => t.calidad).filter(Boolean);
-
-      const hayInsuficiente =
-        calidadMuestras.includes('INSUFICIENTE');
-
-      const hayBaja =
-        calidadMuestras.includes('BAJA');
-
-      const hayMedia =
-        calidadMuestras.includes('MEDIA');
-
-      const calidadAudio =
-        datosTecnicos.find(
-          t => t.nombre === 'Calidad de grabación'
-        );
-
-      const mediciones = calidadAudio?.datos || {};
-
-      const duracion = Number(mediciones.duracionSegundos);
-      const cambiosBruscos = Number(mediciones.cambiosBruscos);
-      const cantidadPausas = Number(mediciones.cantidadPausas);
-
-      const duracionValida =
-        Number.isFinite(duracion) &&
-        duracion >= CONFIG.minDuracionAnalisis;
-
-      const anomaliasTecnicas = [];
-
-      if(Number.isFinite(cambiosBruscos) && cambiosBruscos > 4){
-        anomaliasTecnicas.push(
-          `cambios bruscos: ${cambiosBruscos}`
-        );
+      if(especializada &&
+         especializada.resultado!=='NO DISPONIBLE' &&
+         especializada.resultado!=='ERROR'){
+        return {
+          ...this.evaluarEspecializada(especializada),
+          explicacionFinal:especializada.explicacion,
+          datosTecnicos,
+          datosEspecializados:`Resultado: ${especializada.resultado} | Confianza: ${especializada.confianza}`,
+          datosVoz:voz?.datosObtenidos||null,
+          fuentes:'Herramientas técnicas + detector especializado',
+          limitacion:'El resultado es probabilístico y no constituye certeza absoluta.'
+        };
       }
 
-      if(Number.isFinite(cantidadPausas) && cantidadPausas > 7){
-        anomaliasTecnicas.push(
-          `pausas elevadas: ${cantidadPausas}`
-        );
-      }
-
-      // Aquí sí nos abstenemos: no hay muestra suficiente.
-      if(hayInsuficiente || !duracionValida){
-
+      if(!tecnicas.length){
         return {
           ...this.estadosValidos.INCONCLUSO,
-          explicacionFinal:
-            'La muestra no alcanza las condiciones mínimas para una evaluación preliminar confiable.',
-          confianza: 'MUY BAJA',
-          datosTecnicos:
-            datosTecnicos.map(t =>
-              `${t.nombre}: ${t.resultado} - Calidad: ${t.calidad}`
-            ).join(' | '),
-          datosEspecializados:
-            'Detector especializado: NO DISPONIBLE',
-          fuentes:
-            'Herramientas técnicas disponibles',
-          limitacion:
-            'La muestra es demasiado corta o insuficiente. No se puede inferir autenticidad ni IA.'
+          explicacionFinal:'No se obtuvieron datos técnicos suficientes para evaluar la muestra.',
+          confianza:'MUY BAJA',
+          datosTecnicos:'Sin datos técnicos',
+          datosEspecializados:'Detector especializado: NO DISPONIBLE',
+          fuentes:'Sin evidencia de análisis'
         };
       }
 
-      // Las anomalías técnicas reducen confianza; NO se convierten
-      // automáticamente en "IA".
-      const tieneAnomalias =
-        anomaliasTecnicas.length > 0;
+      const insuficiente=tecnicas.some(t=>
+        String(t.calidadMuestra||'').toUpperCase()==='INSUFICIENTE'
+      );
 
-      const confianza =
-        (hayBaja || hayMedia || tieneAnomalias)
-          ? 'BAJA'
-          : 'MODERADA';
-
-      const estadoFinal =
-        tieneAnomalias
-          ? this.estadosValidos.INDICIOS
-          : this.estadosValidos.EVALUACION_PRELIMINAR;
-
-      const detalleAnomalias =
-        tieneAnomalias
-          ? ` Se observaron condiciones/anomalías técnicas que reducen la confianza: ${anomaliasTecnicas.join(', ')}.`
-          : ' No se observaron anomalías técnicas relevantes entre las mediciones disponibles.';
+      if(insuficiente){
+        return {
+          ...this.estadosValidos.INCONCLUSO,
+          explicacionFinal:'La muestra no alcanzó las condiciones mínimas para una evaluación preliminar.',
+          confianza:'MUY BAJA',
+          datosTecnicos,
+          datosEspecializados:'Detector especializado: NO DISPONIBLE',
+          fuentes:'Herramientas técnicas disponibles'
+        };
+      }
 
       return {
-        ...estadoFinal,
-
-        explicacionFinal:
-          `XOLO realizó una evaluación preliminar utilizando las herramientas disponibles.${detalleAnomalias} La ausencia de un detector especializado impide confirmar o descartar por sí sola el uso de IA.`,
-
-        confianza,
-
-        datosTecnicos:
-          datosTecnicos.map(t =>
-            `${t.nombre}: ${t.resultado} - Calidad: ${t.calidad}`
-          ).join(' | '),
-
-        datosEspecializados:
-          'Detector especializado: NO DISPONIBLE',
-
-        fuentes:
-          'Herramientas técnicas disponibles',
-
-        limitacion:
-          'Esta evaluación no demuestra que el contenido sea humano ni generado por IA. Un detector especializado puede aportar evidencia adicional.',
-
-        evidenciaDisponible: {
-          duracionSegundos:
-            Number.isFinite(duracion) ? duracion : null,
-          cambiosBruscos:
-            Number.isFinite(cambiosBruscos) ? cambiosBruscos : null,
-          cantidadPausas:
-            Number.isFinite(cantidadPausas) ? cantidadPausas : null,
-          calidad:
-            calidadMuestras.length ? calidadMuestras : ['NO DISPONIBLE']
-        }
+        ...this.estadosValidos.EVALUACION_PRELIMINAR,
+        explicacionFinal:'XOLO realizó una evaluación preliminar utilizando las mediciones técnicas disponibles. La ausencia de un detector especializado limita la capacidad para atribuirlas específicamente a IA.',
+        confianza:tecnicas.some(t=>
+          ['BAJA','MEDIA'].includes(String(t.calidadMuestra||'').toUpperCase())
+        )?'BAJA':'MODERADA',
+        datosTecnicos,
+        datosEspecializados:'Detector especializado: NO DISPONIBLE',
+        datosVoz:voz?.datosObtenidos||null,
+        fuentes:'Herramientas técnicas disponibles',
+        limitacion:'Las mediciones técnicas por sí solas no prueban que una voz sea humana ni generada por IA.'
       };
     }
   };
 
   // ==================================================
+  // 🎙️ VOZ DE REFERENCIA DEL PROPIETARIO
+  // ==================================================
+  const VozPropietario={
+
+    db:null,
+
+    abrirDB:function(){
+      return new Promise((resolve,reject)=>{
+        const request=indexedDB.open(CONFIG.voiceReferenceDB,1);
+
+        request.onupgradeneeded=()=>{
+          const db=request.result;
+          if(!db.objectStoreNames.contains(CONFIG.voiceReferenceStore)){
+            db.createObjectStore(CONFIG.voiceReferenceStore,{keyPath:'id'});
+          }
+        };
+
+        request.onsuccess=()=>{
+          this.db=request.result;
+          resolve(this.db);
+        };
+        request.onerror=()=>reject(request.error);
+      });
+    },
+
+    guardar:async function(perfil){
+      const db=this.db||await this.abrirDB();
+      return new Promise((resolve,reject)=>{
+        const tx=db.transaction(CONFIG.voiceReferenceStore,'readwrite');
+        tx.objectStore(CONFIG.voiceReferenceStore).put({
+          id:'owner',
+          creado:new Date().toISOString(),
+          perfil
+        });
+        tx.oncomplete=resolve;
+        tx.onerror=()=>reject(tx.error);
+      });
+    },
+
+    cargar:async function(){
+      try{
+        const db=this.db||await this.abrirDB();
+        return await new Promise((resolve,reject)=>{
+          const tx=db.transaction(CONFIG.voiceReferenceStore,'readonly');
+          const req=tx.objectStore(CONFIG.voiceReferenceStore).get('owner');
+          req.onsuccess=()=>resolve(req.result?.perfil||null);
+          req.onerror=()=>reject(req.error);
+        });
+      }catch(err){
+        console.warn('No se pudo cargar referencia:',err);
+        return null;
+      }
+    },
+
+    eliminar:async function(){
+      const db=this.db||await this.abrirDB();
+      return new Promise((resolve,reject)=>{
+        const tx=db.transaction(CONFIG.voiceReferenceStore,'readwrite');
+        tx.objectStore(CONFIG.voiceReferenceStore).delete('owner');
+        tx.oncomplete=resolve;
+        tx.onerror=()=>reject(tx.error);
+      });
+    },
+
+    extraerCaracteristicas:function(datos){
+      let suma=0,centroide=0,cruces=0;
+      for(let i=0;i<datos.length;i++){
+        const v=datos[i]/255;
+        suma+=v;
+        centroide+=v*(i/Math.max(1,datos.length));
+        if(i>0&&datos[i-1]<128&&datos[i]>=128)cruces++;
+      }
+      const energia=suma/Math.max(1,datos.length);
+      return {
+        energia,
+        centroide:centroide/Math.max(.001,energia),
+        cruceCero:cruces/Math.max(1,datos.length)
+      };
+    },
+
+    perfilDesdeMuestras:function(muestras){
+      if(!muestras.length)return null;
+      const promedio=campo=>muestras.reduce(
+        (a,m)=>a+Number(m[campo]||0),0
+      )/muestras.length;
+      return {
+        energia:promedio('energia'),
+        centroide:promedio('centroide'),
+        cruceCero:promedio('cruceCero'),
+        muestras:muestras.length
+      };
+    },
+
+    distancia:function(a,b){
+      if(!a||!b)return Infinity;
+      return (
+        Math.abs(Number(a.energia||0)-Number(b.energia||0))/.25*.30+
+        Math.abs(Number(a.centroide||0)-Number(b.centroide||0))/.50*.45+
+        Math.abs(Number(a.cruceCero||0)-Number(b.cruceCero||0))/.20*.25
+      );
+    }
+  };
+
+  // ==================================================
+  // 👥 AGRUPACIÓN PRELIMINAR DE INTERLOCUTORES
+  // ==================================================
+  const SeparadorInterlocutores={
+
+    separar:function(muestras,referencia){
+
+      if(!muestras||muestras.length<4){
+        return {grupoA:muestras||[],grupoB:[],confianza:'BAJA'};
+      }
+
+      let centroA=Number(muestras[0].centroide||0);
+      let centroB=Number(
+        muestras[Math.floor(muestras.length/2)].centroide||0
+      );
+
+      for(let i=0;i<3;i++){
+
+        const a=muestras.filter(m=>
+          Math.abs(Number(m.centroide||0)-centroA)<=
+          Math.abs(Number(m.centroide||0)-centroB)
+        );
+
+        const b=muestras.filter(m=>
+          Math.abs(Number(m.centroide||0)-centroB)<
+          Math.abs(Number(m.centroide||0)-centroA)
+        );
+
+        if(a.length)centroA=a.reduce(
+          (s,m)=>s+Number(m.centroide||0),0
+        )/a.length;
+
+        if(b.length)centroB=b.reduce(
+          (s,m)=>s+Number(m.centroide||0),0
+        )/b.length;
+      }
+
+      const grupoA=[],grupoB=[];
+
+      for(const m of muestras){
+        const da=Math.abs(Number(m.centroide||0)-centroA);
+        const db=Math.abs(Number(m.centroide||0)-centroB);
+        (da<=db?grupoA:grupoB).push(m);
+      }
+
+      if(!referencia){
+        return {
+          grupoA,grupoB,
+          confianza:grupoA.length>1&&grupoB.length>1?'BAJA':'MUY BAJA'
+        };
+      }
+
+      const pa=VozPropietario.perfilDesdeMuestras(grupoA);
+      const pb=VozPropietario.perfilDesdeMuestras(grupoB);
+      const da=VozPropietario.distancia(pa,referencia);
+      const db=VozPropietario.distancia(pb,referencia);
+      const propietarioA=da<=db;
+
+      return {
+        grupoA,grupoB,
+        grupoPropietario:propietarioA?grupoA:grupoB,
+        grupoSecundario:propietarioA?grupoB:grupoA,
+        distanciaPropietario:Math.min(da,db),
+        confianza:Math.abs(da-db)>.08?'MODERADA':'BAJA'
+      };
+    }
+  };
+
+  // ==================================================
+  // 🔧 VARIABLES Y ELEMENTOS GENERALES
+  // ==================================================
+  let analizando = false;
+  let streamAudioActivo = null;
+  let mediaRecorder = null;
+  let intervaloAnalisis = null;
+  let fragmentosGrabados = [];
+  let muestrasAcusticas = [];
+  let audioContext = null;
+  let analyser = null;
+
+  const pantallaInicio =
+    document.getElementById('pantallaInicio');
+
+  const pantallaOpciones =
+    document.getElementById('pantallaOpciones');
+
+  const formaCentral =
+    document.getElementById('formaCentral');
+
+  const cerrarOpciones =
+    document.getElementById('cerrarOpciones');
+
+  const btnApoyo =
+    document.getElementById('btnApoyo');
+
+  const btnInstrucciones =
+    document.getElementById('btnInstrucciones');
+
+  const btnEmergencia =
+    document.getElementById('btnEmergencia');
+
+  const btnMisPersonas =
+    document.getElementById('btnMisPersonas');
+
+  const btnAsistencia =
+    document.getElementById('btnAsistencia');
+
+  const fondoOscuroAsistente =
+    document.getElementById('fondoOscuroAsistente');
+
+  const menuAsistente =
+    document.getElementById('menuAsistente');
+
+  const opcionSoloVoz =
+    document.getElementById('opcionSoloVoz');
+
+  const opcionVideoLlamada =
+    document.getElementById('opcionVideoLlamada');
+
+  const pantallaEmergente =
+    document.getElementById('pantallaEmergente');
+
+  const contenidoEmergente =
+    document.getElementById('contenidoEmergente');
+
+  const cerrarEmergente =
+    document.getElementById('cerrarEmergente');
+
+  const selectorImagenAnalisis =
+    document.getElementById('selectorImagenAnalisis');
+
+  // ==================================================
+  // 🎨 ESTADO VISUAL
+  // ==================================================
+  function aplicarColorEstado(nivel){
+
+    formaCentral.classList.remove(
+      'estado-ok',
+      'estado-warn',
+      'estado-peligro',
+      'estado-neutral',
+      'estado-inconcluso',
+      'estado-conflictivo'
+    );
+
+    document.body.classList.remove(
+      'ok',
+      'warn',
+      'danger',
+      'neutral'
+    );
+
+    const mapaNiveles = {
+      ok: 'estado-ok',
+      warn: 'estado-warn',
+      peligro: 'estado-peligro',
+      neutral: 'estado-neutral',
+      inconcluso: 'estado-inconcluso',
+      conflictivo: 'estado-conflictivo'
+    };
+
+    formaCentral.classList.add(
+      mapaNiveles[nivel] || 'estado-inconcluso'
+    );
+
+    if(
+      nivel !== 'inconcluso' &&
+      nivel !== 'neutral'
+    ){
+      document.body.classList.add(nivel);
+    }
+  }
+
+  // ==================================================
+  // 🧹 CIERRE DE RECURSOS
+  // ==================================================
+  function cerrarRecursos(){
+
+    if(intervaloAnalisis){
+      clearInterval(intervaloAnalisis);
+    }
+
+    if(mediaRecorder?.state === 'recording'){
+      mediaRecorder.stop();
+    }
+
+    if(audioContext){
+      audioContext.close();
+    }
+
+    if(streamAudioActivo){
+      streamAudioActivo
+        .getTracks()
+        .forEach(t => t.stop());
+    }
+
+    audioContext = null;
+    analyser = null;
+    streamAudioActivo = null;
+    mediaRecorder = null;
+    intervaloAnalisis = null;
+
+    // Los fragmentos se conservan hasta que el análisis
+    // haya terminado de utilizarlos.
+    fragmentosGrabados = [];
+    muestrasAcusticas = [];
+    window._xoloUltimoSegundo = -1;
+
+    analizando = false;
+
+    fondoOscuroAsistente.classList.remove('activo');
+    menuAsistente.classList.remove('activo');
+    pantallaEmergente.classList.remove('activa');
+  }
+
+  // ==================================================
   // 🎙️ ANÁLISIS DE AUDIO — SIN SIMULACIONES
   // ==================================================
+
   async function iniciarAnalisisVoz(){
 
     cerrarRecursos();
+    analizando=true;
 
-    analizando = true;
-
-    const mediciones = {
-      duracionTotal: 0,
-      energiaPromedio: 0,
-      cambiosBruscosDetectados: 0,
-      cantidadPausas: 0,
-      inicio: Date.now()
+    const mediciones={
+      duracionTotal:0,
+      energiaPromedio:0,
+      cambiosBruscosDetectados:0,
+      cantidadPausas:0,
+      inicio:Date.now()
     };
 
-    let energiaAnterior = 0;
+    let energiaAnterior=0;
 
-    contenidoEmergente.innerHTML = `
+    contenidoEmergente.innerHTML=`
       <h2>🤖 ANÁLISIS DE AUDIO</h2>
-
-      <div class="indicador-proceso activo">
-        🎙️ Solicitando permiso de micrófono...
+      <div class="tarjeta-voz">
+        XOLO escuchará hasta <strong>60 segundos</strong>.
+        Si existe una referencia del propietario, primero buscará
+        esa voz y después priorizará la segunda voz cuando pueda separarla.
       </div>
-
-      <button class="boton-detener" id="btnDetener">
-        ⏹️ Cancelar
-      </button>
+      <div class="indicador-proceso activo">🎙️ Solicitando permiso de micrófono...</div>
+      <button class="boton-detener" id="btnDetener">⏹️ Terminar escucha</button>
     `;
 
     pantallaEmergente.classList.add('activa');
 
-    document
-      .getElementById('btnDetener')
-      .addEventListener('click', cerrarRecursos);
+    document.getElementById('btnDetener')
+      .addEventListener('click',()=>finalizar());
 
-    try{
+    async function finalizar(){
 
-      if(
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-      ){
-        throw new Error(
-          'El dispositivo o navegador no permite acceso al micrófono.'
+      if(!analizando)return;
+
+      analizando=false;
+
+      const fragmentosFinales=[...fragmentosGrabados];
+      const muestrasFinales=[...muestrasAcusticas];
+      const medicionesFinales={...mediciones};
+      const referencia=await VozPropietario.cargar();
+
+      let resultadoVoz={
+        id:'voz_propietario',
+        nombre:'Comparación con voz del propietario',
+        tipo:'tecnica',
+        disponible:!!referencia,
+        resultado:referencia?'REFERENCIA_NO_ENCONTRADA':'SIN_REFERENCIA',
+        confianza:referencia?'BAJA':'NO DISPONIBLE',
+        calidadMuestra:muestrasFinales.length>=4?'BUENA':'INSUFICIENTE',
+        datosObtenidos:{referenciaGuardada:!!referencia,segundaVoz:false},
+        explicacion:referencia
+          ?'Se buscó compatibilidad acústica con la referencia del propietario.'
+          :'No existe una referencia de voz guardada.'
+      };
+
+      if(referencia&&muestrasFinales.length>=4){
+
+        const grupos=SeparadorInterlocutores.separar(
+          muestrasFinales,referencia
         );
+
+        const perfil=VozPropietario.perfilDesdeMuestras(
+          grupos.grupoPropietario
+        );
+
+        const distancia=VozPropietario.distancia(
+          perfil,referencia
+        );
+
+        const coincide=distancia<=.22&&grupos.grupoPropietario.length>=2;
+
+        resultadoVoz.resultado=coincide
+          ?'COINCIDENCIA_PROPIETARIO'
+          :'REFERENCIA_NO_ENCONTRADA';
+
+        resultadoVoz.confianza=coincide
+          ?(grupos.confianza==='MODERADA'?'MODERADA':'BAJA')
+          :'BAJA';
+
+        resultadoVoz.datosObtenidos={
+          referenciaGuardada:true,
+          coincidenciaPropietario:coincide,
+          distanciaAcustica:Number(distancia.toFixed(3)),
+          confianzaSeparacion:grupos.confianza,
+          segmentosPropietario:grupos.grupoPropietario.length,
+          segmentosSegundaVoz:grupos.grupoSecundario.length,
+          segundaVoz:grupos.grupoSecundario.length>=2,
+          enfoqueAnalisis:grupos.grupoSecundario.length>=2
+            ?'Prioridad en segunda voz'
+            :'No se pudo aislar la segunda voz con suficiente claridad'
+        };
       }
 
-      streamAudioActivo =
-        await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: false,
-            noiseSuppression: false
-          }
-        });
+      cerrarRecursos();
+      await new Promise(r=>setTimeout(r,400));
 
-      audioContext =
-        new (
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
-
-      analyser =
-        audioContext.createAnalyser();
-
-      audioContext
-        .createMediaStreamSource(streamAudioActivo)
-        .connect(analyser);
-
-      mediaRecorder =
-        new MediaRecorder(streamAudioActivo);
-
-      mediaRecorder.ondataavailable =
-        (e) => {
-
-          if(
-            e.data.size > 0 &&
-            fragmentosGrabados.length <
-              CONFIG.maxFragmentos
-          ){
-            fragmentosGrabados.push(e.data);
-          }
-        };
-
-      mediaRecorder.start(
-        CONFIG.duracionFragmento * 1000
+      Herramientas.lista=Herramientas.lista.filter(
+        h=>h.id!=='voz_propietario'
       );
 
-      intervaloAnalisis =
-        setInterval(() => {
+      Herramientas.registrar({
+        ...resultadoVoz,
+        analizar:async()=>resultadoVoz
+      });
 
-          if(!analizando) return;
+      const resultados=await Herramientas.ejecutarTodas({
+        ...medicionesFinales,
+        fragmentos:fragmentosFinales,
+        muestrasAcusticas:muestrasFinales
+      });
 
-          mediciones.duracionTotal =
-            (Date.now() - mediciones.inicio) / 1000;
+      const dictamen=CerebroXOLO.dictaminar(resultados);
+      aplicarColorEstado(dictamen.nivel);
 
-          const datosFrecuencia =
-            new Uint8Array(
-              analyser.frequencyBinCount
-            );
+      const v=dictamen.datosVoz;
 
-          analyser.getByteFrequencyData(
-            datosFrecuencia
-          );
+      contenidoEmergente.innerHTML=`
+        <h2>📊 RESULTADO FINAL</h2>
+        <div class="texto-resultado visible">
 
-          const energiaActual =
-            datosFrecuencia.reduce(
-              (a,b) => a + b,
-              0
-            ) /
-            (255 * datosFrecuencia.length);
+${dictamen.texto}
 
-          mediciones.energiaPromedio =
-            mediciones.energiaPromedio * 0.9 +
-            energiaActual * 0.1;
+${dictamen.explicacionFinal}
 
-          if(
-            Math.abs(
-              energiaActual - energiaAnterior
-            ) > 0.35
-          ){
-            mediciones.cambiosBruscosDetectados++;
-          }
+━━━━━━━━━━━━━━━━━━━━
+🎙️ VOZ DEL PROPIETARIO:
 
-          energiaAnterior = energiaActual;
+${v?.coincidenciaPropietario
+  ?'🟢 COMPATIBILIDAD ENCONTRADA'
+  :v?.referenciaGuardada
+    ?'🟡 NO SE ENCONTRÓ COINCIDENCIA SUFICIENTE'
+    :'⚪ NO HAY REFERENCIA GUARDADA'}
 
-          const indicador =
-            document.querySelector(
-              '.indicador-proceso'
-            );
-
-          if(indicador){
-
-            indicador.textContent =
-              `🎙️ Grabando... ` +
-              `${mediciones.duracionTotal.toFixed(1)}s | ` +
-              `Fragmentos: ` +
-              `${fragmentosGrabados.length}/` +
-              `${CONFIG.maxFragmentos}`;
-          }
-
-        },100);
-
-      setTimeout(async () => {
-
-        if(!analizando) return;
-
-        // ==================================================
-        // IMPORTANTE:
-        // Copiamos los fragmentos ANTES de cerrar los recursos.
-        // Así el detector especializado recibe los datos reales.
-        // ==================================================
-        const fragmentosFinales =
-          [...fragmentosGrabados];
-
-        const medicionesFinales =
-          {...mediciones};
-
-        cerrarRecursos();
-
-        await new Promise(
-          res => setTimeout(res,600)
-        );
-
-        // ==================================================
-        // EJECUTAR TODAS LAS HERRAMIENTAS UNA SOLA VEZ
-        // ==================================================
-        const entradaAnalisis = {
-          ...medicionesFinales,
-          fragmentos: fragmentosFinales
-        };
-
-        const resultadosHerramientas =
-          await Herramientas.ejecutarTodas(
-            entradaAnalisis
-          );
-
-        // ==================================================
-        // CEREBRO XOLO
-        // ==================================================
-        const dictamenFinal =
-          CerebroXOLO.dictaminar(
-            resultadosHerramientas
-          );
-
-        aplicarColorEstado(
-          dictamenFinal.nivel
-        );
-
-        contenidoEmergente.innerHTML = `
-          <h2>📊 RESULTADO FINAL</h2>
-
-          <div class="texto-resultado visible">
-
-${dictamenFinal.texto}
-
-${dictamenFinal.explicacionFinal}
+${v?.segundaVoz
+  ?'🔎 SEGUNDA VOZ: segmentos disponibles para análisis prioritario.'
+  :'ℹ️ No se pudo separar una segunda voz con suficiente claridad.'}
 
 ━━━━━━━━━━━━━━━━━━━━
 📋 DATOS OBTENIDOS REALMENTE:
 
-• ${dictamenFinal.datosTecnicos || 'Sin datos técnicos'}
-
-• ${dictamenFinal.datosEspecializados || 'Sin datos especializados'}
-
-━━━━━━━━━━━━━━━━━━━━
-
-ℹ️ FUENTES DE INFORMACIÓN:
-
-${dictamenFinal.fuentes}
+• ${dictamen.datosTecnicos||'Sin datos técnicos'}
+• ${dictamen.datosEspecializados||'Sin datos especializados'}
 
 ━━━━━━━━━━━━━━━━━━━━
+ℹ️ FUENTES:
 
+${dictamen.fuentes}
+
+━━━━━━━━━━━━━━━━━━━━
 ⚠️ ESTE ANÁLISIS NO ES PRUEBA ABSOLUTA.
+⚠️ La compatibilidad vocal no demuestra identidad por sí sola.
 ⚠️ XOLO no inventó ni simuló ningún resultado.
 
-          </div>
-        `;
+        </div>
+      `;
+    }
 
-      },(
-        CONFIG.duracionFragmento *
-        CONFIG.maxFragmentos *
-        1000
-      ) + 1000);
+    try{
+
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+        throw new Error('El dispositivo o navegador no permite acceso al micrófono.');
+      }
+
+      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
+        audio:{echoCancellation:false,noiseSuppression:false}
+      });
+
+      audioContext=new(window.AudioContext||window.webkitAudioContext)();
+      analyser=audioContext.createAnalyser();
+      analyser.fftSize=2048;
+      analyser.smoothingTimeConstant=.35;
+
+      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
+
+      mediaRecorder=new MediaRecorder(streamAudioActivo);
+
+      mediaRecorder.ondataavailable=e=>{
+        if(e.data.size>0&&fragmentosGrabados.length<CONFIG.maxFragmentos){
+          fragmentosGrabados.push(e.data);
+        }
+      };
+
+      mediaRecorder.start(CONFIG.duracionFragmento*1000);
+
+      intervaloAnalisis=setInterval(()=>{
+
+        if(!analizando)return;
+
+        mediciones.duracionTotal=(Date.now()-mediciones.inicio)/1000;
+
+        const datos=new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(datos);
+
+        const energia=datos.reduce((a,b)=>a+b,0)/(255*datos.length);
+
+        mediciones.energiaPromedio=
+          mediciones.energiaPromedio*.9+energia*.1;
+
+        if(Math.abs(energia-energiaAnterior)>.35){
+          mediciones.cambiosBruscosDetectados++;
+        }
+
+        energiaAnterior=energia;
+
+        const segundo=Math.floor(mediciones.duracionTotal);
+
+        if(segundo>0&&segundo!==Number(window._xoloUltimoSegundo||-1)){
+          window._xoloUltimoSegundo=segundo;
+          muestrasAcusticas.push(
+            VozPropietario.extraerCaracteristicas(datos)
+          );
+        }
+
+        const indicador=document.querySelector('.indicador-proceso');
+
+        if(indicador){
+          indicador.textContent=
+            `🎙️ Escuchando... ${mediciones.duracionTotal.toFixed(1)}s / 60s`;
+        }
+
+        if(mediciones.duracionTotal>=60){
+          finalizar();
+        }
+
+      },100);
+
+    }catch(err){
+
+      cerrarRecursos();
+      aplicarColorEstado('inconcluso');
+
+      contenidoEmergente.innerHTML=`
+        <h2>⚪ NO SE PUDO REALIZAR EL ANÁLISIS</h2>
+        <div class="texto-resultado visible">
+          ${err.message}
+          Debes autorizar el permiso de micrófono para realizar análisis.
+        </div>
+      `;
+    }
+  }
+
+
+  // ==================================================
+  // 👤 CONFIGURACIÓN DE VOZ DEL PROPIETARIO
+  // ==================================================
+  async function configurarVozPropietario(){
+
+    cerrarRecursos();
+    analizando=true;
+
+    contenidoEmergente.innerHTML=`
+      <h2>🎙️ VOZ DE REFERENCIA</h2>
+      <div class="tarjeta-voz">
+        Lee el texto durante aproximadamente
+        <strong>${CONFIG.duracionReferencia} segundos</strong>.
+        XOLO guardará localmente un perfil acústico para buscar
+        tu voz en futuras llamadas.
+        <br><br>
+        ⚠️ No es una prueba absoluta de identidad.
+      </div>
+
+      <div class="texto-resultado visible">
+        “Hola. Esta es mi voz de referencia para XOLO.
+        Hablaré de manera natural, con un ritmo normal,
+        para crear una muestra estable de mi voz.
+        Esta referencia servirá para que XOLO pueda
+        distinguir mi voz de la de otros interlocutores.”
+      </div>
+
+      <div class="indicador-proceso activo">🎙️ Preparando...</div>
+      <button class="boton-detener" id="btnCancelarReferencia">⏹️ Cancelar</button>
+    `;
+
+    pantallaEmergente.classList.add('activa');
+
+    document.getElementById('btnCancelarReferencia')
+      .addEventListener('click',cerrarRecursos);
+
+    try{
+
+      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
+        audio:{echoCancellation:false,noiseSuppression:false}
+      });
+
+      audioContext=new(window.AudioContext||window.webkitAudioContext)();
+      analyser=audioContext.createAnalyser();
+      analyser.fftSize=2048;
+
+      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
+
+      const muestras=[];
+      const inicio=Date.now();
+
+      intervaloAnalisis=setInterval(async()=>{
+
+        if(!analizando)return;
+
+        const transcurrido=(Date.now()-inicio)/1000;
+        const datos=new Uint8Array(analyser.frequencyBinCount);
+
+        analyser.getByteFrequencyData(datos);
+        muestras.push(VozPropietario.extraerCaracteristicas(datos));
+
+        const indicador=document.querySelector('.indicador-proceso');
+
+        if(indicador){
+          indicador.textContent=
+            `🎙️ Grabando referencia... ${transcurrido.toFixed(1)} / ${CONFIG.duracionReferencia}s`;
+        }
+
+        if(transcurrido>=CONFIG.duracionReferencia){
+
+          clearInterval(intervaloAnalisis);
+          intervaloAnalisis=null;
+
+          if(muestras.length<CONFIG.minReferencia){
+
+            cerrarRecursos();
+
+            contenidoEmergente.innerHTML=`
+              <h2>⚪ REFERENCIA INSUFICIENTE</h2>
+              <div class="texto-resultado visible">
+                No se obtuvieron suficientes muestras.
+                Inténtalo nuevamente en un ambiente silencioso.
+              </div>
+            `;
+
+            pantallaEmergente.classList.add('activa');
+            return;
+          }
+
+          await VozPropietario.guardar(
+            VozPropietario.perfilDesdeMuestras(muestras)
+          );
+
+          cerrarRecursos();
+
+          contenidoEmergente.innerHTML=`
+            <h2>🟢 REFERENCIA GUARDADA</h2>
+            <div class="texto-resultado visible">
+              XOLO guardó el perfil acústico de referencia del propietario.
+              <br><br>
+              En futuras llamadas, XOLO buscará primero esta voz y,
+              cuando pueda separar otro interlocutor, priorizará
+              el análisis de esa segunda voz.
+              <br><br>
+              ⚠️ La referencia es una herramienta de comparación,
+              no una identificación absoluta.
+            </div>
+          `;
+
+          pantallaEmergente.classList.add('activa');
+        }
+
+      },1000);
 
     }catch(err){
 
       cerrarRecursos();
 
-      aplicarColorEstado(
-        'inconcluso'
-      );
-
-      contenidoEmergente.innerHTML = `
-        <h2>⚪ NO SE PUDO REALIZAR EL ANÁLISIS</h2>
-
-        <div class="texto-resultado visible">
-          ${err.message}
-
-          Debes autorizar el permiso de micrófono
-          para realizar análisis.
-        </div>
+      contenidoEmergente.innerHTML=`
+        <h2>⚪ NO SE PUDO GUARDAR LA REFERENCIA</h2>
+        <div class="texto-resultado visible">${err.message}</div>
       `;
+
+      pantallaEmergente.classList.add('activa');
     }
   }
+
+  async function mostrarVozPropietario(){
+
+    const referencia=await VozPropietario.cargar();
+
+    contenidoEmergente.innerHTML=`
+      <h2>👤 VOZ DEL PROPIETARIO</h2>
+
+      <div class="tarjeta-voz">
+        Estado:
+        <div class="estado-voz ${referencia?'ok':'neutral'}">
+          ${referencia?'🟢 REFERENCIA GUARDADA':'⚪ SIN REFERENCIA'}
+        </div>
+      </div>
+
+      <button class="boton-accion" id="btnCrearVoz">
+        🎙️ ${referencia?'Actualizar referencia':'Crear referencia'}
+      </button>
+
+      ${referencia?`
+        <button class="boton-detener" id="btnBorrarVoz">
+          🗑️ Borrar referencia
+        </button>`:''}
+    `;
+
+    pantallaEmergente.classList.add('activa');
+
+    document.getElementById('btnCrearVoz')
+      .addEventListener('click',configurarVozPropietario);
+
+    const borrar=document.getElementById('btnBorrarVoz');
+
+    if(borrar){
+      borrar.addEventListener('click',async()=>{
+        await VozPropietario.eliminar();
+        mostrarVozPropietario();
+      });
+    }
+  }
+
 
   // ==================================================
   // 📹 REGISTRO DE EVIDENCIA VISUAL
@@ -1106,8 +1468,19 @@ ${dictamenFinal.fuentes}
         <p><strong>Reglas importantes:</strong></p>
 
         <p>
+          • Puedes guardar una voz de referencia del propietario desde "Mis personas".
+          XOLO intentará reconocer esa voz primero durante una llamada.
+        </p>
+
+        <p>
+          • Si identifica una voz compatible, priorizará los recursos de análisis
+          en la segunda voz cuando pueda separarla.
+        </p>
+
+        <p>
           • Si el detector especializado no está configurado,
-          solo verás datos técnicos que NO prueban manipulación
+          XOLO seguirá utilizando la evidencia técnica disponible,
+          pero no la presentará como prueba de IA.
         </p>
 
         <p>
@@ -1175,13 +1548,7 @@ ${dictamenFinal.fuentes}
   btnMisPersonas.addEventListener(
     'click',
     () => {
-
-      contenidoEmergente.innerHTML = `
-        <h2>👥 MIS PERSONAS DE CONFIANZA</h2>
-        <p>Función en desarrollo.</p>
-      `;
-
-      pantallaEmergente.classList.add('activa');
+      mostrarVozPropietario();
     }
   );
 
