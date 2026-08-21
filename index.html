@@ -2,634 +2,438 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>XOLO ANTI-IA</title>
+<title>XOLO ANTI-IA — VERSIÓN REPARADA</title>
 <link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-:root{--bg:#000000;--base:#a855f7;--ok:#22c55e;--warn:#eab308;--danger:#ef4444;--neutral:#888888}
-body{background:var(--bg);min-height:100vh;color:#fff;overflow:hidden;transition:background .8s ease}
-body.ok{background:radial-gradient(circle at center,rgba(34,197,94,.12),transparent 65%),#000}
-body.warn{background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000}
-body.danger{background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000}
-body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),transparent 65%),#000}
-
-.pantalla-inicio{display:flex;align-items:center;justify-content:center;min-height:100vh;transition:opacity .5s ease}
-.forma-central{width:280px;height:280px;border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);box-shadow:0 0 80px rgba(168,85,247,.5), inset 0 0 60px rgba(255,255,255,.1);cursor:pointer;user-select:none;transition:all .8s ease;animation:respira 5s ease-in-out infinite;display:flex;align-items:center;justify-content:center}
-.forma-central .icono-xolo{font-size:90px;color:rgba(255,255,255,.9);text-shadow:0 0 20px rgba(255,255,255,.3)}
-.forma-central:active{transform:scale(0.95)}
-@keyframes respira{0%,100%{border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;transform:scale(1)}25%{border-radius:50% 60% 50% 60% / 60% 50% 60% 40%}50%{border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;transform:scale(1.07)}75%{border-radius:60% 40% 60% 40% / 50% 60% 40% 60%}}
-@keyframes latidoFuerte{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
-.forma-central.estado-ok{background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a);box-shadow:0 0 70px rgba(34,197,94,.5), inset 0 0 60px rgba(255,255,255,.1)}
-.forma-central.estado-warn{background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);box-shadow:0 0 70px rgba(234,179,8,.5), inset 0 0 60px rgba(255,255,255,.1)}
-.forma-central.estado-peligro{background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);box-shadow:0 0 80px rgba(239,68,68,.6), inset 0 0 60px rgba(255,255,255,.15);animation:latidoFuerte .9s ease-in-out infinite !important}
-.forma-central.estado-neutral{background:radial-gradient(circle at 30% 30%,#a8a8a8,#888888 40%,#666666 70%,#444444);box-shadow:0 0 60px rgba(136,136,136,.4), inset 0 0 60px rgba(255,255,255,.05)}
-.forma-central.estado-inconcluso{background:radial-gradient(circle at 30% 30%,#e5e7eb,#9ca3af 40%,#6b7280 70%,#4b5563);box-shadow:0 0 60px rgba(107,114,128,.4), inset 0 0 60px rgba(255,255,255,.05)}
-.forma-central.estado-conflictivo{background:radial-gradient(circle at 30% 30%,#fcd34d,#f59e0b 40%,#d97706 70%,#b45309);box-shadow:0 0 70px rgba(245,158,11,.5), inset 0 0 60px rgba(255,255,255,.1)}
-
-.pantalla-opciones{position:fixed;top:0;left:0;width:100%;height:100%;background:#050508;z-index:20;padding:40px 20px 20px;display:none;opacity:0;transition:opacity .5s ease;overflow-y:auto}
-.pantalla-opciones.activa{display:block;opacity:1}
-.cerrar-opciones{position:sticky;top:0;text-align:right;font-size:28px;color:#777;cursor:pointer;padding:10px 5px;z-index:5}
-.cerrar-opciones:hover{color:#fff}
-.titulo-pantalla{text-align:center;font-size:32px;color:#a855f7;margin-bottom:30px;font-weight:800}
-.texto-privacidad{background:rgba(255,255,255,.03);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:16px;margin:20px 0;line-height:1.7;font-size:13px;color:#aaa}
-.contenedor-botones{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;max-width:380px;margin:0 auto}
-.boton-circular{display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:transform .25s ease}
-.boton-circular:active{transform:scale(0.92)}
-.circulo{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.08));border:2px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:40px;transition:all .25s ease;box-shadow:0 4px 15px rgba(168,85,247,.1)}
-#btnAsistencia .circulo{background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce);border-color:#a855f7;box-shadow:0 0 25px rgba(168,85,247,.4);animation:respira 4s ease-in-out infinite;position:relative}
-#btnAsistencia .circulo .icono-boton-xolo{font-size:42px;color:#fff}
-.boton-circular:hover .circulo{border-color:#a855f7;box-shadow:0 6px 20px rgba(168,85,247,.2)}
-.etiqueta-boton{font-size:15px;color:#ccc;text-align:center;line-height:1.4;font-weight:600}
-.etiqueta-boton.asistencia{color:#a855f7;font-weight:800;font-size:16px}
-
-.fondo-oscuro{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;transition:opacity .3s ease}
-.fondo-oscuro.activo{display:block;opacity:1}
-.menu-asistente{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:92%;max-width:360px;background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));border:2px solid rgba(168,85,247,.4);border-radius:24px;padding:24px;z-index:26;display:none;opacity:0;transition:opacity .3s ease;box-shadow:0 0 50px rgba(168,85,247,.3)}
-.menu-asistente.activo{display:block;opacity:1}
-.titulo-asistente{text-align:center;font-size:20px;font-weight:800;color:#c084fc;margin-bottom:20px;letter-spacing:1px}
-.opcion-asistente{padding:16px 14px;margin:10px 0;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(168,85,247,.3);color:#fff;font-size:16px;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:14px;font-weight:600}
-.opcion-asistente:hover{border-color:#a855f7;background:rgba(168,85,247,.15);transform:scale(1.02)}
-
-.pantalla-emergente{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,5,10,.96);z-index:30;padding:26px;display:none;opacity:0;transition:opacity .35s ease;overflow-y:auto}
-.pantalla-emergente.activa{display:block;opacity:1}
-.cerrar-emergente{position:absolute;top:18px;right:18px;font-size:26px;color:#888;cursor:pointer;transition:color .2s}
-.cerrar-emergente:hover{color:#fff}
-.contenido-pantalla{margin-top:50px;max-width:360px;margin-left:auto;margin-right:auto}
-.contenido-pantalla h2{font-size:20px;margin-bottom:20px;color:#fff;text-align:center}
-.contenido-pantalla p{line-height:1.7;color:#ddd;margin-bottom:12px;font-size:14px}
-.texto-resultado{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-top:16px;display:none;white-space:pre-line;line-height:1.8;font-size:14px}
-.texto-resultado.visible{display:block}
-.boton-accion{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#2563eb,#1d4ed8);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:12px}
-.boton-detener{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,#ef4444,#b91c1c);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:12px}
-.oculto{display:none}
-.indicador-proceso{color:#a855f7;font-weight:600;animation:parpadeo 1s ease-in-out infinite;display:none;margin-top:12px;text-align:center}
-.indicador-proceso.activo{display:block}
-@keyframes parpadeo{0%,100%{opacity:1}50%{opacity:.4}}
-.nota-tecnica{font-size:12px;color:#888;margin-top:8px;text-align:center}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif}
+:root{--bg:#000;--base:#a855f7;--ok:#22c55e;--warn:#eab308;--danger:#ef4444;--neutral:#888}
+body{background:#000;color:#fff;min-height:100vh;overflow:hidden}
+body.ok{background:radial-gradient(circle,rgba(34,197,94,.13),transparent 65%),#000}
+body.warn{background:radial-gradient(circle,rgba(234,179,8,.13),transparent 65%),#000}
+body.danger{background:radial-gradient(circle,rgba(239,68,68,.18),transparent 65%),#000}
+body.neutral{background:radial-gradient(circle,rgba(136,136,136,.12),transparent 65%),#000}
+.pantalla-inicio{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.forma-central{width:280px;height:280px;border-radius:60% 40% 70% 30%/50% 60% 40% 50%;background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);box-shadow:0 0 80px rgba(168,85,247,.5),inset 0 0 60px rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;animation:respira 5s ease-in-out infinite}
+.icono-xolo{font-size:90px;color:#fff}
+.forma-central.estado-ok{background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a)}
+.forma-central.estado-warn{background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04)}
+.forma-central.estado-peligro{background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);animation:latido .9s infinite}
+.forma-central.estado-neutral,.forma-central.estado-inconcluso{background:radial-gradient(circle at 30% 30%,#ddd,#888 45%,#444)}
+.forma-central.estado-conflictivo{background:radial-gradient(circle at 30% 30%,#fcd34d,#f59e0b 45%,#b45309)}
+@keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.07);border-radius:40% 60% 60% 40%/40% 50% 60% 50%}}
+@keyframes latido{50%{transform:scale(1.09)}}
+.pantalla-opciones,.pantalla-emergente{position:fixed;inset:0;background:#050508;z-index:20;padding:28px 20px;overflow-y:auto;display:none}
+.pantalla-opciones.activa,.pantalla-emergente.activa{display:block}
+.cerrar-opciones,.cerrar-emergente{position:absolute;right:20px;top:16px;font-size:28px;color:#888;cursor:pointer}
+.titulo-pantalla{text-align:center;color:#a855f7;font-size:30px;margin:20px 0 24px}
+.texto-privacidad,.texto-resultado{background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:15px;line-height:1.65;color:#bbb;font-size:13px}
+.contenedor-botones{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;max-width:380px;margin:auto}
+.boton-circular{text-align:center;cursor:pointer}
+.circulo{width:92px;height:92px;margin:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;background:rgba(168,85,247,.12);border:2px solid rgba(168,85,247,.3)}
+#btnAsistencia .circulo{background:radial-gradient(circle,#c084fc,#9333ea 50%,#5b21b6);border-color:#a855f7}
+.etiqueta-boton{display:block;margin-top:10px;color:#ccc;font-weight:600}
+.asistencia{color:#c084fc}
+.fondo-oscuro{position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:30;display:none}
+.fondo-oscuro.activo{display:block}
+.menu-asistente{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:92%;max-width:370px;background:#160d28;border:2px solid rgba(168,85,247,.4);border-radius:22px;padding:22px;display:none}
+.menu-asistente.activo{display:block}
+.titulo-asistente{text-align:center;color:#c084fc;margin-bottom:18px}
+.opcion-asistente{padding:16px;margin:10px 0;border:1px solid rgba(168,85,247,.3);border-radius:14px;background:rgba(255,255,255,.05);font-weight:700;cursor:pointer}
+.contenido-pantalla{max-width:380px;margin:55px auto 20px}
+.contenido-pantalla h2{text-align:center;margin-bottom:18px;font-size:20px}
+.contenido-pantalla p{color:#ddd;line-height:1.65;font-size:14px;margin-bottom:12px}
+.boton-accion,.boton-detener,.boton-secundario{width:100%;padding:14px;border-radius:12px;margin-top:12px;font-weight:800;font-size:15px;cursor:pointer}
+.boton-accion{border:0;background:#2563eb;color:#fff}
+.boton-detener{border:0;background:#dc2626;color:#fff}
+.boton-secundario{background:transparent;color:#c084fc;border:1px solid #a855f7}
+.indicador-proceso{text-align:center;color:#c084fc;margin:12px 0;animation:parpadeo 1s infinite}
+@keyframes parpadeo{50%{opacity:.35}}
+.nota-tecnica{text-align:center;color:#888;font-size:12px;margin-top:10px}
+.grupo-input{margin:14px 0}
+.grupo-input label{display:block;color:#ccc;font-size:14px;margin-bottom:6px}
+.grupo-input input{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#111;color:#fff}
+.lista-registros{margin-top:15px}.item-registro{padding:10px;border-bottom:1px solid #222}
+.oculto{display:none!important}
 </style>
 </head>
-
 <body>
-<input type="file" id="selectorImagenAnalisis" accept="image/*" class="oculto">
+<input id="selectorImagenAnalisis" type="file" accept="image/*" class="oculto">
+<input id="selectorAudioRegistro" type="file" accept="audio/*" class="oculto">
+<input id="selectorImagenRegistro" type="file" accept="image/*" class="oculto">
 
-<div class="pantalla-inicio" id="pantallaInicio">
-  <div id="formaCentral" class="forma-central">
-    <span class="icono-xolo">◈</span>
-  </div>
-</div>
+<div class="pantalla-inicio" id="pantallaInicio"><div id="formaCentral" class="forma-central"><span class="icono-xolo">◈</span></div></div>
 
 <div id="pantallaOpciones" class="pantalla-opciones">
-  <span class="cerrar-opciones" id="cerrarOpciones">✕</span>
-  <h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
-
-  <div class="texto-privacidad">
-    🔒 PRIVACIDAD Y LÍMITES:<br>
-    XOLO no puede acceder por sí solo a conversaciones privadas, llamadas de otras aplicaciones ni archivos sin tu autorización explícita.<br>
-    ⚠️ REGLA FUNDAMENTAL:<br>
-    Características como ruido, pausas o mala conexión NO son prueba de contenido manipulado. Solo los detectores especializados pueden aportar evidencia al respecto.<br>
-    XOLO NO adivina, no simula ni inventa resultados. Solo dictamina con la información real que recibe.
-  </div>
-
-  <div class="contenedor-botones">
-    <div class="boton-circular" id="btnApoyo"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
-    <div class="boton-circular" id="btnInstrucciones"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
-    <div class="boton-circular" id="btnEmergencia"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
-    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas</span></div>
-    <div class="boton-circular" id="btnAsistencia">
-      <div class="circulo"><span class="icono-boton-xolo">◈</span></div>
-      <span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span>
-    </div>
-  </div>
+<span id="cerrarOpciones" class="cerrar-opciones">✕</span>
+<h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
+<div class="texto-privacidad">
+🔒 <b>PRIVACIDAD Y LÍMITES</b><br>
+XOLO no accede por sí solo a conversaciones privadas, llamadas de otras aplicaciones ni archivos sin autorización explícita.<br><br>
+⚠️ <b>REGLA FUNDAMENTAL</b><br>
+Ruido, pausas, energía o calidad de grabación NO son pruebas de IA. Solo un detector especializado conectado puede estimar manipulación.<br><br>
+XOLO NO adivina, NO simula y NO inventa resultados.
+</div>
+<div class="contenedor-botones" style="margin-top:28px">
+<div class="boton-circular" id="btnApoyo"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
+<div class="boton-circular" id="btnInstrucciones"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
+<div class="boton-circular" id="btnEmergencia"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
+<div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas</span></div>
+<div class="boton-circular" id="btnAsistencia"><div class="circulo">◈</div><span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span></div>
+</div>
 </div>
 
 <div id="fondoOscuroAsistente" class="fondo-oscuro"></div>
-
 <div id="menuAsistente" class="menu-asistente">
-  <h3 class="titulo-asistente">🤖 ¿QUÉ ESTÁS RECIBIENDO?</h3>
-  <div class="opcion-asistente" id="opcionSoloVoz">📞 Análisis de audio</div>
-  <div class="opcion-asistente" id="opcionVideoLlamada">📹 Registro de capturas de imagen</div>
-  <div style="font-size:12px;color:#aaa;margin-top:15px;text-align:center">
-    ⚠️ No se accede directamente al contenido de llamadas de otras aplicaciones
-  </div>
+<h3 class="titulo-asistente">🤖 ¿QUÉ ESTÁS RECIBIENDO?</h3>
+<div id="opcionSoloVoz" class="opcion-asistente">📞 Análisis de audio</div>
+<div id="opcionVideoLlamada" class="opcion-asistente">📹 Registro de capturas de imagen</div>
+<div class="nota-tecnica">XOLO no accede directamente a llamadas de otras aplicaciones.</div>
 </div>
 
 <div id="pantallaEmergente" class="pantalla-emergente">
-  <span class="cerrar-emergente" id="cerrarEmergente">✕</span>
-  <div class="contenido-pantalla" id="contenidoEmergente"></div>
+<span id="cerrarEmergente" class="cerrar-emergente">✕</span>
+<div id="contenidoEmergente" class="contenido-pantalla"></div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded',function(){
+'use strict';
 
-  // ==================================================
-  // ⚙️ CONFIGURACIÓN — SIN VALORES INVENTADOS
-  // ==================================================
-  const CONFIG = {
-    aasistEndpoint: '', // DEJA VACÍO SI NO TIENES SERVICIO REAL. NO SIMULES NADA.
-    duracionFragmento: 4,
-    maxFragmentos: 4,
-    minDuracionAnalisis: 4
-  };
+const CONFIG={
+  detectorEndpoint:'',
+  duracionFragmentoMs:4000,
+  maxFragmentos:4,
+  tiempoTotalMaximoMs:17000
+};
 
-  // ==================================================
-  // 🧩 SISTEMA DE HERRAMIENTAS — RESULTADOS REALES ÚNICAMENTE
-  // ==================================================
-  const Herramientas = {
+const $=id=>document.getElementById(id);
+const escapeHTML=v=>String(v??'').replace(/[&<>"'`=\/]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;','=':'&#61;','/':'&#47;'}[c]));
 
-    lista: [],
+const DatosGuardados={
+ getEmergencia(){try{return JSON.parse(localStorage.getItem('xolo_emergencia')||'{"nombre":"","numero":""}')}catch{return {nombre:'',numero:''}}},
+ setEmergencia(v){localStorage.setItem('xolo_emergencia',JSON.stringify(v))},
+ getPersonas(){try{return JSON.parse(localStorage.getItem('xolo_personas')||'[]')}catch{return []}},
+ agregarPersona(v){const a=this.getPersonas();a.push(v);localStorage.setItem('xolo_personas',JSON.stringify(a))}
+};
 
-    registrar: function(h){
-      this.lista.push(h);
-    },
+const estadoUI={
+ AUTENTICO:{texto:'🟢 AUTÉNTICO: Estimación compatible con voz de persona real',nivel:'ok'},
+ INDICIOS:{texto:'🟡 INDICIOS: Se recomienda verificar por otros medios',nivel:'warn'},
+ MANIPULACION_MEDIA:{texto:'🟠 PROBABILIDAD MEDIA: Posible uso de IA',nivel:'warn'},
+ MANIPULACION_ALTA:{texto:'🔴 ALTA PROBABILIDAD: Contenido probablemente generado por IA',nivel:'peligro'},
+ CONFLICTIVO:{texto:'⚠️ RESULTADOS CONFLICTIVOS: Repite el análisis',nivel:'conflictivo'},
+ INCONCLUSO:{texto:'⚪ INCONCLUSO: Muestra insuficiente o error',nivel:'inconcluso'},
+ NO_DISPONIBLE:{texto:'⚪ DETECTOR DE IA NO DISPONIBLE',nivel:'neutral'}
+};
 
-    ejecutarTodas: async function(datosEntrada){
-
-      const resultados = [];
-
-      for(const h of this.lista){
-
-        try{
-
-          let entrada = datosEntrada;
-          if(h.tipo === 'especializada') entrada = datosEntrada.fragmentos || [];
-
-          const resultado = await h.analizar?.(entrada) || h;
-
-          resultados.push({
-            id: h.id,
-            nombre: h.nombre,
-            tipo: h.tipo,
-            disponible: h.disponible,
-            ejecutado: true,
-            resultado: resultado.resultado,
-            confianza: resultado.confianza ?? 'NO DISPONIBLE',
-            calidadMuestra: resultado.calidadMuestra ?? 'NO DISPONIBLE',
-            datosObtenidos: resultado.datosObtenidos ?? {},
-            explicacion: resultado.explicacion,
-            limitacion: resultado.limitacion,
-            error: resultado.error ?? null
-          });
-
-        }catch(err){
-
-          resultados.push({
-            id: h.id,
-            nombre: h.nombre,
-            tipo: h.tipo,
-            disponible: h.disponible,
-            ejecutado: false,
-            resultado: 'ERROR',
-            confianza: 'NO DISPONIBLE',
-            calidadMuestra: 'NO DISPONIBLE',
-            datosObtenidos: {},
-            explicacion: 'No se pudo ejecutar la herramienta',
-            error: err.message
-          });
-
-        }
-      }
-
-      return resultados;
-    }
-  };
-
-  // ==================================================
-  // HERRAMIENTA 1: CALIDAD DE GRABACIÓN
-  // SOLO EVALÚA CONDICIONES. NUNCA DETECTA IA.
-  // ==================================================
-  Herramientas.registrar({
-    id: 'calidad_audio',
-    nombre: 'Calidad de grabación',
-    tipo: 'tecnica',
-    disponible: true,
-
-    async analizar(datos){
-
-      const {duracionTotal, energiaPromedio, cambiosBruscosDetectados, cantidadPausas} = datos;
-      let calidadMuestra = 'buena';
-
-      if(duracionTotal < CONFIG.minDuracionAnalisis) calidadMuestra = 'INSUFICIENTE';
-      else if(energiaPromedio < 0.06 || energiaPromedio > 0.94) calidadMuestra = 'BAJA';
-      else if(cambiosBruscosDetectados > 4 || cantidadPausas > 7) calidadMuestra = 'MEDIA';
-
-      return {
-        resultado: 'COMPLETADO',
-        calidadMuestra: calidadMuestra,
-        confianza: 'NO DISPONIBLE',
-        datosObtenidos: {
-          duracionSegundos: duracionTotal.toFixed(1),
-          nivelEnergia: energiaPromedio.toFixed(3),
-          cambiosBruscos: cambiosBruscosDetectados,
-          cantidadPausas: cantidadPausas
-        },
-        explicacion: 'Indica si la grabación tiene condiciones adecuadas para análisis',
-        limitacion: 'ESTA HERRAMIENTA NO PRUEBA NI DESCARTA CONTENIDO GENERADO POR IA'
-      };
-    }
-  });
-
-  // ==================================================
-  // HERRAMIENTA 2: ANÁLISIS TEMPORAL
-  // SOLO DESCRIBE PATRONES. NUNCA DETECTA IA.
-  // ==================================================
-  Herramientas.registrar({
-    id: 'analisis_temporal',
-    nombre: 'Patrones de comportamiento',
-    tipo: 'tecnica',
-    disponible: true,
-
-    async analizar(datos){
-
-      return {
-        resultado: 'COMPLETADO',
-        calidadMuestra: datos.duracionTotal >= CONFIG.minDuracionAnalisis ? 'BUENA' : 'INSUFICIENTE',
-        confianza: 'NO DISPONIBLE',
-        datosObtenidos: { duracionValida: datos.duracionTotal >= CONFIG.minDuracionAnalisis },
-        explicacion: 'Analiza el comportamiento del audio a lo largo del tiempo',
-        limitacion: 'ESTA HERRAMIENTA NO PRUEBA NI DESCARTA CONTENIDO GENERADO POR IA'
-      };
-    }
-  });
-
-  // ==================================================
-  // HERRAMIENTA 3: DETECTOR ESPECIALIZADO
-  // SOLO FUNCIONA SI EXISTE UN SERVICIO REAL.
-  // ==================================================
-  Herramientas.registrar({
-    id: 'detector_especializado',
-    nombre: 'Detector anti-suplantación',
-    tipo: 'especializada',
-    disponible: !!CONFIG.aasistEndpoint,
-
-    async analizar(fragmentos){
-
-      if(!this.disponible){
-        return {
-          resultado: 'NO DISPONIBLE',
-          confianza: 'NO DISPONIBLE',
-          calidadMuestra: 'NO DISPONIBLE',
-          datosObtenidos: {},
-          explicacion: 'No hay servicio de detección especializada configurado',
-          limitacion: 'Sin esta herramienta no se puede determinar si existe contenido generado por IA'
-        };
-      }
-
-      if(!fragmentos || fragmentos.length === 0){
-        return {
-          resultado: 'INCONCLUSO',
-          confianza: 'NO DISPONIBLE',
-          calidadMuestra: 'INSUFICIENTE',
-          datosObtenidos: {},
-          explicacion: 'No hay fragmentos de audio válidos para analizar',
-          limitacion: 'Se requiere al menos 1 fragmento válido'
-        };
-      }
-
-      try{
-        const formulario = new FormData();
-        formulario.append('audio', fragmentos[0], 'fragmento_audio.webm');
-
-        const resp = await fetch(CONFIG.aasistEndpoint,{
-          method: 'POST',
-          body: formulario,
-          signal: AbortSignal.timeout(15000)
-        });
-
-        if(!resp.ok) throw new Error(`Respuesta inválida del servicio: ${resp.status}`);
-        const datosServicio = await resp.json();
-
-        return {
-          resultado: datosServicio.resultado ?? 'INCONCLUSO',
-          confianza: datosServicio.confianza ?? 'NO DISPONIBLE',
-          calidadMuestra: datosServicio.calidad ?? 'NO DISPONIBLE',
-          datosObtenidos: datosServicio.datos ?? {},
-          explicacion: datosServicio.explicacion ?? 'Resultado entregado por el detector especializado',
-          limitacion: 'El resultado es probabilístico y no constituye una prueba absoluta'
-        };
-
-      }catch(err){
-        return {
-          resultado: 'ERROR',
-          confianza: 'NO DISPONIBLE',
-          calidadMuestra: 'NO DISPONIBLE',
-          datosObtenidos: {},
-          explicacion: 'No se pudo conectar al servicio de detección',
-          error: err.message
-        };
-      }
-    }
-  });
-
-  // ==================================================
-  // 🧠 CEREBRO XOLO
-  // SOLO COMBINA RESULTADOS REALES
-  // ==================================================
-  const CerebroXOLO = {
-
-    estadosValidos: {
-      AUTENTICO: { texto: '🟢 ALTA COMPATIBILIDAD CON CONTENIDO AUTÉNTICO', nivel: 'ok' },
-      INDICIOS: { texto: '🟡 INDICIOS PARCIALES — VERIFICA', nivel: 'warn' },
-      MANIPULACION_MEDIA: { texto: '🟠 COMPATIBILIDAD MEDIA CON MANIPULACIÓN', nivel: 'warn' },
-      MANIPULACION_ALTA: { texto: '🔴 ALTA COMPATIBILIDAD CON MANIPULACIÓN', nivel: 'peligro' },
-      CONFLICTIVO: { texto: '⚠️ RESULTADOS CONFLICTIVOS', nivel: 'conflictivo' },
-      INCONCLUSO: { texto: '⚪ RESULTADO INCONCLUSO', nivel: 'inconcluso' },
-      NO_DISPONIBLE: { texto: '⚪ DETECTOR ESPECIALIZADO NO DISPONIBLE', nivel: 'neutral' },
-      ERROR: { texto: '⚪ ERROR EN EL ANÁLISIS', nivel: 'neutral' }
-    },
-
-    dictaminar: function(resultadosHerramientas){
-
-      const herramientasTecnicas = resultadosHerramientas.filter(h => h.tipo === 'tecnica');
-      const herramientaEspecializada = resultadosHerramientas.find(h => h.tipo === 'especializada');
-
-      // CASO 1: No existe detector especializado real
-      if(!herramientaEspecializada || herramientaEspecializada.resultado === 'NO DISPONIBLE'){
-        return {
-          ...this.estadosValidos.NO_DISPONIBLE,
-          explicacionFinal: 'Solo se evaluaron condiciones técnicas de la grabación. ESTAS NO SON PRUEBA DE MANIPULACIÓN NI DE AUTENTICIDAD. No existe evidencia especializada para determinar el uso de IA.',
-          datosTecnicos: herramientasTecnicas.map(t => `${t.nombre}: ${t.resultado} - Calidad: ${t.calidadMuestra}`).join(' | '),
-          datosEspecializados: 'Detector especializado: NO DISPONIBLE',
-          fuentes: 'Datos de herramientas técnicas únicamente'
-        };
-      }
-
-      // CASO 2: Error o muestra insuficiente
-      if(herramientaEspecializada.resultado === 'ERROR' || herramientaEspecializada.calidadMuestra === 'INSUFICIENTE'){
-        return {
-          ...this.estadosValidos.INCONCLUSO,
-          explicacionFinal: herramientaEspecializada.explicacion + '. No hay información suficiente para emitir un dictamen.',
-          datosTecnicos: herramientasTecnicas.map(t => `${t.nombre}: ${t.resultado} - Calidad: ${t.calidadMuestra}`).join(' | '),
-          datosEspecializados: `Resultado: ${herramientaEspecializada.resultado} | Confianza: ${herramientaEspecializada.confianza}`,
-          fuentes: 'Resultado del detector especializado'
-        };
-      }
-
-      // CASO 3: Evaluar ÚNICAMENTE el resultado del detector especializado
-      const resultadoEspecializado = String(herramientaEspecializada.resultado || '').toUpperCase();
-      let estadoDictamen;
-
-      switch(resultadoEspecializado){
-        case 'AUTENTICO': estadoDictamen = this.estadosValidos.AUTENTICO; break;
-        case 'INDICIOS': estadoDictamen = this.estadosValidos.INDICIOS; break;
-        case 'MANIPULACION_MEDIA': estadoDictamen = this.estadosValidos.MANIPULACION_MEDIA; break;
-        case 'MANIPULACION_ALTA': estadoDictamen = this.estadosValidos.MANIPULACION_ALTA; break;
-        case 'CONFLICTIVO': estadoDictamen = this.estadosValidos.CONFLICTIVO; break;
-        case 'INCONCLUSO': default: estadoDictamen = this.estadosValidos.INCONCLUSO; break;
-      }
-
-      return {
-        ...estadoDictamen,
-        explicacionFinal: herramientaEspecializada.explicacion,
-        datosTecnicos: herramientasTecnicas.map(t => `${t.nombre}: ${t.resultado} - Calidad: ${t.calidadMuestra}`).join(' | '),
-        datosEspecializados: `Resultado: ${herramientaEspecializada.resultado} | Confianza: ${herramientaEspecializada.confianza}`,
-        fuentes: 'Herramientas técnicas + Detector especializado real'
-      };
-    }
-  };
-
-  // ==================================================
-  // 🔧 VARIABLES Y ELEMENTOS GENERALES
-  // ==================================================
-  let analizando = false, streamAudioActivo = null, mediaRecorder = null, intervaloAnalisis = null;
-  let fragmentosGrabados = [], audioContext = null, analyser = null;
-
-  const pantallaInicio = document.getElementById('pantallaInicio');
-  const pantallaOpciones = document.getElementById('pantallaOpciones');
-  const formaCentral = document.getElementById('formaCentral');
-  const cerrarOpciones = document.getElementById('cerrarOpciones');
-  const btnApoyo = document.getElementById('btnApoyo');
-  const btnInstrucciones = document.getElementById('btnInstrucciones');
-  const btnEmergencia = document.getElementById('btnEmergencia');
-  const btnMisPersonas = document.getElementById('btnMisPersonas');
-  const btnAsistencia = document.getElementById('btnAsistencia');
-  const fondoOscuroAsistente = document.getElementById('fondoOscuroAsistente');
-  const menuAsistente = document.getElementById('menuAsistente');
-  const opcionSoloVoz = document.getElementById('opcionSoloVoz');
-  const opcionVideoLlamada = document.getElementById('opcionVideoLlamada');
-  const pantallaEmergente = document.getElementById('pantallaEmergente');
-  const contenidoEmergente = document.getElementById('contenidoEmergente');
-  const cerrarEmergente = document.getElementById('cerrarEmergente');
-  const selectorImagenAnalisis = document.getElementById('selectorImagenAnalisis');
-
-  // ==================================================
-  // 🎨 ESTADO VISUAL
-  // ==================================================
-  function aplicarColorEstado(nivel){
-    formaCentral.classList.remove('estado-ok','estado-warn','estado-peligro','estado-neutral','estado-inconcluso','estado-conflictivo');
-    document.body.classList.remove('ok','warn','danger','neutral');
-    const mapaNiveles = {ok:'estado-ok', warn:'estado-warn', peligro:'estado-peligro', neutral:'estado-neutral', inconcluso:'estado-inconcluso', conflictivo:'estado-conflictivo'};
-    formaCentral.classList.add(mapaNiveles[nivel] || 'estado-inconcluso');
-    if(nivel !== 'inconcluso' && nivel !== 'neutral') document.body.classList.add(nivel);
+const Herramientas={
+ lista:[],
+ registrar(h){this.lista.push(h)},
+ async ejecutarTodas(datos){
+  const salida=[];
+  for(const h of this.lista){
+   try{
+    const entrada=h.tipo==='especializada'?(datos.fragmentos||[]):datos;
+    const r=await h.analizar(entrada);
+    salida.push({...h,ejecutado:true,...r});
+   }catch(e){
+    salida.push({...h,ejecutado:false,resultado:'ERROR',confianza:'NO DISPONIBLE',calidadMuestra:'NO DISPONIBLE',explicacion:'La herramienta produjo un error.',error:e.message});
+   }
   }
+  return salida;
+ }
+};
 
-  // ==================================================
-  // 🧹 CIERRE DE RECURSOS
-  // ==================================================
-  function cerrarRecursos(){
-    if(intervaloAnalisis) clearInterval(intervaloAnalisis);
-    if(mediaRecorder?.state === 'recording') mediaRecorder.stop();
-    if(audioContext) audioContext.close();
-    if(streamAudioActivo) streamAudioActivo.getTracks().forEach(t => t.stop());
-    audioContext = analyser = streamAudioActivo = mediaRecorder = intervaloAnalisis = null;
-    fragmentosGrabados = []; analizando = false;
-    fondoOscuroAsistente.classList.remove('activo');
-    menuAsistente.classList.remove('activo');
-    pantallaEmergente.classList.remove('activa');
-  }
-
-  // ==================================================
-  // 🎙️ ANÁLISIS DE AUDIO — SIN SIMULACIONES
-  // ==================================================
-  async function iniciarAnalisisVoz(){
-    cerrarRecursos(); analizando = true;
-    const mediciones = {duracionTotal: 0, energiaPromedio: 0, cambiosBruscosDetectados: 0, cantidadPausas: 0, inicio: Date.now()};
-    let energiaAnterior = 0;
-
-    contenidoEmergente.innerHTML = `
-      <h2>🤖 ANÁLISIS DE AUDIO</h2>
-      <div class="indicador-proceso activo">🎙️ Solicitando permiso de micrófono...</div>
-      <button class="boton-detener" id="btnDetener">⏹️ Cancelar</button>
-    `;
-    pantallaEmergente.classList.add('activa');
-    document.getElementById('btnDetener').addEventListener('click', cerrarRecursos);
-
-    try{
-      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('El dispositivo o navegador no permite acceso al micrófono.');
-
-      streamAudioActivo = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: false, noiseSuppression: false}});
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioContext.createAnalyser();
-      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
-
-      mediaRecorder = new MediaRecorder(streamAudioActivo);
-      mediaRecorder.ondataavailable = (e) => {
-        if(e.data.size > 0 && fragmentosGrabados.length < CONFIG.maxFragmentos) fragmentosGrabados.push(e.data);
-      };
-      mediaRecorder.start(CONFIG.duracionFragmento * 1000);
-
-      intervaloAnalisis = setInterval(() => {
-        if(!analizando) return;
-        mediciones.duracionTotal = (Date.now() - mediciones.inicio) / 1000;
-        const datosFrecuencia = new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(datosFrecuencia);
-        const energiaActual = datosFrecuencia.reduce((a,b) => a + b, 0) / (255 * datosFrecuencia.length);
-        mediciones.energiaPromedio = mediciones.energiaPromedio * 0.9 + energiaActual * 0.1;
-        if(Math.abs(energiaActual - energiaAnterior) > 0.35) mediciones.cambiosBruscosDetectados++;
-        energiaAnterior = energiaActual;
-
-        const indicador = document.querySelector('.indicador-proceso');
-        if(indicador) indicador.textContent = `🎙️ Grabando... ${mediciones.duracionTotal.toFixed(1)}s | Fragmentos: ${fragmentosGrabados.length}/${CONFIG.maxFragmentos}`;
-      },100);
-
-      setTimeout(async () => {
-        if(!analizando) return;
-        const fragmentosFinales = [...fragmentosGrabados];
-        const medicionesFinales = {...mediciones};
-        cerrarRecursos();
-        await new Promise(res => setTimeout(res,600));
-
-        const entradaAnalisis = {...medicionesFinales, fragmentos: fragmentosFinales};
-        const resultadosHerramientas = await Herramientas.ejecutarTodas(entradaAnalisis);
-        const dictamenFinal = CerebroXOLO.dictaminar(resultadosHerramientas);
-        aplicarColorEstado(dictamenFinal.nivel);
-
-        contenidoEmergente.innerHTML = `
-          <h2>📊 RESULTADO FINAL</h2>
-          <div class="texto-resultado visible">
-${dictamenFinal.texto}
-
-${dictamenFinal.explicacionFinal}
-
-━━━━━━━━━━━━━━━━━━━━
-📋 DATOS OBTENIDOS REALMENTE:
-• ${dictamenFinal.datosTecnicos || 'Sin datos técnicos'}
-• ${dictamenFinal.datosEspecializados || 'Sin datos especializados'}
-
-━━━━━━━━━━━━━━━━━━━━
-ℹ️ FUENTES DE INFORMACIÓN:
-${dictamenFinal.fuentes}
-
-━━━━━━━━━━━━━━━━━━━━
-⚠️ ESTE ANÁLISIS NO ES PRUEBA ABSOLUTA.
-⚠️ XOLO no inventó ni simuló ningún resultado.
-          </div>
-        `;
-
-      },(CONFIG.duracionFragmento * CONFIG.maxFragmentos * 1000) + 1000);
-
-    }catch(err){
-      cerrarRecursos(); aplicarColorEstado('inconcluso');
-      contenidoEmergente.innerHTML = `
-        <h2>⚪ NO SE PUDO REALIZAR EL ANÁLISIS</h2>
-        <div class="texto-resultado visible">
-          ${err.message}
-          Debes autorizar el permiso de micrófono para realizar análisis.
-        </div>
-      `;
-    }
-  }
-
-  // ==================================================
-  // 📹 REGISTRO DE EVIDENCIA VISUAL
-  // CONSERVADO SIN DETECTOR FALSO
-  // ==================================================
-  function iniciarAnalisisVideo(){
-    cerrarRecursos(); analizando = true; let capturas = 0;
-    contenidoEmergente.innerHTML = `
-      <h2>🤖 REGISTRO DE EVIDENCIA VISUAL</h2>
-      <div class="texto-resultado visible">
-        📹 Podrás registrar hasta 4 capturas como evidencia.
-        El análisis especializado de imagen se agregará cuando exista una herramienta real conectada.
-      </div>
-      <button class="boton-accion" id="btnSeleccionar">📸 Seleccionar captura ${capturas + 1} de 4</button>
-    `;
-    pantallaEmergente.classList.add('activa');
-    document.getElementById('btnSeleccionar').addEventListener('click', () => selectorImagenAnalisis.click());
-
-    selectorImagenAnalisis.onchange = (e) => {
-      if(!e.target.files[0] || !analizando) return;
-      capturas++;
-      contenidoEmergente.innerHTML = `
-        <h2>🤖 REGISTRO DE EVIDENCIA VISUAL</h2>
-        <div class="texto-resultado visible">
-          ✅ Captura ${capturas} registrada: ${e.target.files[0].name}
-          ${capturas < 4 ? 'Selecciona la siguiente cuando estés listo' : 'Se completaron todas las capturas'}
-        </div>
-        ${capturas < 4 ? `<button class="boton-accion" id="btnSeleccionar">📸 Siguiente captura (${capturas + 1} de 4)</button>` : `<div class="nota-tecnica">No hay detector de imagen activo en este momento</div>`}
-      `;
-      if(capturas < 4){
-        document.getElementById('btnSeleccionar').addEventListener('click', () => selectorImagenAnalisis.click());
-      }else{
-        analizando = false;
-      }
-      selectorImagenAnalisis.value = '';
-    };
-  }
-
-  // ==================================================
-  // 🔘 ACCIONES DE BOTONES
-  // ==================================================
-  formaCentral.addEventListener('click', () => pantallaOpciones.classList.add('activa'));
-  cerrarOpciones.addEventListener('click', () => pantallaOpciones.classList.remove('activa'));
-  cerrarEmergente.addEventListener('click', () => { pantallaEmergente.classList.remove('activa'); cerrarRecursos(); });
-  fondoOscuroAsistente.addEventListener('click', () => cerrarRecursos());
-  btnAsistencia.addEventListener('click', () => { fondoOscuroAsistente.classList.add('activo'); menuAsistente.classList.add('activo'); });
-  opcionSoloVoz.addEventListener('click', () => { cerrarRecursos(); iniciarAnalisisVoz(); });
-  opcionVideoLlamada.addEventListener('click', () => { cerrarRecursos(); iniciarAnalisisVideo(); });
-
-  // ==================================================
-  // 📖 INSTRUCCIONES
-  // ==================================================
-  btnInstrucciones.addEventListener('click', () => {
-    contenidoEmergente.innerHTML = `
-      <h2>📖 INSTRUCCIONES DE USO</h2>
-      <p><strong>Para analizar audio:</strong></p>
-      <p>1. Coloca el teléfono en altavoz durante la llamada</p>
-      <p>2. Pulsa la figura central → ASISTENCIA XOLO → Análisis de audio</p>
-      <p>3. Autoriza el permiso de micrófono</p>
-      <p>4. Espera el proceso completo: no lo cierres antes de terminar</p>
-      <br>
-      <p><strong>Reglas importantes:</strong></p>
-      <p>• Si el detector especializado no está configurado, solo verás datos técnicos que NO prueban manipulación</p>
-      <p>• Si no hay suficiente información, XOLO dirá "INCONCLUSO" — nunca inventa un resultado</p>
-      <p>• Todos los valores mostrados son entregados por herramientas reales, no se generan al azar</p>
-    `;
-    pantallaEmergente.classList.add('activa');
-  });
-
-  // ==================================================
-  // ☕ APOYO
-  // ==================================================
-  btnApoyo.addEventListener('click', () => {
-    contenidoEmergente.innerHTML = `
-      <h2>☕ PRINCIPIOS DE XOLO</h2>
-      <p>XOLO NO adivina, NO simula, NO inventa.</p>
-      <p>Solo comunica lo que las herramientas reales detectan.</p>
-      <p>No puede dar certezas absolutas, solo estimaciones basadas en evidencia disponible.</p>
-    `;
-    pantallaEmergente.classList.add('activa');
-  });
-
-  // ==================================================
-  // 🚨 EMERGENCIA
-  // ==================================================
-  btnEmergencia.addEventListener('click', () => {
-    contenidoEmergente.innerHTML = `<h2>🚨 CONTACTO DE EMERGENCIA</h2><p>Función en desarrollo.</p>`;
-    pantallaEmergente.classList.add('activa');
-  });
-
-  // ==================================================
-  // 👥 MIS PERSONAS
-  // ==================================================
-  btnMisPersonas.addEventListener('click', () => {
-    contenidoEmergente.innerHTML = `<h2>👥 MIS PERSONAS DE CONFIANZA</h2><p>Función en desarrollo.</p>`;
-    pantallaEmergente.classList.add('activa');
-  });
-
+Herramientas.registrar({
+ id:'calidad_audio',nombre:'Condiciones de grabación',tipo:'tecnica',disponible:true,
+ async analizar(d){
+  const dur=Number(d.duracionTotal)||0, en=Number(d.energiaPromedio)||0, cambios=Number(d.cambiosBruscosDetectados)||0;
+  let calidad='BUENA';
+  if(dur<4) calidad='INSUFICIENTE';
+  else if(en<.02||en>.94) calidad='BAJA';
+  else if(cambios>8) calidad='MEDIA';
+  return {resultado:'DATOS TÉCNICOS',confianza:'NO APLICA',calidadMuestra:calidad,
+   datosObtenidos:{duracionSegundos:dur.toFixed(1),nivelEnergia:en.toFixed(3),variacionesBruscas:cambios},
+   explicacion:'Describe únicamente las condiciones técnicas de la grabación.',
+   limitacion:'NO INDICA NI DESCARTA USO DE INTELIGENCIA ARTIFICIAL'};
+ }
 });
+
+Herramientas.registrar({
+ id:'analisis_temporal',nombre:'Duración de la muestra',tipo:'tecnica',disponible:true,
+ async analizar(d){
+  const ok=(Number(d.duracionTotal)||0)>=4;
+  return {resultado:'DATOS TÉCNICOS',confianza:'NO APLICA',calidadMuestra:ok?'SUFICIENTE':'INSUFICIENTE',
+   datosObtenidos:{duracionValida:ok},explicacion:'Indica si existe tiempo suficiente para el procesamiento.',limitacion:'NO INDICA NI DESCARTA USO DE IA'};
+ }
+});
+
+Herramientas.registrar({
+ id:'detector_especializado',nombre:'Detector anti-suplantación',tipo:'especializada',disponible:Boolean(CONFIG.detectorEndpoint),
+ async analizar(fragmentos){
+  if(!CONFIG.detectorEndpoint)return {resultado:'NO_DISPONIBLE',confianza:'NO DISPONIBLE',calidadMuestra:'NO DISPONIBLE',
+   explicacion:'No existe un servicio de detección especializado conectado.',limitacion:'Sin detector especializado XOLO no puede estimar si el audio fue generado por IA.'};
+  if(!fragmentos.length)return {resultado:'INCONCLUSO',confianza:'NO DISPONIBLE',calidadMuestra:'INSUFICIENTE',explicacion:'No se obtuvieron fragmentos válidos.'};
+  const respuestas=[];
+  for(const blob of fragmentos){
+   const fd=new FormData();
+   fd.append('audio',blob,'fragmento_audio.webm');
+   const controller=new AbortController();
+   const timer=setTimeout(()=>controller.abort(),12000);
+   try{
+    const resp=await fetch(CONFIG.detectorEndpoint,{method:'POST',body:fd,signal:controller.signal});
+    if(resp.ok){
+     const json=await resp.json();
+     respuestas.push(json);
+    }
+   }finally{clearTimeout(timer)}
+  }
+  if(!respuestas.length)throw new Error('El detector no devolvió una respuesta válida.');
+  const validos=['AUTENTICO','INDICIOS','MANIPULACION_MEDIA','MANIPULACION_ALTA','CONFLICTIVO','INCONCLUSO'];
+  const conteo={};
+  respuestas.forEach(r=>{const x=String(r.resultado||'INCONCLUSO').toUpperCase();const k=validos.includes(x)?x:'INCONCLUSO';conteo[k]=(conteo[k]||0)+1});
+  const orden=Object.entries(conteo).sort((a,b)=>b[1]-a[1]);
+  const conflict=orden.length>1&&orden[0][1]===orden[1][1];
+  return {resultado:conflict?'CONFLICTIVO':orden[0][0],
+   confianza:respuestas[0].confianza??'NO DISPONIBLE',calidadMuestra:respuestas[0].calidad??'NO DISPONIBLE',
+   explicacion:`El detector especializado respondió sobre ${respuestas.length} fragmento(s).`,
+   limitacion:'La estimación no constituye certeza absoluta.'};
+ }
+});
+
+const CerebroXOLO={
+ dictaminar(resultados){
+  const esp=resultados.find(x=>x.tipo==='especializada');
+  const tec=resultados.filter(x=>x.tipo==='tecnica');
+  if(!esp||esp.resultado==='NO_DISPONIBLE')return {...estadoUI.NO_DISPONIBLE,
+   explicacionFinal:'Las mediciones técnicas no pueden determinar por sí solas si existe IA. No hay detector especializado conectado.',
+   datosTecnicos:tec.map(x=>`${x.nombre}: ${x.calidadMuestra}`).join(' | ')};
+  if(esp.resultado==='ERROR'||esp.calidadMuestra==='INSUFICIENTE')return {...estadoUI.INCONCLUSO,explicacionFinal:esp.explicacion||'No fue posible completar el análisis.'};
+  const e=estadoUI[String(esp.resultado).toUpperCase()]||estadoUI.INCONCLUSO;
+  return {...e,explicacionFinal:esp.explicacion||'Sin explicación adicional.',datosTecnicos:tec.map(x=>`${x.nombre}: ${x.calidadMuestra}`).join(' | '),confianza:esp.confianza};
+ }
+};
+
+let estado={analizando:false,finalizando:false,fragmentos:[],capturas:0,stream:null,recorder:null,audioContext:null,analyser:null,intervalo:null,seguridad:null,formato:null,inicio:0,energia:0,energiaAnterior:0,cambios:0};
+
+function aplicarEstado(nivel){
+ const f=$('formaCentral');
+ f.className='forma-central';
+ f.classList.add({ok:'estado-ok',warn:'estado-warn',peligro:'estado-peligro',neutral:'estado-neutral',inconcluso:'estado-inconcluso',conflictivo:'estado-conflictivo'}[nivel]||'estado-inconcluso');
+ document.body.className='';
+ if(nivel==='ok')document.body.classList.add('ok');
+ if(nivel==='warn'||nivel==='conflictivo')document.body.classList.add('warn');
+ if(nivel==='peligro')document.body.classList.add('danger');
+ if(nivel==='neutral')document.body.classList.add('neutral');
+}
+
+function detenerAudio(){
+ if(estado.intervalo){clearInterval(estado.intervalo);estado.intervalo=null}
+ if(estado.seguridad){clearTimeout(estado.seguridad);estado.seguridad=null}
+ if(estado.recorder&&estado.recorder.state!=='inactive'){try{estado.recorder.stop()}catch{}}
+ estado.recorder=null;
+ if(estado.audioContext){try{estado.audioContext.close()}catch{}}
+ estado.audioContext=null;estado.analyser=null;
+ if(estado.stream){estado.stream.getTracks().forEach(t=>t.stop())}
+ estado.stream=null;
+}
+
+function resetAnalisis(){
+ detenerAudio();
+ estado={...estado,analizando:false,finalizando:false,fragmentos:[],capturas:0,inicio:0,energia:0,energiaAnterior:0,cambios:0,formato:null};
+}
+
+function cerrarEmerg(){ $('pantallaEmergente').classList.remove('activa');$('contenidoEmergente').innerHTML='' }
+function cerrarAsist(){ $('fondoOscuroAsistente').classList.remove('activo');$('menuAsistente').classList.remove('activo') }
+
+async function finalizarAudio(){
+ if(estado.finalizando)return;
+ estado.finalizando=true;
+ await new Promise(r=>setTimeout(r,250));
+ detenerAudio();
+ if(!estado.fragmentos.length){
+  aplicarEstado('inconcluso');
+  $('contenidoEmergente').innerHTML='<h2>⚪ INCONCLUSO</h2><div class="texto-resultado">No se obtuvo ningún fragmento de audio válido.</div>';
+  estado.analizando=false;estado.finalizando=false;return;
+ }
+ const datos={
+  duracionTotal:(Date.now()-estado.inicio)/1000,
+  energiaPromedio:estado.energia,
+  cambiosBruscosDetectados:estado.cambios,
+  fragmentos:estado.fragmentos
+ };
+ const resultados=await Herramientas.ejecutarTodas(datos);
+ const veredicto=CerebroXOLO.dictaminar(resultados);
+ aplicarEstado(veredicto.nivel);
+ $('contenidoEmergente').innerHTML=`
+ <h2>📊 VEREDICTO FINAL</h2>
+ <div class="texto-resultado">
+ <strong>${escapeHTML(veredicto.texto)}</strong><br><br>
+ ${escapeHTML(veredicto.explicacionFinal)}
+ <br><br>━━━━━━━━━━━━━━━━━━━━
+ <br>📋 DATOS TÉCNICOS:
+ <br>${escapeHTML(veredicto.datosTecnicos||'No disponibles')}
+ ${veredicto.confianza?`<br><br>🔎 Confianza reportada por detector: ${escapeHTML(veredicto.confianza)}`:''}
+ <br><br>⚠️ Las mediciones técnicas NO son prueba de IA.
+ <br>La estimación especializada tampoco representa certeza absoluta.
+ </div>
+ <button class="boton-accion" id="repetirAudio">🔄 Repetir análisis</button>`;
+ $('repetirAudio').onclick=iniciarAnalisisVoz;
+ estado.analizando=false;estado.finalizando=false;
+}
+
+async function iniciarAnalisisVoz(){
+ cerrarAsist();resetAnalisis();estado.analizando=true;estado.inicio=Date.now();
+ const cont=$('contenidoEmergente');$('pantallaEmergente').classList.add('activa');
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
+  aplicarEstado('inconcluso');cont.innerHTML='<h2>⚠️ NO COMPATIBLE</h2><div class="texto-resultado">Este dispositivo/navegador no permite la grabación necesaria.</div>';estado.analizando=false;return;
+ }
+ const formatos=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
+ estado.formato=formatos.find(x=>!MediaRecorder.isTypeSupported||MediaRecorder.isTypeSupported(x));
+ if(!estado.formato){
+  aplicarEstado('inconcluso');cont.innerHTML='<h2>⚠️ FORMATO NO COMPATIBLE</h2><div class="texto-resultado">No se encontró un formato de audio compatible.</div>';estado.analizando=false;return;
+ }
+ cont.innerHTML=`<h2>🎙️ ANÁLISIS DE AUDIO</h2>
+ <p>Coloca la llamada en altavoz y permanece en silencio. XOLO grabará hasta 4 fragmentos de 4 segundos.</p>
+ <div class="indicador-proceso" id="indicador">🎙️ Solicitando permiso...</div>
+ <button class="boton-detener" id="cancelarAudio">⏹️ Cancelar</button>`;
+ $('cancelarAudio').onclick=()=>{resetAnalisis();cerrarEmerg();aplicarEstado('neutral')};
+ try{
+  estado.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  estado.audioContext=new (window.AudioContext||window.webkitAudioContext)();
+  estado.analyser=estado.audioContext.createAnalyser();
+  estado.analyser.fftSize=1024;
+  estado.audioContext.createMediaStreamSource(estado.stream).connect(estado.analyser);
+
+  estado.recorder=new MediaRecorder(estado.stream,{mimeType:estado.formato});
+
+  estado.recorder.ondataavailable=e=>{
+   if(e.data&&e.data.size>0)estado.fragmentos.push(e.data);
+  };
+
+  estado.recorder.onstop=()=>{
+   if(!estado.analizando||estado.finalizando)return;
+   if(estado.fragmentos.length>=CONFIG.maxFragmentos){finalizarAudio();return}
+   setTimeout(()=>{if(estado.analizando&&!estado.finalizando)grabarFragmento()},180);
+  };
+
+  function grabarFragmento(){
+   if(!estado.recorder||estado.recorder.state!=='inactive')return;
+   estado.recorder.start();
+   const n=estado.fragmentos.length+1;
+   $('indicador').textContent=`🎙️ Escuchando fragmento ${n}/${CONFIG.maxFragmentos}...`;
+   setTimeout(()=>{
+    if(estado.recorder&&estado.recorder.state==='recording'&&estado.analizando)estado.recorder.stop();
+   },CONFIG.duracionFragmentoMs);
+  }
+
+  grabarFragmento();
+
+  estado.seguridad=setTimeout(()=>{if(estado.analizando)finalizarAudio()},CONFIG.tiempoTotalMaximoMs);
+
+  const buffer=new Uint8Array(estado.analyser.frequencyBinCount);
+  estado.intervalo=setInterval(()=>{
+   if(!estado.analizando||estado.finalizando)return;
+   estado.analyser.getByteFrequencyData(buffer);
+   const energia=buffer.reduce((a,b)=>a+b,0)/(255*buffer.length);
+   estado.energia=estado.energia*.9+energia*.1;
+   if(Math.abs(energia-estado.energiaAnterior)>.35)estado.cambios++;
+   estado.energiaAnterior=energia;
+  },100);
+ }catch(e){
+  detenerAudio();estado.analizando=false;aplicarEstado('inconcluso');
+  cont.innerHTML=`<h2>⚪ NO SE PUDO REALIZAR</h2><div class="texto-resultado">${escapeHTML(e.message)}<br><br>Autoriza el micrófono para realizar el análisis.</div>`;
+ }
+}
+
+function iniciarRegistroImagenes(){
+ cerrarAsist();resetAnalisis();estado.analizando=true;estado.capturas=0;
+ const cont=$('contenidoEmergente');$('pantallaEmergente').classList.add('activa');
+ function render(){
+  cont.innerHTML=`<h2>📹 REGISTRO DE CAPTURAS</h2>
+  <p>Selecciona hasta 4 imágenes. Esta función <b>registra</b> capturas; actualmente no existe detector de imágenes conectado.</p>
+  ${estado.capturas<4?`<button class="boton-accion" id="selImg">📸 Seleccionar captura ${estado.capturas+1} de 4</button>`:'<div class="texto-resultado">✅ Las 4 capturas fueron registradas.</div>'}
+  <div class="nota-tecnica">Registrar una imagen no significa determinar si fue generada por IA.</div>`;
+  if(estado.capturas<4)$('selImg').onclick=()=>$('selectorImagenAnalisis').click();
+ }
+ render();
+ $('selectorImagenAnalisis').onchange=e=>{
+  if(!e.target.files[0])return;
+  estado.capturas++;
+  e.target.value='';render();
+  if(estado.capturas>=4)estado.analizando=false;
+ };
+}
+
+function mostrarPersonas(){
+ const lista=DatosGuardados.getPersonas();
+ $('contenidoEmergente').innerHTML=`<h2>👥 MIS PERSONAS</h2>
+ <p>Los registros son referencias locales. No se usan como detector de IA por sí mismos.</p>
+ <div class="lista-registros">${lista.length?lista.map(p=>`<div class="item-registro">✅ ${escapeHTML(p.nombre)} — ${escapeHTML(p.tipo)} — ${escapeHTML(p.archivo||'Sin archivo')}</div>`).join(''):'<div class="nota-tecnica">Aún no hay personas registradas.</div>'}</div>
+ <button class="boton-accion" id="agregarPersona">➕ Agregar persona</button>`;
+ $('pantallaEmergente').classList.add('activa');
+ $('agregarPersona').onclick=()=>{
+  const nombre=prompt('Nombre de la persona:');if(!nombre)return;
+  const voz=confirm('¿Deseas registrar una referencia de voz? Aceptar = Voz / Cancelar = Rostro');
+  const input=voz?$('selectorAudioRegistro'):$('selectorImagenRegistro');
+  input.value='';
+  input.onchange=e=>{
+   if(!e.target.files[0])return;
+   DatosGuardados.agregarPersona({nombre:nombre.trim(),tipo:voz?'Voz':'Rostro',archivo:e.target.files[0].name});
+   input.value='';mostrarPersonas();
+  };
+  input.click();
+ };
+}
+
+function mostrarEmergencia(){
+ const d=DatosGuardados.getEmergencia();
+ $('contenidoEmergente').innerHTML=`<h2>🚨 CONTACTO DE EMERGENCIA</h2>
+ <p>Guarda un contacto de confianza. XOLO no realiza llamadas ni envía mensajes automáticamente.</p>
+ <div class="grupo-input"><label>Nombre</label><input id="emNombre" value="${escapeHTML(d.nombre)}"></div>
+ <div class="grupo-input"><label>Número</label><input id="emNumero" type="tel" value="${escapeHTML(d.numero)}"></div>
+ <button class="boton-accion" id="guardarEmerg">💾 Guardar</button>`;
+ $('pantallaEmergente').classList.add('activa');
+ $('guardarEmerg').onclick=()=>{
+  const nombre=$('emNombre').value.trim(),numero=$('emNumero').value.trim();
+  if(!nombre||!numero){alert('Completa nombre y número.');return}
+  DatosGuardados.setEmergencia({nombre,numero});alert('✅ Contacto guardado');cerrarEmerg();
+ };
+}
+
+function mostrarInstrucciones(){
+ $('contenidoEmergente').innerHTML=`<h2>📖 INSTRUCCIONES</h2><div class="texto-resultado">
+1️⃣ Pulsa la figura central.<br>
+2️⃣ Entra a ASISTENCIA XOLO.<br>
+3️⃣ Selecciona Análisis de audio.<br>
+4️⃣ Autoriza el micrófono.<br>
+5️⃣ Pon la llamada en altavoz y permanece en silencio.<br>
+6️⃣ XOLO procesará hasta 4 fragmentos reales.<br><br>
+📹 Las capturas de imagen actualmente solo se registran.<br>
+👥 Las personas de confianza se guardan localmente.<br><br>
+⚠️ Sin detector especializado conectado, XOLO NO puede afirmar que una voz sea IA.
+</div>`;
+ $('pantallaEmergente').classList.add('activa');
+}
+
+function mostrarApoyo(){
+ $('contenidoEmergente').innerHTML=`<h2>☕ APOYO</h2><div class="texto-resultado">Si tienes dudas sobre una llamada o archivo, no tomes una decisión importante basándote únicamente en el resultado de XOLO. Verifica la identidad por otro medio independiente.</div>`;
+ $('pantallaEmergente').classList.add('activa');
+}
+
+$('formaCentral').onclick=()=>{$('pantallaOpciones').classList.add('activa')};
+$('cerrarOpciones').onclick=()=>$('pantallaOpciones').classList.remove('activa');
+$('btnAsistencia').onclick=()=>{$('fondoOscuroAsistente').classList.add('activo');$('menuAsistente').classList.add('activo')};
+$('fondoOscuroAsistente').onclick=cerrarAsist;
+$('opcionSoloVoz').onclick=iniciarAnalisisVoz;
+$('opcionVideoLlamada').onclick=iniciarRegistroImagenes;
+$('cerrarEmergente').onclick=()=>{resetAnalisis();cerrarEmerg()};
+$('btnApoyo').onclick=mostrarApoyo;
+$('btnInstrucciones').onclick=mostrarInstrucciones;
+$('btnEmergencia').onclick=mostrarEmergencia;
+$('btnMisPersonas').onclick=mostrarPersonas;
 </script>
 </body>
 </html>
