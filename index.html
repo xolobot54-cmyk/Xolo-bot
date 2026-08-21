@@ -103,7 +103,7 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
     <div class="boton-circular" id="btnApoyo"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
     <div class="boton-circular" id="btnInstrucciones"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
     <div class="boton-circular" id="btnEmergencia"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
-    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas<br>y voz del dueño</span></div>
+    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas<br>y voces</span></div>
     <div class="boton-circular" id="btnAsistencia">
       <div class="circulo"><span class="icono-boton-xolo">◈</span></div>
       <span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span>
@@ -116,7 +116,6 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 <div id="menuAsistente" class="menu-asistente">
   <h3 class="titulo-asistente">🤖 ¿QUÉ ESTÁS RECIBIENDO?</h3>
   <div class="opcion-asistente" id="opcionSoloVoz">📞 Análisis de audio</div>
-  <div class="opcion-asistente" id="opcionVideoLlamada">📹 Registro de capturas de imagen</div>
   <div style="font-size:12px;color:#aaa;margin-top:15px;text-align:center">
     ⚠️ No se accede directamente al contenido de llamadas de otras aplicaciones
   </div>
@@ -141,7 +140,10 @@ document.addEventListener('DOMContentLoaded',function(){
     duracionReferencia: 30,
     minReferencia: 20,
     voiceReferenceDB: 'xolo_voice_reference',
-    voiceReferenceStore: 'owner_profile'
+    voiceReferenceStore: 'owner_profile',
+    familyVoiceStore: 'family_profiles',
+    maxFamilyVoices: 4,
+    emergencyContactKey: 'xolo_emergency_contact'
   };
 
   // ==================================================
@@ -564,12 +566,15 @@ document.addEventListener('DOMContentLoaded',function(){
 
     abrirDB:function(){
       return new Promise((resolve,reject)=>{
-        const request=indexedDB.open(CONFIG.voiceReferenceDB,1);
+        const request=indexedDB.open(CONFIG.voiceReferenceDB,2);
 
         request.onupgradeneeded=()=>{
           const db=request.result;
           if(!db.objectStoreNames.contains(CONFIG.voiceReferenceStore)){
             db.createObjectStore(CONFIG.voiceReferenceStore,{keyPath:'id'});
+          }
+          if(!db.objectStoreNames.contains(CONFIG.familyVoiceStore)){
+            db.createObjectStore(CONFIG.familyVoiceStore,{keyPath:'id'});
           }
         };
 
@@ -656,6 +661,63 @@ document.addEventListener('DOMContentLoaded',function(){
         Math.abs(Number(a.centroide||0)-Number(b.centroide||0))/.50*.45+
         Math.abs(Number(a.cruceCero||0)-Number(b.cruceCero||0))/.20*.25
       );
+    }
+  };
+
+  // ==================================================
+  // 👨‍👩‍👧 VOCES DE FAMILIARES / PERSONAS DE CONFIANZA
+  // ==================================================
+  const VocesFamilia={
+
+    abrirDB:async function(){
+      return VozPropietario.abrirDB();
+    },
+
+    listar:async function(){
+      const db=await this.abrirDB();
+      return await new Promise((resolve,reject)=>{
+        const tx=db.transaction(CONFIG.familyVoiceStore,'readonly');
+        let store;
+        try{
+          store=tx.objectStore(CONFIG.familyVoiceStore);
+        }catch(e){
+          resolve([]);
+          return;
+        }
+        const req=store.getAll();
+        req.onsuccess=()=>resolve(req.result||[]);
+        req.onerror=()=>reject(req.error);
+      });
+    },
+
+    guardar:async function(nombre,perfil){
+      const db=await this.abrirDB();
+      const lista=await this.listar();
+      if(lista.length>=CONFIG.maxFamilyVoices){
+        throw new Error(`Máximo de ${CONFIG.maxFamilyVoices} voces de confianza.`);
+      }
+      const id='family_'+Date.now();
+      return await new Promise((resolve,reject)=>{
+        const tx=db.transaction(CONFIG.familyVoiceStore,'readwrite');
+        tx.objectStore(CONFIG.familyVoiceStore).put({
+          id,
+          nombre:String(nombre||'Persona de confianza').trim(),
+          creado:new Date().toISOString(),
+          perfil
+        });
+        tx.oncomplete=()=>resolve(id);
+        tx.onerror=()=>reject(tx.error);
+      });
+    },
+
+    eliminar:async function(id){
+      const db=await this.abrirDB();
+      return await new Promise((resolve,reject)=>{
+        const tx=db.transaction(CONFIG.familyVoiceStore,'readwrite');
+        tx.objectStore(CONFIG.familyVoiceStore).delete(id);
+        tx.oncomplete=resolve;
+        tx.onerror=()=>reject(tx.error);
+      });
     }
   };
 
@@ -775,9 +837,6 @@ document.addEventListener('DOMContentLoaded',function(){
   const opcionSoloVoz =
     document.getElementById('opcionSoloVoz');
 
-  const opcionVideoLlamada =
-    document.getElementById('opcionVideoLlamada');
-
   const pantallaEmergente =
     document.getElementById('pantallaEmergente');
 
@@ -786,9 +845,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
   const cerrarEmergente =
     document.getElementById('cerrarEmergente');
-
-  const selectorImagenAnalisis =
-    document.getElementById('selectorImagenAnalisis');
 
   // ==================================================
   // 🎨 ESTADO VISUAL
@@ -1248,42 +1304,207 @@ ${dictamen.fuentes}
     }
   }
 
-  async function mostrarVozPropietario(){
+  async function mostrarMisPersonas(){
 
     const referencia=await VozPropietario.cargar();
+    const familiares=await VocesFamilia.listar();
 
     contenidoEmergente.innerHTML=`
-      <h2>👤 VOZ DEL PROPIETARIO</h2>
+      <h2>👥 MIS PERSONAS Y VOCES</h2>
 
       <div class="tarjeta-voz">
-        Estado:
+        <strong>🎙️ VOZ DEL PROPIETARIO</strong>
         <div class="estado-voz ${referencia?'ok':'neutral'}">
           ${referencia?'🟢 REFERENCIA GUARDADA':'⚪ SIN REFERENCIA'}
         </div>
+        <button class="boton-accion" id="btnVozPropietario">
+          🎙️ ${referencia?'Actualizar voz del propietario':'Registrar voz del propietario'}
+        </button>
+        ${referencia?`<button class="boton-detener" id="btnBorrarVozPropietario">🗑️ Borrar referencia</button>`:''}
       </div>
 
-      <button class="boton-accion" id="btnCrearVoz">
-        🎙️ ${referencia?'Actualizar referencia':'Crear referencia'}
-      </button>
+      <div class="tarjeta-voz">
+        <strong>👨‍👩‍👧 VOCES DE FAMILIARES / CONOCIDOS</strong>
+        <div class="estado-voz ${familiares.length?'ok':'neutral'}">
+          ${familiares.length} de ${CONFIG.maxFamilyVoices} referencias guardadas
+        </div>
+        <button class="boton-accion" id="btnVocesFamilia">
+          👥 Registrar / administrar voces familiares
+        </button>
+      </div>
 
-      ${referencia?`
-        <button class="boton-detener" id="btnBorrarVoz">
-          🗑️ Borrar referencia
-        </button>`:''}
+      <div class="nota-tecnica">
+        Las voces guardadas sirven como referencias de comparación.
+        No constituyen identificación absoluta.
+      </div>
     `;
 
     pantallaEmergente.classList.add('activa');
 
-    document.getElementById('btnCrearVoz')
+    document.getElementById('btnVozPropietario')
       .addEventListener('click',configurarVozPropietario);
 
-    const borrar=document.getElementById('btnBorrarVoz');
-
+    const borrar=document.getElementById('btnBorrarVozPropietario');
     if(borrar){
       borrar.addEventListener('click',async()=>{
         await VozPropietario.eliminar();
-        mostrarVozPropietario();
+        mostrarMisPersonas();
       });
+    }
+
+    document.getElementById('btnVocesFamilia')
+      .addEventListener('click',mostrarVocesFamilia);
+  }
+
+  async function mostrarVocesFamilia(){
+
+    const familiares=await VocesFamilia.listar();
+
+    contenidoEmergente.innerHTML=`
+      <h2>👨‍👩‍👧 VOCES DE FAMILIARES</h2>
+      <div class="tarjeta-voz">
+        Puedes guardar hasta <strong>${CONFIG.maxFamilyVoices}</strong> voces
+        de familiares o personas de confianza.
+      </div>
+
+      ${familiares.length?familiares.map(p=>`
+        <div class="tarjeta-voz">
+          <strong>👤 ${escapeHtml(p.nombre)}</strong>
+          <div class="estado-voz ok">🟢 REFERENCIA GUARDADA</div>
+          <button class="boton-detener" data-borrar-familia="${p.id}">🗑️ Borrar voz</button>
+        </div>
+      `).join(''):'<div class="nota-tecnica">No hay voces familiares guardadas.</div>'}
+
+      ${familiares.length<CONFIG.maxFamilyVoices?`
+        <button class="boton-accion" id="btnAgregarFamiliar">
+          🎙️ Registrar nueva voz familiar
+        </button>`:''}
+
+      <button class="boton-accion" id="btnVolverPersonas">
+        ↩️ Volver a Mis personas
+      </button>
+    `;
+
+    pantallaEmergente.classList.add('activa');
+
+    document.querySelectorAll('[data-borrar-familia]').forEach(btn=>{
+      btn.addEventListener('click',async()=>{
+        await VocesFamilia.eliminar(btn.dataset.borrarFamilia);
+        mostrarVocesFamilia();
+      });
+    });
+
+    const agregar=document.getElementById('btnAgregarFamiliar');
+    if(agregar) agregar.addEventListener('click',configurarVozFamiliar);
+
+    document.getElementById('btnVolverPersonas')
+      .addEventListener('click',mostrarMisPersonas);
+  }
+
+  function escapeHtml(valor){
+    return String(valor||'')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  async function configurarVozFamiliar(){
+
+    const nombre=prompt('Nombre de la persona cuya voz vas a registrar:');
+    if(!nombre||!nombre.trim()){
+      mostrarVocesFamilia();
+      return;
+    }
+
+    cerrarRecursos();
+    analizando=true;
+
+    contenidoEmergente.innerHTML=`
+      <h2>🎙️ VOZ DE FAMILIAR / CONOCIDO</h2>
+      <div class="tarjeta-voz">
+        Persona: <strong>${escapeHtml(nombre.trim())}</strong><br>
+        Lee durante aproximadamente <strong>${CONFIG.duracionReferencia} segundos</strong>.
+      </div>
+      <div class="texto-resultado visible">
+        “Esta es mi voz de referencia para XOLO.
+        Hablaré de manera natural, con un ritmo normal,
+        para crear una muestra estable de mi voz.”
+      </div>
+      <div class="indicador-proceso activo">🎙️ Preparando...</div>
+      <button class="boton-detener" id="btnCancelarReferenciaFamiliar">⏹️ Cancelar</button>
+    `;
+
+    pantallaEmergente.classList.add('activa');
+
+    document.getElementById('btnCancelarReferenciaFamiliar')
+      .addEventListener('click',cerrarRecursos);
+
+    try{
+      const existentes=await VocesFamilia.listar();
+      if(existentes.length>=CONFIG.maxFamilyVoices){
+        throw new Error(`Ya tienes ${CONFIG.maxFamilyVoices} voces guardadas.`);
+      }
+
+      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
+        audio:{echoCancellation:false,noiseSuppression:false}
+      });
+
+      audioContext=new(window.AudioContext||window.webkitAudioContext)();
+      analyser=audioContext.createAnalyser();
+      analyser.fftSize=2048;
+      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
+
+      const muestras=[];
+      const inicio=Date.now();
+
+      intervaloAnalisis=setInterval(async()=>{
+        if(!analizando)return;
+
+        const transcurrido=(Date.now()-inicio)/1000;
+        const datos=new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(datos);
+        muestras.push(VozPropietario.extraerCaracteristicas(datos));
+
+        const indicador=document.querySelector('.indicador-proceso');
+        if(indicador){
+          indicador.textContent=`🎙️ Grabando ${escapeHtml(nombre.trim())}... ${transcurrido.toFixed(1)} / ${CONFIG.duracionReferencia}s`;
+        }
+
+        if(transcurrido>=CONFIG.duracionReferencia){
+          clearInterval(intervaloAnalisis);
+          intervaloAnalisis=null;
+
+          if(muestras.length<CONFIG.minReferencia){
+            cerrarRecursos();
+            contenidoEmergente.innerHTML=`<h2>⚪ REFERENCIA INSUFICIENTE</h2><div class="texto-resultado visible">No se obtuvieron suficientes muestras. Inténtalo nuevamente.</div>`;
+            pantallaEmergente.classList.add('activa');
+            return;
+          }
+
+          await VocesFamilia.guardar(
+            nombre.trim(),
+            VozPropietario.perfilDesdeMuestras(muestras)
+          );
+
+          cerrarRecursos();
+          contenidoEmergente.innerHTML=`
+            <h2>🟢 VOZ GUARDADA</h2>
+            <div class="texto-resultado visible">
+              Se guardó la voz de <strong>${escapeHtml(nombre.trim())}</strong> como referencia local.
+              <br><br>
+              Esta referencia no representa una identificación absoluta.
+            </div>
+          `;
+          pantallaEmergente.classList.add('activa');
+        }
+      },1000);
+
+    }catch(err){
+      cerrarRecursos();
+      contenidoEmergente.innerHTML=`<h2>⚪ NO SE PUDO GUARDAR LA VOZ</h2><div class="texto-resultado visible">${escapeHtml(err.message)}</div>`;
+      pantallaEmergente.classList.add('activa');
     }
   }
 
@@ -1425,13 +1646,6 @@ ${dictamen.fuentes}
     }
   );
 
-  opcionVideoLlamada.addEventListener(
-    'click',
-    () => {
-      cerrarRecursos();
-      iniciarAnalisisVideo();
-    }
-  );
 
   // ==================================================
   // 📖 INSTRUCCIONES
@@ -1468,13 +1682,13 @@ ${dictamen.fuentes}
         <p><strong>Reglas importantes:</strong></p>
 
         <p>
-          • Puedes guardar una voz de referencia del propietario desde "Mis personas".
-          XOLO intentará reconocer esa voz primero durante una llamada.
+          • En "Mis personas" encontrarás dos registros separados:
+          <strong>Voz del propietario</strong> y <strong>Voces de familiares / conocidos</strong>.
         </p>
 
         <p>
-          • Si identifica una voz compatible, priorizará los recursos de análisis
-          en la segunda voz cuando pueda separarla.
+          • Durante una llamada, XOLO buscará primero la voz del propietario.
+          Cuando pueda separar otro interlocutor, priorizará el análisis de esa segunda voz.
         </p>
 
         <p>
@@ -1532,15 +1746,93 @@ ${dictamen.fuentes}
   btnEmergencia.addEventListener(
     'click',
     () => {
-
-      contenidoEmergente.innerHTML = `
-        <h2>🚨 CONTACTO DE EMERGENCIA</h2>
-        <p>Función en desarrollo.</p>
-      `;
-
-      pantallaEmergente.classList.add('activa');
+      mostrarContactoEmergencia();
     }
   );
+
+  function cargarContactoEmergencia(){
+    try{
+      return JSON.parse(localStorage.getItem(CONFIG.emergencyContactKey)||'null');
+    }catch(e){
+      return null;
+    }
+  }
+
+  function guardarContactoEmergencia(contacto){
+    localStorage.setItem(CONFIG.emergencyContactKey,JSON.stringify(contacto));
+  }
+
+  function mostrarContactoEmergencia(){
+
+    const contacto=cargarContactoEmergencia();
+
+    contenidoEmergente.innerHTML=`
+      <h2>🚨 CONTACTO DE EMERGENCIA</h2>
+
+      <div class="tarjeta-voz">
+        <strong>${contacto?'🟢 CONTACTO REGISTRADO':'⚪ SIN CONTACTO REGISTRADO'}</strong>
+        ${contacto?`<br><br>👤 ${escapeHtml(contacto.nombre)}<br>📞 ${escapeHtml(contacto.telefono)}`:''}
+      </div>
+
+      <button class="boton-accion" id="btnRegistrarEmergencia">
+        📱 ${contacto?'Actualizar contacto':'Registrar contacto de emergencia'}
+      </button>
+
+      ${contacto?`
+        <button class="boton-accion" id="btnLlamarEmergencia">📞 Llamar al contacto</button>
+        <button class="boton-detener" id="btnBorrarEmergencia">🗑️ Borrar contacto</button>
+      `:''}
+
+      <div class="nota-tecnica">
+        El registro se guarda localmente en este dispositivo.
+        XOLO no envía mensajes automáticamente sin una acción autorizada del usuario.
+      </div>
+    `;
+
+    pantallaEmergente.classList.add('activa');
+
+    document.getElementById('btnRegistrarEmergencia')
+      .addEventListener('click',registrarContactoEmergencia);
+
+    const llamar=document.getElementById('btnLlamarEmergencia');
+    if(llamar){
+      llamar.addEventListener('click',()=>{
+        const c=cargarContactoEmergencia();
+        if(c) window.location.href='tel:'+c.telefono;
+      });
+    }
+
+    const borrar=document.getElementById('btnBorrarEmergencia');
+    if(borrar){
+      borrar.addEventListener('click',()=>{
+        localStorage.removeItem(CONFIG.emergencyContactKey);
+        mostrarContactoEmergencia();
+      });
+    }
+  }
+
+  function registrarContactoEmergencia(){
+    const nombre=prompt('Nombre del contacto de emergencia:');
+    if(!nombre||!nombre.trim())return;
+
+    const telefono=prompt('Número de teléfono del contacto:');
+    if(!telefono||!telefono.trim())return;
+
+    const limpio=telefono.trim().replace(/[^0-9+]/g,'');
+    if(limpio.length<7){
+      alert('El número parece demasiado corto. Verifícalo.');
+      return;
+    }
+
+    guardarContactoEmergencia({
+      nombre:nombre.trim(),
+      telefono:limpio,
+      actualizado:new Date().toISOString()
+    });
+
+    mostrarContactoEmergencia();
+  }
+
 
   // ==================================================
   // 👥 MIS PERSONAS
@@ -1548,7 +1840,7 @@ ${dictamen.fuentes}
   btnMisPersonas.addEventListener(
     'click',
     () => {
-      mostrarVozPropietario();
+      mostrarMisPersonas();
     }
   );
 
