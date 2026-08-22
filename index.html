@@ -4,1176 +4,609 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>XOLO ANTI-IA</title>
+<title>XOLO ANTI-IA — AUDIO V1</title>
 <link rel="manifest" href="manifest.json">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,sans-serif
 }
 
 :root{
---bg:#000000;
---base:#a855f7;
---ok:#22c55e;
---warn:#eab308;
---danger:#ef4444;
---neutral:#888888
+  --bg:#000;
+  --base:#a855f7;
+  --ok:#22c55e;
+  --warn:#eab308;
+  --danger:#ef4444;
+  --neutral:#888;
 }
 
 body{
-background:var(--bg);
-min-height:100vh;
-color:#fff;
-overflow:hidden;
-transition:background .8s ease
+  background:#000;
+  color:#fff;
+  min-height:100vh;
+  overflow:hidden;
 }
 
 body.ok{
-background:radial-gradient(circle at center,rgba(34,197,94,.12),transparent 65%),#000
+  background:radial-gradient(circle,rgba(34,197,94,.13),transparent 65%),#000
 }
 
 body.warn{
-background:radial-gradient(circle at center,rgba(234,179,8,.12),transparent 65%),#000
+  background:radial-gradient(circle,rgba(234,179,8,.13),transparent 65%),#000
 }
 
 body.danger{
-background:radial-gradient(circle at center,rgba(239,68,68,.18),transparent 65%),#000
+  background:radial-gradient(circle,rgba(239,68,68,.18),transparent 65%),#000
 }
 
 body.neutral{
-background:radial-gradient(circle at center,rgba(136,136,136,.12),transparent 65%),#000
+  background:radial-gradient(circle,rgba(136,136,136,.12),transparent 65%),#000
 }
 
 .pantalla-inicio{
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-transition:opacity .5s ease
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center
 }
 
 .forma-central{
-width:280px;
-height:280px;
-border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;
-background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce 70%,#5b21b6);
-box-shadow:0 0 80px rgba(168,85,247,.5),inset 0 0 60px rgba(255,255,255,.1);
-cursor:pointer;
-user-select:none;
-transition:all .8s ease;
-animation:respira 5s ease-in-out infinite;
-display:flex;
-align-items:center;
-justify-content:center
+  width:280px;
+  height:280px;
+  border-radius:60% 40% 70% 30%/50% 60% 40% 50%;
+  background:radial-gradient(
+    circle at 30% 30%,
+    #c084fc,
+    #9333ea 40%,
+    #7e22ce 70%,
+    #5b21b6
+  );
+  box-shadow:
+    0 0 80px rgba(168,85,247,.5),
+    inset 0 0 60px rgba(255,255,255,.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  animation:respira 5s ease-in-out infinite
 }
 
-.forma-central .icono-xolo{
-font-size:90px;
-color:rgba(255,255,255,.9);
-text-shadow:0 0 20px rgba(255,255,255,.3)
-}
-
-.forma-central:active{
-transform:scale(.95)
-}
-
-@keyframes respira{
-0%,100%{
-border-radius:60% 40% 70% 30% / 50% 60% 40% 50%;
-transform:scale(1)
-}
-25%{
-border-radius:50% 60% 50% 60% / 60% 50% 60% 40%
-}
-50%{
-border-radius:40% 60% 60% 40% / 40% 50% 60% 50%;
-transform:scale(1.07)
-}
-75%{
-border-radius:60% 40% 60% 40% / 50% 60% 40% 60%
-}
-}
-
-@keyframes latidoFuerte{
-0%,100%{transform:scale(1)}
-50%{transform:scale(1.09)}
+.icono-xolo{
+  font-size:90px;
+  color:#fff
 }
 
 .forma-central.estado-ok{
-background:radial-gradient(circle at 30% 30%,#86efac,#4ade80 40%,#22c55e 70%,#16a34a);
-box-shadow:0 0 70px rgba(34,197,94,.5),inset 0 0 60px rgba(255,255,255,.1)
+  background:radial-gradient(
+    circle at 30% 30%,
+    #86efac,
+    #4ade80 40%,
+    #22c55e 70%,
+    #16a34a
+  )
 }
 
 .forma-central.estado-warn{
-background:radial-gradient(circle at 30% 30%,#fef08a,#facc15 40%,#eab308 70%,#ca8a04);
-box-shadow:0 0 70px rgba(234,179,8,.5),inset 0 0 60px rgba(255,255,255,.1)
+  background:radial-gradient(
+    circle at 30% 30%,
+    #fef08a,
+    #facc15 40%,
+    #eab308 70%,
+    #ca8a04
+  )
 }
 
 .forma-central.estado-peligro{
-background:radial-gradient(circle at 30% 30%,#fca5a5,#f87171 40%,#ef4444 70%,#dc2626);
-box-shadow:0 0 80px rgba(239,68,68,.6),inset 0 0 60px rgba(255,255,255,.15);
-animation:latidoFuerte .9s ease-in-out infinite!important
+  background:radial-gradient(
+    circle at 30% 30%,
+    #fca5a5,
+    #f87171 40%,
+    #ef4444 70%,
+    #dc2626
+  );
+  animation:latido .9s infinite
 }
 
-.forma-central.estado-neutral{
-background:radial-gradient(circle at 30% 30%,#a8a8a8,#888 40%,#666 70%,#444);
-box-shadow:0 0 60px rgba(136,136,136,.4),inset 0 0 60px rgba(255,255,255,.05)
-}
-
+.forma-central.estado-neutral,
 .forma-central.estado-inconcluso{
-background:radial-gradient(circle at 30% 30%,#e5e7eb,#9ca3af 40%,#6b7280 70%,#4b5563);
-box-shadow:0 0 60px rgba(107,114,128,.4),inset 0 0 60px rgba(255,255,255,.05)
+  background:radial-gradient(
+    circle at 30% 30%,
+    #ddd,
+    #888 45%,
+    #444
+  )
 }
 
 .forma-central.estado-conflictivo{
-background:radial-gradient(circle at 30% 30%,#fcd34d,#f59e0b 40%,#d97706 70%,#b45309);
-box-shadow:0 0 70px rgba(245,158,11,.5),inset 0 0 60px rgba(255,255,255,.1)
+  background:radial-gradient(
+    circle at 30% 30%,
+    #fcd34d,
+    #f59e0b 45%,
+    #b45309
+  )
 }
 
-.pantalla-opciones{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#050508;
-z-index:20;
-padding:40px 20px 20px;
-display:none;
-opacity:0;
-transition:opacity .5s ease;
-overflow-y:auto
+@keyframes respira{
+  0%,100%{
+    transform:scale(1)
+  }
+  50%{
+    transform:scale(1.07);
+    border-radius:40% 60% 60% 40%/40% 50% 60% 50%
+  }
 }
 
-.pantalla-opciones.activa{
-display:block;
-opacity:1
+@keyframes latido{
+  50%{
+    transform:scale(1.09)
+  }
 }
 
-.cerrar-opciones{
-position:sticky;
-top:0;
-text-align:right;
-font-size:28px;
-color:#777;
-cursor:pointer;
-padding:10px 5px;
-z-index:5
+.pantalla-opciones,
+.pantalla-emergente{
+  position:fixed;
+  inset:0;
+  background:#050508;
+  z-index:20;
+  padding:28px 20px;
+  overflow-y:auto;
+  display:none
 }
 
-.cerrar-opciones:hover{
-color:#fff
+.pantalla-opciones.activa,
+.pantalla-emergente.activa{
+  display:block
+}
+
+.cerrar-opciones,
+.cerrar-emergente{
+  position:absolute;
+  right:20px;
+  top:16px;
+  font-size:28px;
+  color:#888;
+  cursor:pointer
 }
 
 .titulo-pantalla{
-text-align:center;
-font-size:32px;
-color:#a855f7;
-margin-bottom:30px;
-font-weight:800
+  text-align:center;
+  color:#a855f7;
+  font-size:30px;
+  margin:20px 0 24px
 }
 
-.texto-privacidad{
-background:rgba(255,255,255,.03);
-border:1px solid rgba(168,85,247,.2);
-border-radius:12px;
-padding:16px;
-margin:20px 0;
-line-height:1.7;
-font-size:13px;
-color:#aaa
+.texto-privacidad,
+.texto-resultado{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(168,85,247,.2);
+  border-radius:14px;
+  padding:15px;
+  line-height:1.65;
+  color:#bbb;
+  font-size:13px
 }
 
 .contenedor-botones{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:32px;
-max-width:380px;
-margin:0 auto
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:28px;
+  max-width:380px;
+  margin:auto
 }
 
 .boton-circular{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:12px;
-cursor:pointer;
-transition:transform .25s ease
-}
-
-.boton-circular:active{
-transform:scale(.92)
+  text-align:center;
+  cursor:pointer
 }
 
 .circulo{
-width:100px;
-height:100px;
-border-radius:50%;
-background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.08));
-border:2px solid rgba(168,85,247,.3);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:40px;
-transition:all .25s ease;
-box-shadow:0 4px 15px rgba(168,85,247,.1)
+  width:92px;
+  height:92px;
+  margin:auto;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  background:rgba(168,85,247,.12);
+  border:2px solid rgba(168,85,247,.3)
 }
 
 #btnAsistencia .circulo{
-background:radial-gradient(circle at 30% 30%,#c084fc,#9333ea 40%,#7e22ce);
-border-color:#a855f7;
-box-shadow:0 0 25px rgba(168,85,247,.4);
-animation:respira 4s ease-in-out infinite;
-position:relative
-}
-
-#btnAsistencia .circulo .icono-boton-xolo{
-font-size:42px;
-color:#fff
-}
-
-#btnResultados .circulo{
-background:linear-gradient(135deg,rgba(59,130,246,.22),rgba(37,99,235,.08));
-border-color:rgba(59,130,246,.4)
-}
-
-.boton-circular:hover .circulo{
-border-color:#a855f7;
-box-shadow:0 6px 20px rgba(168,85,247,.2)
+  background:radial-gradient(
+    circle,
+    #c084fc,
+    #9333ea 50%,
+    #5b21b6
+  );
+  border-color:#a855f7
 }
 
 .etiqueta-boton{
-font-size:15px;
-color:#ccc;
-text-align:center;
-line-height:1.4;
-font-weight:600
+  display:block;
+  margin-top:10px;
+  color:#ccc;
+  font-weight:600
 }
 
-.etiqueta-boton.asistencia{
-color:#a855f7;
-font-weight:800;
-font-size:16px
+.asistencia{
+  color:#c084fc
 }
 
 .fondo-oscuro{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.85);
-z-index:25;
-display:none;
-opacity:0;
-transition:opacity .3s ease
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.86);
+  z-index:30;
+  display:none
 }
 
 .fondo-oscuro.activo{
-display:block;
-opacity:1
+  display:block
 }
 
 .menu-asistente{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:92%;
-max-width:360px;
-background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));
-border:2px solid rgba(168,85,247,.4);
-border-radius:24px;
-padding:24px;
-z-index:26;
-display:none;
-opacity:0;
-transition:opacity .3s ease;
-box-shadow:0 0 50px rgba(168,85,247,.3)
+  position:fixed;
+  z-index:31;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:92%;
+  max-width:370px;
+  background:#160d28;
+  border:2px solid rgba(168,85,247,.4);
+  border-radius:22px;
+  padding:22px;
+  display:none
 }
 
 .menu-asistente.activo{
-display:block;
-opacity:1
+  display:block
 }
 
 .titulo-asistente{
-text-align:center;
-font-size:20px;
-font-weight:800;
-color:#c084fc;
-margin-bottom:20px;
-letter-spacing:1px
+  text-align:center;
+  color:#c084fc;
+  margin-bottom:18px
 }
 
 .opcion-asistente{
-padding:16px 14px;
-margin:10px 0;
-border-radius:14px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(168,85,247,.3);
-color:#fff;
-font-size:16px;
-cursor:pointer;
-transition:all .2s ease;
-display:flex;
-align-items:center;
-gap:14px;
-font-weight:600
-}
-
-.opcion-asistente:hover{
-border-color:#a855f7;
-background:rgba(168,85,247,.15);
-transform:scale(1.02)
-}
-
-.pantalla-emergente{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(5,5,10,.96);
-z-index:30;
-padding:26px;
-display:none;
-opacity:0;
-transition:opacity .35s ease;
-overflow-y:auto
-}
-
-.pantalla-emergente.activa{
-display:block;
-opacity:1
-}
-
-.cerrar-emergente{
-position:absolute;
-top:18px;
-right:18px;
-font-size:26px;
-color:#888;
-cursor:pointer;
-transition:color .2s
-}
-
-.cerrar-emergente:hover{
-color:#fff
+  padding:16px;
+  margin:10px 0;
+  border:1px solid rgba(168,85,247,.3);
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  font-weight:700;
+  cursor:pointer
 }
 
 .contenido-pantalla{
-margin-top:50px;
-max-width:420px;
-margin-left:auto;
-margin-right:auto;
-padding-bottom:40px
+  max-width:380px;
+  margin:55px auto 20px
 }
 
 .contenido-pantalla h2{
-font-size:20px;
-margin-bottom:20px;
-color:#fff;
-text-align:center
+  text-align:center;
+  margin-bottom:18px;
+  font-size:20px
 }
 
 .contenido-pantalla p{
-line-height:1.7;
-color:#ddd;
-margin-bottom:12px;
-font-size:14px
-}
-
-.texto-resultado{
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.1);
-border-radius:12px;
-padding:16px;
-margin-top:16px;
-display:none;
-white-space:pre-line;
-line-height:1.8;
-font-size:14px
-}
-
-.texto-resultado.visible{
-display:block
+  color:#ddd;
+  line-height:1.65;
+  font-size:14px;
+  margin-bottom:12px
 }
 
 .boton-accion,
-.boton-detener{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:none;
-color:#fff;
-font-weight:800;
-font-size:15px;
-cursor:pointer;
-margin-top:12px
+.boton-detener,
+.boton-secundario{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  margin-top:12px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer
 }
 
 .boton-accion{
-background:linear-gradient(90deg,#2563eb,#1d4ed8)
+  border:0;
+  background:#2563eb;
+  color:#fff
 }
 
 .boton-detener{
-background:linear-gradient(90deg,#ef4444,#b91c1c)
+  border:0;
+  background:#dc2626;
+  color:#fff
 }
 
 .boton-secundario{
-width:100%;
-padding:13px;
-border-radius:12px;
-border:1px solid rgba(168,85,247,.4);
-background:rgba(168,85,247,.08);
-color:#fff;
-font-weight:700;
-font-size:14px;
-cursor:pointer;
-margin-top:10px
-}
-
-.oculto{
-display:none
+  background:transparent;
+  color:#c084fc;
+  border:1px solid #a855f7
 }
 
 .indicador-proceso{
-color:#a855f7;
-font-weight:600;
-animation:parpadeo 1s ease-in-out infinite;
-display:none;
-margin-top:12px;
-text-align:center
-}
-
-.indicador-proceso.activo{
-display:block
+  text-align:center;
+  color:#c084fc;
+  margin:12px 0;
+  animation:parpadeo 1s infinite
 }
 
 @keyframes parpadeo{
-0%,100%{opacity:1}
-50%{opacity:.4}
+  50%{
+    opacity:.35
+  }
 }
 
 .nota-tecnica{
-font-size:12px;
-color:#888;
-margin-top:8px;
-text-align:center;
-line-height:1.6
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:10px
 }
 
-.tarjeta-voz{
-background:rgba(168,85,247,.06);
-border:1px solid rgba(168,85,247,.25);
-border-radius:14px;
-padding:14px;
-margin-top:14px;
-line-height:1.7
+.grupo-input{
+  margin:14px 0
 }
 
-.estado-voz{
-font-weight:800;
-margin-top:8px
+.grupo-input label{
+  display:block;
+  color:#ccc;
+  font-size:14px;
+  margin-bottom:6px
 }
 
-.estado-voz.ok{color:#22c55e}
-.estado-voz.warn{color:#eab308}
-.estado-voz.neutral{color:#aaa}
-
-.tarjeta-historial{
-background:rgba(255,255,255,.035);
-border:1px solid rgba(255,255,255,.1);
-border-radius:14px;
-padding:14px;
-margin-top:12px;
-cursor:pointer;
-transition:all .2s ease
+.grupo-input input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff
 }
 
-.tarjeta-historial:hover{
-border-color:rgba(168,85,247,.5);
-background:rgba(168,85,247,.08)
+.lista-registros{
+  margin-top:15px
 }
 
-.historial-id{
-font-size:11px;
-color:#777;
-margin-top:6px;
-word-break:break-all
+.item-registro{
+  padding:13px;
+  margin-bottom:8px;
+  border:1px solid #292929;
+  border-radius:10px;
+  background:#0c0c0c
 }
 
-.historial-fecha{
-font-size:12px;
-color:#aaa;
-margin-top:5px
+.estado-persona{
+  color:#22c55e;
+  font-size:12px;
+  margin-top:5px
 }
 
-.historial-estado{
-font-weight:800;
-margin-top:8px
+.prueba-registro{
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
+  background:#0d0d0d;
+  border:1px solid #222;
+  font-size:12px;
+  line-height:1.5
 }
 
-.resultado-ok{color:#22c55e}
-.resultado-warn{color:#eab308}
-.resultado-peligro{color:#ef4444}
-.resultado-neutral{color:#aaa}
-.resultado-inconcluso{color:#d1d5db}
-
-.bloque-detalle{
-background:rgba(255,255,255,.035);
-border:1px solid rgba(255,255,255,.08);
-border-radius:12px;
-padding:14px;
-margin-top:12px
-}
-
-.bloque-detalle h3{
-font-size:14px;
-color:#c084fc;
-margin-bottom:10px
-}
-
-.fila-detalle{
-font-size:12px;
-line-height:1.7;
-color:#ccc;
-border-bottom:1px solid rgba(255,255,255,.06);
-padding:6px 0
-}
-
-.fila-detalle:last-child{
-border-bottom:none
-}
-
-.lista-herramienta{
-margin-top:10px
-}
-
-.herramienta-item{
-background:rgba(0,0,0,.25);
-border-radius:10px;
-padding:11px;
-margin-top:8px;
-font-size:12px;
-line-height:1.65
-}
-
-.herramienta-titulo{
-font-weight:800;
-color:#fff;
-font-size:13px
-}
-
-.version-xolo{
-text-align:center;
-font-size:10px;
-color:#555;
-margin-top:20px
+.oculto{
+  display:none!important
 }
 </style>
 </head>
 
 <body>
 
+<!--
+  XOLO V1
+  Esta versión está deliberadamente enfocada exclusivamente en AUDIO.
+
+  Las imágenes no forman parte de esta versión.
+  La arquitectura puede recibirlas posteriormente como un módulo independiente.
+-->
+
 <input
-type="file"
-id="selectorImagenAnalisis"
-accept="image/*"
-class="oculto"
+  id="selectorAudioRegistro"
+  type="file"
+  accept="audio/*"
+  class="oculto"
 >
 
 <div class="pantalla-inicio" id="pantallaInicio">
-<div id="formaCentral" class="forma-central">
-<span class="icono-xolo">◈</span>
-</div>
+  <div id="formaCentral" class="forma-central">
+    <span class="icono-xolo">◈</span>
+  </div>
 </div>
 
 <div id="pantallaOpciones" class="pantalla-opciones">
 
-<span class="cerrar-opciones" id="cerrarOpciones">✕</span>
+  <span id="cerrarOpciones" class="cerrar-opciones">✕</span>
 
-<h2 class="titulo-pantalla">XOLO ANTI-IA</h2>
+  <h2 class="titulo-pantalla">
+    XOLO ANTI-IA
+  </h2>
 
-<div class="texto-privacidad">
-🔒 PRIVACIDAD Y LÍMITES:<br>
-XOLO no puede acceder por sí solo a conversaciones privadas, llamadas de otras aplicaciones ni archivos sin tu autorización explícita.
-<br><br>
-⚠️ REGLA FUNDAMENTAL:<br>
-Características como ruido, pausas o mala conexión NO son prueba de contenido manipulado. Solo los detectores especializados pueden aportar evidencia al respecto.
-<br><br>
-XOLO NO adivina, no simula ni inventa resultados. Solo dictamina con la información real que recibe.
-<br><br>
-🎙️ La referencia de voz del propietario se guarda localmente como perfil acústico.
-</div>
+  <div class="texto-privacidad">
 
-<div class="contenedor-botones">
+    🔒 <b>PRIVACIDAD Y LÍMITES</b><br>
 
-<div class="boton-circular" id="btnApoyo">
-<div class="circulo">☕</div>
-<span class="etiqueta-boton">Apoyo</span>
-</div>
+    XOLO solo procesa audio cuando el usuario
+    autoriza explícitamente el acceso al micrófono.
 
-<div class="boton-circular" id="btnInstrucciones">
-<div class="circulo">📖</div>
-<span class="etiqueta-boton">Instrucciones</span>
-</div>
+    <br><br>
 
-<div class="boton-circular" id="btnEmergencia">
-<div class="circulo">🚨</div>
-<span class="etiqueta-boton">Emergencia</span>
-</div>
+    XOLO no accede por sí solo a llamadas de otras
+    aplicaciones ni a conversaciones privadas.
 
-<div class="boton-circular" id="btnMisPersonas">
-<div class="circulo">👥</div>
-<span class="etiqueta-boton">
-Mis personas<br>y voces
-</span>
-</div>
+    <br><br>
 
-<div class="boton-circular" id="btnResultados">
-<div class="circulo">📊</div>
-<span class="etiqueta-boton">
-Resultados<br>de análisis
-</span>
-</div>
+    ⚠️ <b>REGLA FUNDAMENTAL</b><br>
 
-<div class="boton-circular" id="btnAsistencia">
-<div class="circulo">
-<span class="icono-boton-xolo">◈</span>
-</div>
-<span class="etiqueta-boton asistencia">
-ASISTENCIA XOLO
-</span>
-</div>
+    Ruido, pausas, energía, volumen o calidad de
+    grabación NO son pruebas de inteligencia artificial.
 
-</div>
+    <br><br>
+
+    El análisis especializado puede proporcionar
+    indicios de manipulación, pero nunca constituye
+    certeza absoluta.
+
+  </div>
+
+  <div
+    class="contenedor-botones"
+    style="margin-top:28px"
+  >
+
+    <div class="boton-circular" id="btnApoyo">
+      <div class="circulo">☕</div>
+      <span class="etiqueta-boton">Apoyo</span>
+    </div>
+
+    <div class="boton-circular" id="btnInstrucciones">
+      <div class="circulo">📖</div>
+      <span class="etiqueta-boton">Instrucciones</span>
+    </div>
+
+    <div class="boton-circular" id="btnEmergencia">
+      <div class="circulo">🚨</div>
+      <span class="etiqueta-boton">Emergencia</span>
+    </div>
+
+    <div class="boton-circular" id="btnMisPersonas">
+      <div class="circulo">👥</div>
+      <span class="etiqueta-boton">Mis personas</span>
+    </div>
+
+    <div class="boton-circular" id="btnPruebas">
+      <div class="circulo">📊</div>
+      <span class="etiqueta-boton">Pruebas</span>
+    </div>
+
+    <!-- NUEVO: RESULTADOS DE ANÁLISIS -->
+    <div class="boton-circular" id="btnResultados">
+      <div class="circulo">🔬</div>
+      <span class="etiqueta-boton">
+        Resultados análisis
+      </span>
+    </div>
+
+    <div class="boton-circular" id="btnTerminos">
+      <div class="circulo">📜</div>
+      <span class="etiqueta-boton">Términos</span>
+    </div>
+
+    <div class="boton-circular" id="btnAsistencia">
+      <div class="circulo">◈</div>
+      <span class="etiqueta-boton asistencia">
+        ASISTENCIA XOLO
+      </span>
+    </div>
+
+  </div>
 </div>
 
 <div id="fondoOscuroAsistente" class="fondo-oscuro"></div>
 
 <div id="menuAsistente" class="menu-asistente">
 
-<h3 class="titulo-asistente">
-🤖 ¿QUÉ ESTÁS RECIBIENDO?
-</h3>
+  <h3 class="titulo-asistente">
+    🤖 ¿QUÉ ESTÁS RECIBIENDO?
+  </h3>
 
-<div class="opcion-asistente" id="opcionSoloVoz">
-📞 Análisis de audio
-</div>
+  <div id="opcionSoloVoz" class="opcion-asistente">
+    🎙️ Análisis de audio
+  </div>
 
-<div style="font-size:12px;color:#aaa;margin-top:15px;text-align:center">
-⚠️ No se accede directamente al contenido de llamadas de otras aplicaciones
-</div>
+  <div class="nota-tecnica">
+    XOLO V1 funciona exclusivamente con audio.
+    El análisis de imágenes queda reservado para
+    una futura versión.
+  </div>
 
 </div>
 
 <div id="pantallaEmergente" class="pantalla-emergente">
 
-<span class="cerrar-emergente" id="cerrarEmergente">
-✕
-</span>
+  <span id="cerrarEmergente" class="cerrar-emergente">
+    ✕
+  </span>
 
-<div class="contenido-pantalla" id="contenidoEmergente"></div>
+  <div
+    id="contenidoEmergente"
+    class="contenido-pantalla"
+  ></div>
 
 </div>
 
-
 <script>
+'use strict';
 
-document.addEventListener('DOMContentLoaded',function(){
+/* =========================================================
+   CONFIGURACIÓN
+   ========================================================= */
 
-/* ============================================================
-   CONFIGURACIÓN PRINCIPAL XOLO
-============================================================ */
+const CONFIG = {
 
-const CONFIG={
-aasistEndpoint:'',
-duracionFragmento:5,
-maxFragmentos:12,
-minDuracionAnalisis:10,
-duracionReferencia:30,
-minReferencia:20,
-voiceReferenceDB:'xolo_voice_reference',
-voiceReferenceStore:'owner_profile',
-familyVoiceStore:'family_profiles',
-analysisDB:'xolo_analysis_history',
-analysisStore:'analysis_results',
-maxAnalysisHistory:100,
-maxFamilyVoices:4,
-emergencyContactKey:'xolo_emergency_contact',
-version:'XOLO-CEREBRO-V1.1'
+  detectorEndpoint:'',
+
+  duracionFragmentoMs:4000,
+
+  maxFragmentos:4,
+
+  tiempoTotalMaximoMs:17000,
+
+  maxPersonas:4,
+
+  maxPruebasGuardadas:100
 };
 
 
-/* ============================================================
-   HISTORIAL DE RESULTADOS
-============================================================ */
-
-const HistorialXOLO={
-
-db:null,
-
-abrirDB(){
-return new Promise((resolve,reject)=>{
-
-const request=indexedDB.open(CONFIG.analysisDB,1);
-
-request.onupgradeneeded=()=>{
-const db=request.result;
-
-if(!db.objectStoreNames.contains(CONFIG.analysisStore)){
-const store=db.createObjectStore(
-CONFIG.analysisStore,
-{keyPath:'id'}
-);
-
-store.createIndex('fecha','fecha',{unique:false});
-}
-};
-
-request.onsuccess=()=>{
-this.db=request.result;
-resolve(this.db);
-};
-
-request.onerror=()=>{
-reject(request.error);
-};
-
-});
-},
-
-async guardar(resultado){
-
-try{
-
-const db=this.db||await this.abrirDB();
-
-return new Promise((resolve,reject)=>{
-
-const tx=db.transaction(CONFIG.analysisStore,'readwrite');
-
-tx.objectStore(CONFIG.analysisStore).put(resultado);
-
-tx.oncomplete=resolve;
-tx.onerror=()=>reject(tx.error);
-
-});
-
-}catch(err){
-
-console.warn('No se pudo guardar análisis:',err);
-return null;
-
-}
-},
-
-async listar(){
-
-try{
-
-const db=this.db||await this.abrirDB();
-
-return new Promise((resolve,reject)=>{
-
-const tx=db.transaction(CONFIG.analysisStore,'readonly');
-const store=tx.objectStore(CONFIG.analysisStore);
-
-let request;
-
-try{
-request=store.index('fecha').getAll();
-}catch(e){
-request=store.getAll();
-}
-
-request.onsuccess=()=>{
-const lista=request.result||[];
-lista.sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
-resolve(lista);
-};
-
-request.onerror=()=>{
-reject(request.error);
-};
-
-});
-
-}catch(err){
-
-console.warn('No se pudo cargar historial:',err);
-return [];
-
-}
-},
-
-async obtener(id){
-
-const db=this.db||await this.abrirDB();
-
-return new Promise((resolve,reject)=>{
-
-const tx=db.transaction(CONFIG.analysisStore,'readonly');
-
-const request=
-tx.objectStore(CONFIG.analysisStore).get(id);
-
-request.onsuccess=()=>{
-resolve(request.result||null);
-};
-
-request.onerror=()=>{
-reject(request.error);
-};
-
-});
-
-},
-
-async eliminar(id){
-
-const db=this.db||await this.abrirDB();
-
-return new Promise((resolve,reject)=>{
-
-const tx=db.transaction(CONFIG.analysisStore,'readwrite');
-
-tx.objectStore(CONFIG.analysisStore).delete(id);
-
-tx.oncomplete=resolve;
-tx.onerror=()=>reject(tx.error);
-
-});
-
-},
-
-async limpiar(){
-
-const db=this.db||await this.abrirDB();
-
-return new Promise((resolve,reject)=>{
-
-const tx=db.transaction(CONFIG.analysisStore,'readwrite');
-
-tx.objectStore(CONFIG.analysisStore).clear();
-
-tx.oncomplete=resolve;
-tx.onerror=()=>reject(tx.error);
-
-});
-
-}
-
-};
-
-
-/* ============================================================
-   HERRAMIENTAS XOLO
-============================================================ */
-
-const Herramientas={
-
-lista:[],
-
-registrar(h){
-this.lista.push(h);
-},
-
-async ejecutarTodas(datosEntrada){
-
-const resultados=[];
-
-for(const h of this.lista){
-
-try{
-
-let entrada=
-h.tipo==='especializada'
-?datosEntrada.fragmentos||[]
-:datosEntrada;
-
-const resultado=
-await h.analizar?.(entrada)||h;
-
-resultados.push({
-
-id:h.id,
-nombre:h.nombre,
-tipo:h.tipo,
-disponible:h.disponible,
-ejecutado:true,
-
-resultado:resultado.resultado,
-confianza:resultado.confianza??'NO DISPONIBLE',
-calidadMuestra:resultado.calidadMuestra??'NO DISPONIBLE',
-
-datosObtenidos:
-resultado.datosObtenidos??{},
-
-explicacion:resultado.explicacion,
-
-limitacion:resultado.limitacion,
-
-error:resultado.error??null
-
-});
-
-}catch(err){
-
-resultados.push({
-
-id:h.id,
-nombre:h.nombre,
-tipo:h.tipo,
-disponible:h.disponible,
-ejecutado:false,
-resultado:'ERROR',
-confianza:'NO DISPONIBLE',
-calidadMuestra:'NO DISPONIBLE',
-datosObtenidos:{},
-explicacion:'No se pudo ejecutar la herramienta',
-error:err.message
-
-});
-
-}
-
-}
-
-return resultados;
-
-}
-
-};
-
-
-/* ============================================================
-   CALIDAD DE AUDIO
-============================================================ */
-
-Herramientas.registrar({
-
-id:'calidad_audio',
-nombre:'Calidad de grabación',
-tipo:'tecnica',
-disponible:true,
-
-async analizar(datos){
-
-const{
-duracionTotal,
-energiaPromedio,
-cambiosBruscosDetectados,
-cantidadPausas
-}=datos;
-
-let calidadMuestra='buena';
-
-if(duracionTotal<CONFIG.minDuracionAnalisis)
-calidadMuestra='INSUFICIENTE';
-
-else if(energiaPromedio<.06||energiaPromedio>.94)
-calidadMuestra='BAJA';
-
-else if(
-cambiosBruscosDetectados>4||
-cantidadPausas>7
-)
-calidadMuestra='MEDIA';
-
-return{
-
-resultado:'COMPLETADO',
-calidadMuestra,
-
-confianza:'NO DISPONIBLE',
-
-datosObtenidos:{
-duracionSegundos:duracionTotal.toFixed(1),
-nivelEnergia:energiaPromedio.toFixed(3),
-cambiosBruscos:cambiosBruscosDetectados,
-cantidadPausas
-},
-
-explicacion:
-'Indica si la grabación tiene condiciones adecuadas para análisis',
-
-limitacion:
-'ESTA HERRAMIENTA NO PRUEBA NI DESCARTA CONTENIDO GENERADO POR IA'
-
-};
-
-}
-
-});
-
-
-/* ============================================================
-   ANÁLISIS TEMPORAL
-============================================================ */
-
-Herramientas.registrar({
-
-id:'analisis_temporal',
-nombre:'Patrones de comportamiento',
-tipo:'tecnica',
-disponible:true,
-
-async analizar(datos){
-
-return{
-
-resultado:'COMPLETADO',
-
-calidadMuestra:
-datos.duracionTotal>=CONFIG.minDuracionAnalisis
-?'BUENA'
-:'INSUFICIENTE',
-
-confianza:'NO DISPONIBLE',
-
-datosObtenidos:{
-duracionValida:
-datos.duracionTotal>=CONFIG.minDuracionAnalisis
-},
-
-explicacion:
-'Analiza el comportamiento del audio a lo largo del tiempo',
-
-limitacion:
-'ESTA HERRAMIENTA NO PRUEBA NI DESCARTA CONTENIDO GENERADO POR IA'
-
-};
-
-}
-
-});
-
-
-/* ============================================================
-   DETECTOR ESPECIALIZADO
-============================================================ */
-
-Herramientas.registrar({
-
-id:'detector_especializado',
-nombre:'Detector anti-suplantación',
-tipo:'especializada',
-disponible:!!CONFIG.aasistEndpoint,
-
-async analizar(fragmentos){
-
-if(!this.disponible)
-
-return{
-
-resultado:'NO DISPONIBLE',
-confianza:'NO DISPONIBLE',
-calidadMuestra:'NO DISPONIBLE',
-datosObtenidos:{},
-
-explicacion:
-'No hay servicio de detección especializada configurado',
-
-limitacion:
-'Sin esta herramienta no se puede determinar si existe contenido generado por IA'
-
-};
-
-if(!fragmentos?.length)
-
-return{
-
-resultado:'INCONCLUSO',
-confianza:'NO DISPONIBLE',
-calidadMuestra:'INSUFICIENTE',
-datosObtenidos:{},
-
-explicacion:
-'No hay fragmentos de audio válidos para analizar',
-
-limitacion:
-'Se requiere al menos 1 fragmento válido'
-
-};
-
-try{
-
-const formulario=new FormData();
-
-formulario.append(
-'audio',
-fragmentos[0],
-'fragmento_audio.webm'
-);
-
-const resp=await fetch(
-CONFIG.aasistEndpoint,
-{
-method:'POST',
-body:formulario,
-signal:AbortSignal.timeout(15000)
-}
-);
-
-if(!resp.ok)
-throw new Error(
-`Respuesta inválida del servicio: ${resp.status}`
-);
-
-const d=await resp.json();
-
-return{
-
-resultado:d.resultado??'INCONCLUSO',
-confianza:d.confianza??'NO DISPONIBLE',
-calidadMuestra:d.calidad??'NO DISPONIBLE',
-datosObtenidos:d.datos??{},
-
-explicacion:
-d.explicacion??
-'Resultado entregado por el detector especializado',
-
-limitacion:
-'El resultado es probabilístico y no constituye una prueba absoluta'
-
-};
-
-}catch(err){
-
-return{
-
-resultado:'ERROR',
-confianza:'NO DISPONIBLE',
-calidadMuestra:'NO DISPONIBLE',
-datosObtenidos:{},
-
-explicacion:
-'No se pudo conectar al servicio de detección',
-
-error:err.message
-
-};
-
-}
-
-}
-
-});
-
-
-/* ============================================================
-   CEREBRO XOLO
-============================================================ */
-
-const CerebroXOLO={
-
-estadosValidos:{
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+const escapeHTML = value =>
+  String(value ?? '')
+    .replace(
+      /[&<>"'`=\/]/g,
+      c => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;',
+        '`':'&#96;',
+        '=':'&#61;',
+        '/':'&#47;'
+      }[c])
+    );
+
+
+/* =========================================================
+   ALMACENAMIENTO LOCAL
+   ========================================================= */
+
+const DatosGuardados = {
+
+  leer(clave, defecto){
+
+    try{
+      return JSON.parse(
+        local
