@@ -45,6 +45,18 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 .etiqueta-boton{font-size:15px;color:#ccc;text-align:center;line-height:1.4;font-weight:600}
 .etiqueta-boton.asistencia{color:#a855f7;font-weight:800;font-size:16px}
 
+/* ==================================================
+   NUEVO: ESTILO DEL BOTÓN RESULTADOS
+   ================================================== */
+#btnResultados .circulo{
+  background:linear-gradient(135deg,rgba(59,130,246,.22),rgba(37,99,235,.08));
+  border-color:rgba(59,130,246,.4);
+}
+#btnResultados:hover .circulo{
+  border-color:#60a5fa;
+  box-shadow:0 6px 22px rgba(59,130,246,.25);
+}
+
 .fondo-oscuro{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:25;display:none;opacity:0;transition:opacity .3s ease}
 .fondo-oscuro.activo{display:block;opacity:1}
 .menu-asistente{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:92%;max-width:360px;background:linear-gradient(180deg,rgba(40,20,80,.96),rgba(20,10,40,.98));border:2px solid rgba(168,85,247,.4);border-radius:24px;padding:24px;z-index:26;display:none;opacity:0;transition:opacity .3s ease;box-shadow:0 0 50px rgba(168,85,247,.3)}
@@ -69,11 +81,82 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
 .indicador-proceso.activo{display:block}
 @keyframes parpadeo{0%,100%{opacity:1}50%{opacity:.4}}
 .nota-tecnica{font-size:12px;color:#888;margin-top:8px;text-align:center}
-  .tarjeta-voz{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.25);border-radius:14px;padding:14px;margin-top:14px;line-height:1.7}
-  .estado-voz{font-weight:800;margin-top:8px}
-  .estado-voz.ok{color:#22c55e}
-  .estado-voz.warn{color:#eab308}
-  .estado-voz.neutral{color:#aaa}
+.tarjeta-voz{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.25);border-radius:14px;padding:14px;margin-top:14px;line-height:1.7}
+.estado-voz{font-weight:800;margin-top:8px}
+.estado-voz.ok{color:#22c55e}
+.estado-voz.warn{color:#eab308}
+.estado-voz.neutral{color:#aaa}
+
+/* ==================================================
+   NUEVO: PANEL DE RESULTADOS DE ANÁLISIS
+   ================================================== */
+.tarjeta-resultado-analisis{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(168,85,247,.22);
+  border-radius:15px;
+  padding:15px;
+  margin-top:14px;
+}
+.tarjeta-resultado-analisis h3{
+  font-size:15px;
+  color:#c084fc;
+  margin-bottom:8px;
+}
+.tarjeta-resultado-analisis p{
+  font-size:12px;
+  color:#aaa;
+  margin:4px 0;
+  line-height:1.5;
+}
+.estado-resultado{
+  font-weight:800;
+  margin:7px 0;
+}
+.estado-resultado.ok{color:#22c55e}
+.estado-resultado.warn{color:#eab308}
+.estado-resultado.peligro{color:#ef4444}
+.estado-resultado.neutral{color:#aaa}
+.estado-resultado.inconcluso{color:#d1d5db}
+.estado-resultado.conflictivo{color:#f59e0b}
+
+.detalle-herramienta{
+  background:rgba(0,0,0,.28);
+  border-radius:10px;
+  padding:12px;
+  margin-top:10px;
+  border-left:2px solid rgba(168,85,247,.35);
+}
+.detalle-herramienta strong{
+  color:#fff;
+  font-size:13px;
+}
+.detalle-herramienta div{
+  color:#aaa;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:5px;
+}
+.resultado-vacio{
+  text-align:center;
+  color:#888;
+  padding:25px 10px;
+  line-height:1.7;
+}
+.boton-secundario{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(168,85,247,.3);
+  background:rgba(168,85,247,.08);
+  color:#ddd;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.boton-secundario:hover{
+  background:rgba(168,85,247,.16);
+}
 </style>
 </head>
 
@@ -100,14 +183,40 @@ body.neutral{background:radial-gradient(circle at center,rgba(136,136,136,.12),t
   </div>
 
   <div class="contenedor-botones">
-    <div class="boton-circular" id="btnApoyo"><div class="circulo">☕</div><span class="etiqueta-boton">Apoyo</span></div>
-    <div class="boton-circular" id="btnInstrucciones"><div class="circulo">📖</div><span class="etiqueta-boton">Instrucciones</span></div>
-    <div class="boton-circular" id="btnEmergencia"><div class="circulo">🚨</div><span class="etiqueta-boton">Emergencia</span></div>
-    <div class="boton-circular" id="btnMisPersonas"><div class="circulo">👥</div><span class="etiqueta-boton">Mis personas<br>y voces</span></div>
+
+    <div class="boton-circular" id="btnApoyo">
+      <div class="circulo">☕</div>
+      <span class="etiqueta-boton">Apoyo</span>
+    </div>
+
+    <div class="boton-circular" id="btnInstrucciones">
+      <div class="circulo">📖</div>
+      <span class="etiqueta-boton">Instrucciones</span>
+    </div>
+
+    <div class="boton-circular" id="btnEmergencia">
+      <div class="circulo">🚨</div>
+      <span class="etiqueta-boton">Emergencia</span>
+    </div>
+
+    <div class="boton-circular" id="btnMisPersonas">
+      <div class="circulo">👥</div>
+      <span class="etiqueta-boton">Mis personas<br>y voces</span>
+    </div>
+
+    <!-- ==================================================
+         NUEVO BOTÓN: RESULTADOS DE ANÁLISIS
+         ================================================== -->
+    <div class="boton-circular" id="btnResultados">
+      <div class="circulo">📊</div>
+      <span class="etiqueta-boton">Resultados<br>de análisis</span>
+    </div>
+
     <div class="boton-circular" id="btnAsistencia">
       <div class="circulo"><span class="icono-boton-xolo">◈</span></div>
       <span class="etiqueta-boton asistencia">ASISTENCIA XOLO</span>
     </div>
+
   </div>
 </div>
 
@@ -133,7 +242,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // ⚙️ CONFIGURACIÓN — SIN VALORES INVENTADOS
   // ==================================================
   const CONFIG = {
-    aasistEndpoint: '', // DEJA VACÍO SI NO TIENES SERVICIO REAL. NO SIMULES NADA.
+    aasistEndpoint: '',
     duracionFragmento: 5,
     maxFragmentos: 12,
     minDuracionAnalisis: 10,
@@ -143,7 +252,13 @@ document.addEventListener('DOMContentLoaded',function(){
     voiceReferenceStore: 'owner_profile',
     familyVoiceStore: 'family_profiles',
     maxFamilyVoices: 4,
-    emergencyContactKey: 'xolo_emergency_contact'
+    emergencyContactKey: 'xolo_emergency_contact',
+
+    // ==================================================
+    // NUEVO: HISTORIAL LOCAL DE RESULTADOS
+    // ==================================================
+    analysisHistoryKey: 'xolo_analysis_results_v1',
+    maxAnalysisHistory: 50
   };
 
   // ==================================================
@@ -165,8 +280,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
         try{
 
-          // Las herramientas técnicas reciben las mediciones.
-          // El detector especializado recibe los fragmentos reales.
           let entrada = datosEntrada;
 
           if(h.tipo === 'especializada'){
@@ -345,9 +458,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
       try{
 
-        // IMPORTANTE:
-        // FormData.append() modifica el FormData pero NO lo devuelve.
-        // Por eso se crea primero el formulario y después se agrega el audio.
         const formulario = new FormData();
 
         formulario.append(
@@ -448,11 +558,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
       const propietarioReconocido=voz?.resultado==='COINCIDENCIA_PROPIETARIO';
       const segundaVoz=!!voz?.datosObtenidos?.segundaVoz;
-
-      // 1. Buscar primero la voz compatible con el propietario.
-      // 2. Darle luz verde como compatibilidad de referencia.
-      // 3. Priorizar recursos en la segunda voz cuando exista.
-      // 4. Nunca convertir "no coincide" en "es IA".
 
       if(propietarioReconocido){
 
@@ -828,6 +933,12 @@ document.addEventListener('DOMContentLoaded',function(){
   const btnAsistencia =
     document.getElementById('btnAsistencia');
 
+  // ==================================================
+  // NUEVO: BOTÓN RESULTADOS
+  // ==================================================
+  const btnResultados =
+    document.getElementById('btnResultados');
+
   const fondoOscuroAsistente =
     document.getElementById('fondoOscuroAsistente');
 
@@ -846,1005 +957,534 @@ document.addEventListener('DOMContentLoaded',function(){
   const cerrarEmergente =
     document.getElementById('cerrarEmergente');
 
-  // ==================================================
-  // 🎨 ESTADO VISUAL
-  // ==================================================
-  function aplicarColorEstado(nivel){
-
-    formaCentral.classList.remove(
-      'estado-ok',
-      'estado-warn',
-      'estado-peligro',
-      'estado-neutral',
-      'estado-inconcluso',
-      'estado-conflictivo'
-    );
-
-    document.body.classList.remove(
-      'ok',
-      'warn',
-      'danger',
-      'neutral'
-    );
-
-    const mapaNiveles = {
-      ok: 'estado-ok',
-      warn: 'estado-warn',
-      peligro: 'estado-peligro',
-      neutral: 'estado-neutral',
-      inconcluso: 'estado-inconcluso',
-      conflictivo: 'estado-conflictivo'
-    };
-
-    formaCentral.classList.add(
-      mapaNiveles[nivel] || 'estado-inconcluso'
-    );
-
-    if(
-      nivel !== 'inconcluso' &&
-      nivel !== 'neutral'
-    ){
-      document.body.classList.add(nivel);
-    }
-  }
+  const selectorImagenAnalisis =
+    document.getElementById('selectorImagenAnalisis');
 
   // ==================================================
-  // 🧹 CIERRE DE RECURSOS
+  // 💾 HISTORIAL DE RESULTADOS DE ANÁLISIS
+  // SOLO GUARDA RESULTADOS REALES
   // ==================================================
-  function cerrarRecursos(){
+  const HistorialAnalisis = {
 
-    if(intervaloAnalisis){
-      clearInterval(intervaloAnalisis);
-    }
+    cargar:function(){
 
-    if(mediaRecorder?.state === 'recording'){
-      mediaRecorder.stop();
-    }
+      try{
 
-    if(audioContext){
-      audioContext.close();
-    }
+        const datos=
+          JSON.parse(
+            localStorage.getItem(CONFIG.analysisHistoryKey)||'[]'
+          );
 
-    if(streamAudioActivo){
-      streamAudioActivo
-        .getTracks()
-        .forEach(t => t.stop());
-    }
+        return Array.isArray(datos)?datos:[];
 
-    audioContext = null;
-    analyser = null;
-    streamAudioActivo = null;
-    mediaRecorder = null;
-    intervaloAnalisis = null;
+      }catch(err){
 
-    // Los fragmentos se conservan hasta que el análisis
-    // haya terminado de utilizarlos.
-    fragmentosGrabados = [];
-    muestrasAcusticas = [];
-    window._xoloUltimoSegundo = -1;
-
-    analizando = false;
-
-    fondoOscuroAsistente.classList.remove('activo');
-    menuAsistente.classList.remove('activo');
-    pantallaEmergente.classList.remove('activa');
-  }
-
-  // ==================================================
-  // 🎙️ ANÁLISIS DE AUDIO — SIN SIMULACIONES
-  // ==================================================
-
-  async function iniciarAnalisisVoz(){
-
-    cerrarRecursos();
-    analizando=true;
-
-    const mediciones={
-      duracionTotal:0,
-      energiaPromedio:0,
-      cambiosBruscosDetectados:0,
-      cantidadPausas:0,
-      inicio:Date.now()
-    };
-
-    let energiaAnterior=0;
-
-    contenidoEmergente.innerHTML=`
-      <h2>🤖 ANÁLISIS DE AUDIO</h2>
-      <div class="tarjeta-voz">
-        XOLO escuchará hasta <strong>60 segundos</strong>.
-        Si existe una referencia del propietario, primero buscará
-        esa voz y después priorizará la segunda voz cuando pueda separarla.
-      </div>
-      <div class="indicador-proceso activo">🎙️ Solicitando permiso de micrófono...</div>
-      <button class="boton-detener" id="btnDetener">⏹️ Terminar escucha</button>
-    `;
-
-    pantallaEmergente.classList.add('activa');
-
-    document.getElementById('btnDetener')
-      .addEventListener('click',()=>finalizar());
-
-    async function finalizar(){
-
-      if(!analizando)return;
-
-      analizando=false;
-
-      const fragmentosFinales=[...fragmentosGrabados];
-      const muestrasFinales=[...muestrasAcusticas];
-      const medicionesFinales={...mediciones};
-      const referencia=await VozPropietario.cargar();
-
-      let resultadoVoz={
-        id:'voz_propietario',
-        nombre:'Comparación con voz del propietario',
-        tipo:'tecnica',
-        disponible:!!referencia,
-        resultado:referencia?'REFERENCIA_NO_ENCONTRADA':'SIN_REFERENCIA',
-        confianza:referencia?'BAJA':'NO DISPONIBLE',
-        calidadMuestra:muestrasFinales.length>=4?'BUENA':'INSUFICIENTE',
-        datosObtenidos:{referenciaGuardada:!!referencia,segundaVoz:false},
-        explicacion:referencia
-          ?'Se buscó compatibilidad acústica con la referencia del propietario.'
-          :'No existe una referencia de voz guardada.'
-      };
-
-      if(referencia&&muestrasFinales.length>=4){
-
-        const grupos=SeparadorInterlocutores.separar(
-          muestrasFinales,referencia
+        console.warn(
+          'No se pudo cargar el historial de análisis:',
+          err
         );
 
-        const perfil=VozPropietario.perfilDesdeMuestras(
-          grupos.grupoPropietario
-        );
-
-        const distancia=VozPropietario.distancia(
-          perfil,referencia
-        );
-
-        const coincide=distancia<=.22&&grupos.grupoPropietario.length>=2;
-
-        resultadoVoz.resultado=coincide
-          ?'COINCIDENCIA_PROPIETARIO'
-          :'REFERENCIA_NO_ENCONTRADA';
-
-        resultadoVoz.confianza=coincide
-          ?(grupos.confianza==='MODERADA'?'MODERADA':'BAJA')
-          :'BAJA';
-
-        resultadoVoz.datosObtenidos={
-          referenciaGuardada:true,
-          coincidenciaPropietario:coincide,
-          distanciaAcustica:Number(distancia.toFixed(3)),
-          confianzaSeparacion:grupos.confianza,
-          segmentosPropietario:grupos.grupoPropietario.length,
-          segmentosSegundaVoz:grupos.grupoSecundario.length,
-          segundaVoz:grupos.grupoSecundario.length>=2,
-          enfoqueAnalisis:grupos.grupoSecundario.length>=2
-            ?'Prioridad en segunda voz'
-            :'No se pudo aislar la segunda voz con suficiente claridad'
-        };
+        return [];
       }
+    },
 
-      cerrarRecursos();
-      await new Promise(r=>setTimeout(r,400));
+    guardar:function(registro){
 
-      Herramientas.lista=Herramientas.lista.filter(
-        h=>h.id!=='voz_propietario'
+      try{
+
+        const historial=this.cargar();
+
+        historial.unshift(registro);
+
+        const limitado=
+          historial.slice(0,CONFIG.maxAnalysisHistory);
+
+        localStorage.setItem(
+          CONFIG.analysisHistoryKey,
+          JSON.stringify(limitado)
+        );
+
+        return true;
+
+      }catch(err){
+
+        console.warn(
+          'No se pudo guardar el resultado:',
+          err
+        );
+
+        return false;
+      }
+    },
+
+    borrarTodo:function(){
+
+      localStorage.removeItem(
+        CONFIG.analysisHistoryKey
       );
+    },
 
-      Herramientas.registrar({
-        ...resultadoVoz,
-        analizar:async()=>resultadoVoz
-      });
+    obtener:function(id){
 
-      const resultados=await Herramientas.ejecutarTodas({
-        ...medicionesFinales,
-        fragmentos:fragmentosFinales,
-        muestrasAcusticas:muestrasFinales
-      });
-
-      const dictamen=CerebroXOLO.dictaminar(resultados);
-      aplicarColorEstado(dictamen.nivel);
-
-      const v=dictamen.datosVoz;
-
-      contenidoEmergente.innerHTML=`
-        <h2>📊 RESULTADO FINAL</h2>
-        <div class="texto-resultado visible">
-
-${dictamen.texto}
-
-${dictamen.explicacionFinal}
-
-━━━━━━━━━━━━━━━━━━━━
-🎙️ VOZ DEL PROPIETARIO:
-
-${v?.coincidenciaPropietario
-  ?'🟢 COMPATIBILIDAD ENCONTRADA'
-  :v?.referenciaGuardada
-    ?'🟡 NO SE ENCONTRÓ COINCIDENCIA SUFICIENTE'
-    :'⚪ NO HAY REFERENCIA GUARDADA'}
-
-${v?.segundaVoz
-  ?'🔎 SEGUNDA VOZ: segmentos disponibles para análisis prioritario.'
-  :'ℹ️ No se pudo separar una segunda voz con suficiente claridad.'}
-
-━━━━━━━━━━━━━━━━━━━━
-📋 DATOS OBTENIDOS REALMENTE:
-
-• ${dictamen.datosTecnicos||'Sin datos técnicos'}
-• ${dictamen.datosEspecializados||'Sin datos especializados'}
-
-━━━━━━━━━━━━━━━━━━━━
-ℹ️ FUENTES:
-
-${dictamen.fuentes}
-
-━━━━━━━━━━━━━━━━━━━━
-⚠️ ESTE ANÁLISIS NO ES PRUEBA ABSOLUTA.
-⚠️ La compatibilidad vocal no demuestra identidad por sí sola.
-⚠️ XOLO no inventó ni simuló ningún resultado.
-
-        </div>
-      `;
+      return this.cargar().find(
+        r=>r.id===id
+      );
     }
+  };
 
-    try{
+  // ==================================================
+  // 📊 CONSTRUIR REGISTRO COMPLETO DE ANÁLISIS
+  // ==================================================
+  function construirRegistroAnalisis(
+    resultados,
+    dictamen,
+    medicionesFinales,
+    muestrasFinales,
+    fragmentosFinales
+  ){
 
-      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-        throw new Error('El dispositivo o navegador no permite acceso al micrófono.');
-      }
+    const ahora=new Date();
 
-      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
-        audio:{echoCancellation:false,noiseSuppression:false}
-      });
+    return {
 
-      audioContext=new(window.AudioContext||window.webkitAudioContext)();
-      analyser=audioContext.createAnalyser();
-      analyser.fftSize=2048;
-      analyser.smoothingTimeConstant=.35;
+      id:
+        'xolo_'+
+        ahora.getTime()+
+        '_'+
+        Math.random().toString(36).slice(2,8),
 
-      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
+      fechaHora:
+        ahora.toISOString(),
 
-      mediaRecorder=new MediaRecorder(streamAudioActivo);
+      fechaLocal:
+        ahora.toLocaleString('es-MX'),
 
-      mediaRecorder.ondataavailable=e=>{
-        if(e.data.size>0&&fragmentosGrabados.length<CONFIG.maxFragmentos){
-          fragmentosGrabados.push(e.data);
-        }
-      };
+      version:
+        'XOLO ANTI-IA — AUDIO V1',
 
-      mediaRecorder.start(CONFIG.duracionFragmento*1000);
+      tipo:
+        'ANÁLISIS DE AUDIO',
 
-      intervaloAnalisis=setInterval(()=>{
+      duracionAnalisis:
+        Number(
+          medicionesFinales?.duracionTotal||0
+        ).toFixed(1),
 
-        if(!analizando)return;
+      fragmentosUtilizados:
+        fragmentosFinales?.length||0,
 
-        mediciones.duracionTotal=(Date.now()-mediciones.inicio)/1000;
+      muestrasAcusticas:
+        muestrasFinales?.length||0,
 
-        const datos=new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(datos);
+      mediciones:{
+        duracionTotal:
+          Number(medicionesFinales?.duracionTotal||0),
+        energiaPromedio:
+          Number(medicionesFinales?.energiaPromedio||0),
+        cambiosBruscosDetectados:
+          Number(medicionesFinales?.cambiosBruscosDetectados||0),
+        cantidadPausas:
+          Number(medicionesFinales?.cantidadPausas||0)
+      },
 
-        const energia=datos.reduce((a,b)=>a+b,0)/(255*datos.length);
+      dictamen:{
 
-        mediciones.energiaPromedio=
-          mediciones.energiaPromedio*.9+energia*.1;
+        texto:
+          dictamen?.texto||
+          'NO DISPONIBLE',
 
-        if(Math.abs(energia-energiaAnterior)>.35){
-          mediciones.cambiosBruscosDetectados++;
-        }
+        nivel:
+          dictamen?.nivel||
+          'neutral',
 
-        energiaAnterior=energia;
+        confianza:
+          dictamen?.confianza||
+          'NO DISPONIBLE',
 
-        const segundo=Math.floor(mediciones.duracionTotal);
+        explicacionFinal:
+          dictamen?.explicacionFinal||
+          'NO DISPONIBLE',
 
-        if(segundo>0&&segundo!==Number(window._xoloUltimoSegundo||-1)){
-          window._xoloUltimoSegundo=segundo;
-          muestrasAcusticas.push(
-            VozPropietario.extraerCaracteristicas(datos)
-          );
-        }
+        datosTecnicos:
+          dictamen?.datosTecnicos||
+          'Sin datos técnicos',
 
-        const indicador=document.querySelector('.indicador-proceso');
+        datosEspecializados:
+          dictamen?.datosEspecializados||
+          'Sin datos especializados',
 
-        if(indicador){
-          indicador.textContent=
-            `🎙️ Escuchando... ${mediciones.duracionTotal.toFixed(1)}s / 60s`;
-        }
+        datosVoz:
+          dictamen?.datosVoz||
+          null,
 
-        if(mediciones.duracionTotal>=60){
-          finalizar();
-        }
+        fuentes:
+          dictamen?.fuentes||
+          'NO DISPONIBLE',
 
-      },100);
+        limitacion:
+          dictamen?.limitacion||
+          'NO DISPONIBLE'
+      },
 
-    }catch(err){
+      herramientas:
+        resultados.map(r=>({
 
-      cerrarRecursos();
-      aplicarColorEstado('inconcluso');
+          id:r.id,
+          nombre:r.nombre,
+          tipo:r.tipo,
+          disponible:!!r.disponible,
+          ejecutado:!!r.ejecutado,
+          resultado:r.resultado,
+          confianza:r.confianza,
+          calidadMuestra:r.calidadMuestra,
+          datosObtenidos:r.datosObtenidos||{},
+          explicacion:r.explicacion||'NO DISPONIBLE',
+          limitacion:r.limitacion||'NO DISPONIBLE',
+          error:r.error||null
 
-      contenidoEmergente.innerHTML=`
-        <h2>⚪ NO SE PUDO REALIZAR EL ANÁLISIS</h2>
-        <div class="texto-resultado visible">
-          ${err.message}
-          Debes autorizar el permiso de micrófono para realizar análisis.
-        </div>
-      `;
-    }
+        })),
+
+      aviso:
+        'Este registro contiene los resultados obtenidos realmente por las herramientas ejecutadas. No constituye una prueba absoluta.'
+    };
   }
 
-
   // ==================================================
-  // 👤 CONFIGURACIÓN DE VOZ DEL PROPIETARIO
+  // 📊 MOSTRAR TODOS LOS RESULTADOS DE ANÁLISIS
   // ==================================================
-  async function configurarVozPropietario(){
+  function mostrarResultadosAnalisis(){
 
-    cerrarRecursos();
-    analizando=true;
+    const historial=
+      HistorialAnalisis.cargar();
 
-    contenidoEmergente.innerHTML=`
-      <h2>🎙️ VOZ DE REFERENCIA</h2>
-      <div class="tarjeta-voz">
-        Lee el texto durante aproximadamente
-        <strong>${CONFIG.duracionReferencia} segundos</strong>.
-        XOLO guardará localmente un perfil acústico para buscar
-        tu voz en futuras llamadas.
-        <br><br>
-        ⚠️ No es una prueba absoluta de identidad.
-      </div>
-
-      <div class="texto-resultado visible">
-        “Hola. Esta es mi voz de referencia para XOLO.
-        Hablaré de manera natural, con un ritmo normal,
-        para crear una muestra estable de mi voz.
-        Esta referencia servirá para que XOLO pueda
-        distinguir mi voz de la de otros interlocutores.”
-      </div>
-
-      <div class="indicador-proceso activo">🎙️ Preparando...</div>
-      <button class="boton-detener" id="btnCancelarReferencia">⏹️ Cancelar</button>
-    `;
-
-    pantallaEmergente.classList.add('activa');
-
-    document.getElementById('btnCancelarReferencia')
-      .addEventListener('click',cerrarRecursos);
-
-    try{
-
-      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
-        audio:{echoCancellation:false,noiseSuppression:false}
-      });
-
-      audioContext=new(window.AudioContext||window.webkitAudioContext)();
-      analyser=audioContext.createAnalyser();
-      analyser.fftSize=2048;
-
-      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
-
-      const muestras=[];
-      const inicio=Date.now();
-
-      intervaloAnalisis=setInterval(async()=>{
-
-        if(!analizando)return;
-
-        const transcurrido=(Date.now()-inicio)/1000;
-        const datos=new Uint8Array(analyser.frequencyBinCount);
-
-        analyser.getByteFrequencyData(datos);
-        muestras.push(VozPropietario.extraerCaracteristicas(datos));
-
-        const indicador=document.querySelector('.indicador-proceso');
-
-        if(indicador){
-          indicador.textContent=
-            `🎙️ Grabando referencia... ${transcurrido.toFixed(1)} / ${CONFIG.duracionReferencia}s`;
-        }
-
-        if(transcurrido>=CONFIG.duracionReferencia){
-
-          clearInterval(intervaloAnalisis);
-          intervaloAnalisis=null;
-
-          if(muestras.length<CONFIG.minReferencia){
-
-            cerrarRecursos();
-
-            contenidoEmergente.innerHTML=`
-              <h2>⚪ REFERENCIA INSUFICIENTE</h2>
-              <div class="texto-resultado visible">
-                No se obtuvieron suficientes muestras.
-                Inténtalo nuevamente en un ambiente silencioso.
-              </div>
-            `;
-
-            pantallaEmergente.classList.add('activa');
-            return;
-          }
-
-          await VozPropietario.guardar(
-            VozPropietario.perfilDesdeMuestras(muestras)
-          );
-
-          cerrarRecursos();
-
-          contenidoEmergente.innerHTML=`
-            <h2>🟢 REFERENCIA GUARDADA</h2>
-            <div class="texto-resultado visible">
-              XOLO guardó el perfil acústico de referencia del propietario.
-              <br><br>
-              En futuras llamadas, XOLO buscará primero esta voz y,
-              cuando pueda separar otro interlocutor, priorizará
-              el análisis de esa segunda voz.
-              <br><br>
-              ⚠️ La referencia es una herramienta de comparación,
-              no una identificación absoluta.
-            </div>
-          `;
-
-          pantallaEmergente.classList.add('activa');
-        }
-
-      },1000);
-
-    }catch(err){
-
-      cerrarRecursos();
+    if(!historial.length){
 
       contenidoEmergente.innerHTML=`
-        <h2>⚪ NO SE PUDO GUARDAR LA REFERENCIA</h2>
-        <div class="texto-resultado visible">${err.message}</div>
+
+        <h2>📊 RESULTADOS DE ANÁLISIS</h2>
+
+        <div class="resultado-vacio">
+
+          ⚪ Todavía no hay análisis guardados.
+
+          <br><br>
+
+          Cuando XOLO termine un análisis de audio,
+          aquí aparecerán los resultados completos
+          entregados por sus herramientas.
+
+          <br><br>
+
+          XOLO no mostrará resultados inventados
+          ni datos simulados.
+
+        </div>
+
+        <button class="boton-accion" id="btnVolverResultadosVacio">
+          ↩️ Volver al menú
+        </button>
+
       `;
 
       pantallaEmergente.classList.add('activa');
-    }
-  }
 
-  async function mostrarMisPersonas(){
+      document
+        .getElementById('btnVolverResultadosVacio')
+        .addEventListener(
+          'click',
+          ()=>{
+            pantallaEmergente.classList.remove('activa');
+          }
+        );
 
-    const referencia=await VozPropietario.cargar();
-    const familiares=await VocesFamilia.listar();
-
-    contenidoEmergente.innerHTML=`
-      <h2>👥 MIS PERSONAS Y VOCES</h2>
-
-      <div class="tarjeta-voz">
-        <strong>🎙️ VOZ DEL PROPIETARIO</strong>
-        <div class="estado-voz ${referencia?'ok':'neutral'}">
-          ${referencia?'🟢 REFERENCIA GUARDADA':'⚪ SIN REFERENCIA'}
-        </div>
-        <button class="boton-accion" id="btnVozPropietario">
-          🎙️ ${referencia?'Actualizar voz del propietario':'Registrar voz del propietario'}
-        </button>
-        ${referencia?`<button class="boton-detener" id="btnBorrarVozPropietario">🗑️ Borrar referencia</button>`:''}
-      </div>
-
-      <div class="tarjeta-voz">
-        <strong>👨‍👩‍👧 VOCES DE FAMILIARES / CONOCIDOS</strong>
-        <div class="estado-voz ${familiares.length?'ok':'neutral'}">
-          ${familiares.length} de ${CONFIG.maxFamilyVoices} referencias guardadas
-        </div>
-        <button class="boton-accion" id="btnVocesFamilia">
-          👥 Registrar / administrar voces familiares
-        </button>
-      </div>
-
-      <div class="nota-tecnica">
-        Las voces guardadas sirven como referencias de comparación.
-        No constituyen identificación absoluta.
-      </div>
-    `;
-
-    pantallaEmergente.classList.add('activa');
-
-    document.getElementById('btnVozPropietario')
-      .addEventListener('click',configurarVozPropietario);
-
-    const borrar=document.getElementById('btnBorrarVozPropietario');
-    if(borrar){
-      borrar.addEventListener('click',async()=>{
-        await VozPropietario.eliminar();
-        mostrarMisPersonas();
-      });
-    }
-
-    document.getElementById('btnVocesFamilia')
-      .addEventListener('click',mostrarVocesFamilia);
-  }
-
-  async function mostrarVocesFamilia(){
-
-    const familiares=await VocesFamilia.listar();
-
-    contenidoEmergente.innerHTML=`
-      <h2>👨‍👩‍👧 VOCES DE FAMILIARES</h2>
-      <div class="tarjeta-voz">
-        Puedes guardar hasta <strong>${CONFIG.maxFamilyVoices}</strong> voces
-        de familiares o personas de confianza.
-      </div>
-
-      ${familiares.length?familiares.map(p=>`
-        <div class="tarjeta-voz">
-          <strong>👤 ${escapeHtml(p.nombre)}</strong>
-          <div class="estado-voz ok">🟢 REFERENCIA GUARDADA</div>
-          <button class="boton-detener" data-borrar-familia="${p.id}">🗑️ Borrar voz</button>
-        </div>
-      `).join(''):'<div class="nota-tecnica">No hay voces familiares guardadas.</div>'}
-
-      ${familiares.length<CONFIG.maxFamilyVoices?`
-        <button class="boton-accion" id="btnAgregarFamiliar">
-          🎙️ Registrar nueva voz familiar
-        </button>`:''}
-
-      <button class="boton-accion" id="btnVolverPersonas">
-        ↩️ Volver a Mis personas
-      </button>
-    `;
-
-    pantallaEmergente.classList.add('activa');
-
-    document.querySelectorAll('[data-borrar-familia]').forEach(btn=>{
-      btn.addEventListener('click',async()=>{
-        await VocesFamilia.eliminar(btn.dataset.borrarFamilia);
-        mostrarVocesFamilia();
-      });
-    });
-
-    const agregar=document.getElementById('btnAgregarFamiliar');
-    if(agregar) agregar.addEventListener('click',configurarVozFamiliar);
-
-    document.getElementById('btnVolverPersonas')
-      .addEventListener('click',mostrarMisPersonas);
-  }
-
-  function escapeHtml(valor){
-    return String(valor||'')
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#039;');
-  }
-
-  async function configurarVozFamiliar(){
-
-    const nombre=prompt('Nombre de la persona cuya voz vas a registrar:');
-    if(!nombre||!nombre.trim()){
-      mostrarVocesFamilia();
       return;
     }
 
-    cerrarRecursos();
-    analizando=true;
-
     contenidoEmergente.innerHTML=`
-      <h2>🎙️ VOZ DE FAMILIAR / CONOCIDO</h2>
-      <div class="tarjeta-voz">
-        Persona: <strong>${escapeHtml(nombre.trim())}</strong><br>
-        Lee durante aproximadamente <strong>${CONFIG.duracionReferencia} segundos</strong>.
-      </div>
-      <div class="texto-resultado visible">
-        “Esta es mi voz de referencia para XOLO.
-        Hablaré de manera natural, con un ritmo normal,
-        para crear una muestra estable de mi voz.”
-      </div>
-      <div class="indicador-proceso activo">🎙️ Preparando...</div>
-      <button class="boton-detener" id="btnCancelarReferenciaFamiliar">⏹️ Cancelar</button>
-    `;
 
-    pantallaEmergente.classList.add('activa');
+      <h2>📊 RESULTADOS DE ANÁLISIS</h2>
 
-    document.getElementById('btnCancelarReferenciaFamiliar')
-      .addEventListener('click',cerrarRecursos);
-
-    try{
-      const existentes=await VocesFamilia.listar();
-      if(existentes.length>=CONFIG.maxFamilyVoices){
-        throw new Error(`Ya tienes ${CONFIG.maxFamilyVoices} voces guardadas.`);
-      }
-
-      streamAudioActivo=await navigator.mediaDevices.getUserMedia({
-        audio:{echoCancellation:false,noiseSuppression:false}
-      });
-
-      audioContext=new(window.AudioContext||window.webkitAudioContext)();
-      analyser=audioContext.createAnalyser();
-      analyser.fftSize=2048;
-      audioContext.createMediaStreamSource(streamAudioActivo).connect(analyser);
-
-      const muestras=[];
-      const inicio=Date.now();
-
-      intervaloAnalisis=setInterval(async()=>{
-        if(!analizando)return;
-
-        const transcurrido=(Date.now()-inicio)/1000;
-        const datos=new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(datos);
-        muestras.push(VozPropietario.extraerCaracteristicas(datos));
-
-        const indicador=document.querySelector('.indicador-proceso');
-        if(indicador){
-          indicador.textContent=`🎙️ Grabando ${escapeHtml(nombre.trim())}... ${transcurrido.toFixed(1)} / ${CONFIG.duracionReferencia}s`;
-        }
-
-        if(transcurrido>=CONFIG.duracionReferencia){
-          clearInterval(intervaloAnalisis);
-          intervaloAnalisis=null;
-
-          if(muestras.length<CONFIG.minReferencia){
-            cerrarRecursos();
-            contenidoEmergente.innerHTML=`<h2>⚪ REFERENCIA INSUFICIENTE</h2><div class="texto-resultado visible">No se obtuvieron suficientes muestras. Inténtalo nuevamente.</div>`;
-            pantallaEmergente.classList.add('activa');
-            return;
-          }
-
-          await VocesFamilia.guardar(
-            nombre.trim(),
-            VozPropietario.perfilDesdeMuestras(muestras)
-          );
-
-          cerrarRecursos();
-          contenidoEmergente.innerHTML=`
-            <h2>🟢 VOZ GUARDADA</h2>
-            <div class="texto-resultado visible">
-              Se guardó la voz de <strong>${escapeHtml(nombre.trim())}</strong> como referencia local.
-              <br><br>
-              Esta referencia no representa una identificación absoluta.
-            </div>
-          `;
-          pantallaEmergente.classList.add('activa');
-        }
-      },1000);
-
-    }catch(err){
-      cerrarRecursos();
-      contenidoEmergente.innerHTML=`<h2>⚪ NO SE PUDO GUARDAR LA VOZ</h2><div class="texto-resultado visible">${escapeHtml(err.message)}</div>`;
-      pantallaEmergente.classList.add('activa');
-    }
-  }
-
-
-  // ==================================================
-  // 📹 REGISTRO DE EVIDENCIA VISUAL
-  // CONSERVADO SIN DETECTOR FALSO
-  // ==================================================
-  function iniciarAnalisisVideo(){
-
-    cerrarRecursos();
-
-    analizando = true;
-
-    let capturas = 0;
-
-    contenidoEmergente.innerHTML = `
-      <h2>🤖 REGISTRO DE EVIDENCIA VISUAL</h2>
-
-      <div class="texto-resultado visible">
-        📹 Podrás registrar hasta 4 capturas como evidencia.
-
-        El análisis especializado de imagen se agregará
-        cuando exista una herramienta real conectada.
+      <div class="nota-tecnica">
+        ${historial.length}
+        análisis guardado${historial.length===1?'':'s'}
+        localmente.
       </div>
 
-      <button class="boton-accion" id="btnSeleccionar">
-        📸 Seleccionar captura ${capturas + 1} de 4
+      <button
+        class="boton-secundario"
+        id="btnBorrarHistorial"
+      >
+        🗑️ Borrar historial de resultados
       </button>
+
+      <div id="listaResultados">
+
+        ${historial.map((r,index)=>{
+
+          const nivel=
+            r.dictamen?.nivel||
+            'neutral';
+
+          const texto=
+            r.dictamen?.texto||
+            'RESULTADO NO DISPONIBLE';
+
+          return `
+
+            <div class="tarjeta-resultado-analisis">
+
+              <h3>
+                📋 Análisis #${historial.length-index}
+              </h3>
+
+              <p>
+                🕒 ${escapeHtml(r.fechaLocal||'Fecha no disponible')}
+              </p>
+
+              <p>
+                🆔 ${escapeHtml(r.id||'ID no disponible')}
+              </p>
+
+              <div class="estado-resultado ${escapeHtml(nivel)}">
+                ${escapeHtml(texto)}
+              </div>
+
+              <p>
+                🎯 Confianza:
+                <strong>
+                  ${escapeHtml(r.dictamen?.confianza||'NO DISPONIBLE')}
+                </strong>
+              </p>
+
+              <p>
+                ⏱️ Duración:
+                ${escapeHtml(String(r.duracionAnalisis||'0'))} segundos
+              </p>
+
+              <p>
+                🧩 Herramientas ejecutadas:
+                ${r.herramientas?.length||0}
+              </p>
+
+              <button
+                class="boton-accion"
+                data-ver-resultado="${escapeHtml(r.id)}"
+              >
+                🔎 Ver análisis completo
+              </button>
+
+            </div>
+
+          `;
+
+        }).join('')}
+
+      </div>
+
     `;
 
     pantallaEmergente.classList.add('activa');
 
     document
-      .getElementById('btnSeleccionar')
+      .querySelectorAll('[data-ver-resultado]')
+      .forEach(btn=>{
+
+        btn.addEventListener(
+          'click',
+          ()=>{
+            mostrarDetalleResultado(
+              btn.dataset.verResultado
+            );
+          }
+        );
+
+      });
+
+    document
+      .getElementById('btnBorrarHistorial')
       .addEventListener(
         'click',
-        () => selectorImagenAnalisis.click()
-      );
+        ()=>{
 
-    selectorImagenAnalisis.onchange =
-      (e) => {
-
-        if(
-          !e.target.files[0] ||
-          !analizando
-        ){
-          return;
-        }
-
-        capturas++;
-
-        contenidoEmergente.innerHTML = `
-          <h2>🤖 REGISTRO DE EVIDENCIA VISUAL</h2>
-
-          <div class="texto-resultado visible">
-            ✅ Captura ${capturas} registrada:
-            ${e.target.files[0].name}
-
-            ${
-              capturas < 4
-                ? 'Selecciona la siguiente cuando estés listo'
-                : 'Se completaron todas las capturas'
-            }
-          </div>
-
-          ${
-            capturas < 4
-              ? `
-                <button class="boton-accion" id="btnSeleccionar">
-                  📸 Siguiente captura (${capturas + 1} de 4)
-                </button>
-              `
-              : `
-                <div class="nota-tecnica">
-                  No hay detector de imagen activo en este momento
-                </div>
-              `
-          }
-        `;
-
-        if(capturas < 4){
-
-          document
-            .getElementById('btnSeleccionar')
-            .addEventListener(
-              'click',
-              () => selectorImagenAnalisis.click()
+          const confirmar=
+            confirm(
+              '¿Quieres borrar todos los resultados guardados en este dispositivo?'
             );
 
-        }else{
+          if(!confirmar)return;
 
-          analizando = false;
+          HistorialAnalisis.borrarTodo();
+
+          mostrarResultadosAnalisis();
+
         }
-
-        selectorImagenAnalisis.value = '';
-      };
+      );
   }
 
   // ==================================================
-  // 🔘 ACCIONES DE BOTONES
+  // 📋 DETALLE COMPLETO DE UN ANÁLISIS
   // ==================================================
-  formaCentral.addEventListener(
-    'click',
-    () => pantallaOpciones.classList.add('activa')
-  );
+  function mostrarDetalleResultado(id){
 
-  cerrarOpciones.addEventListener(
-    'click',
-    () => pantallaOpciones.classList.remove('activa')
-  );
+    const registro=
+      HistorialAnalisis.obtener(id);
 
-  cerrarEmergente.addEventListener(
-    'click',
-    () => {
-      pantallaEmergente.classList.remove('activa');
-      cerrarRecursos();
-    }
-  );
+    if(!registro){
 
-  fondoOscuroAsistente.addEventListener(
-    'click',
-    () => cerrarRecursos()
-  );
+      contenidoEmergente.innerHTML=`
 
-  btnAsistencia.addEventListener(
-    'click',
-    () => {
-      fondoOscuroAsistente.classList.add('activo');
-      menuAsistente.classList.add('activo');
-    }
-  );
+        <h2>⚪ RESULTADO NO ENCONTRADO</h2>
 
-  opcionSoloVoz.addEventListener(
-    'click',
-    () => {
-      cerrarRecursos();
-      iniciarAnalisisVoz();
-    }
-  );
+        <div class="texto-resultado visible">
+          El registro solicitado ya no existe
+          en el historial local.
+        </div>
 
+        <button class="boton-accion" id="btnRegresarResultados">
+          ↩️ Volver a resultados
+        </button>
 
-  // ==================================================
-  // 📖 INSTRUCCIONES
-  // ==================================================
-  btnInstrucciones.addEventListener(
-    'click',
-    () => {
-
-      contenidoEmergente.innerHTML = `
-        <h2>📖 INSTRUCCIONES DE USO</h2>
-
-        <p><strong>Para analizar audio:</strong></p>
-
-        <p>
-          1. Coloca el teléfono en altavoz durante la llamada
-        </p>
-
-        <p>
-          2. Pulsa la figura central →
-          ASISTENCIA XOLO → Análisis de audio
-        </p>
-
-        <p>
-          3. Autoriza el permiso de micrófono
-        </p>
-
-        <p>
-          4. Espera el proceso completo:
-          no lo cierres antes de terminar
-        </p>
-
-        <br>
-
-        <p><strong>Reglas importantes:</strong></p>
-
-        <p>
-          • En "Mis personas" encontrarás dos registros separados:
-          <strong>Voz del propietario</strong> y <strong>Voces de familiares / conocidos</strong>.
-        </p>
-
-        <p>
-          • Durante una llamada, XOLO buscará primero la voz del propietario.
-          Cuando pueda separar otro interlocutor, priorizará el análisis de esa segunda voz.
-        </p>
-
-        <p>
-          • Si el detector especializado no está configurado,
-          XOLO seguirá utilizando la evidencia técnica disponible,
-          pero no la presentará como prueba de IA.
-        </p>
-
-        <p>
-          • Si no hay suficiente información,
-          XOLO dirá "INCONCLUSO" — nunca inventa un resultado
-        </p>
-
-        <p>
-          • Todos los valores mostrados son entregados por
-          herramientas reales, no se generan al azar
-        </p>
       `;
 
       pantallaEmergente.classList.add('activa');
-    }
-  );
 
-  // ==================================================
-  // ☕ APOYO
-  // ==================================================
-  btnApoyo.addEventListener(
-    'click',
-    () => {
+      document
+        .getElementById('btnRegresarResultados')
+        .addEventListener(
+          'click',
+          mostrarResultadosAnalisis
+        );
 
-      contenidoEmergente.innerHTML = `
-        <h2>☕ PRINCIPIOS DE XOLO</h2>
-
-        <p>
-          XOLO NO adivina, NO simula, NO inventa.
-        </p>
-
-        <p>
-          Solo comunica lo que las herramientas reales detectan.
-        </p>
-
-        <p>
-          No puede dar certezas absolutas, solo estimaciones
-          basadas en evidencia disponible.
-        </p>
-      `;
-
-      pantallaEmergente.classList.add('activa');
-    }
-  );
-
-  // ==================================================
-  // 🚨 EMERGENCIA
-  // ==================================================
-  btnEmergencia.addEventListener(
-    'click',
-    () => {
-      mostrarContactoEmergencia();
-    }
-  );
-
-  function cargarContactoEmergencia(){
-    try{
-      return JSON.parse(localStorage.getItem(CONFIG.emergencyContactKey)||'null');
-    }catch(e){
-      return null;
-    }
-  }
-
-  function guardarContactoEmergencia(contacto){
-    localStorage.setItem(CONFIG.emergencyContactKey,JSON.stringify(contacto));
-  }
-
-  function mostrarContactoEmergencia(){
-
-    const contacto=cargarContactoEmergencia();
-
-    contenidoEmergente.innerHTML=`
-      <h2>🚨 CONTACTO DE EMERGENCIA</h2>
-
-      <div class="tarjeta-voz">
-        <strong>${contacto?'🟢 CONTACTO REGISTRADO':'⚪ SIN CONTACTO REGISTRADO'}</strong>
-        ${contacto?`<br><br>👤 ${escapeHtml(contacto.nombre)}<br>📞 ${escapeHtml(contacto.telefono)}`:''}
-      </div>
-
-      <button class="boton-accion" id="btnRegistrarEmergencia">
-        📱 ${contacto?'Actualizar contacto':'Registrar contacto de emergencia'}
-      </button>
-
-      ${contacto?`
-        <button class="boton-accion" id="btnLlamarEmergencia">📞 Llamar al contacto</button>
-        <button class="boton-detener" id="btnBorrarEmergencia">🗑️ Borrar contacto</button>
-      `:''}
-
-      <div class="nota-tecnica">
-        El registro se guarda localmente en este dispositivo.
-        XOLO no envía mensajes automáticamente sin una acción autorizada del usuario.
-      </div>
-    `;
-
-    pantallaEmergente.classList.add('activa');
-
-    document.getElementById('btnRegistrarEmergencia')
-      .addEventListener('click',registrarContactoEmergencia);
-
-    const llamar=document.getElementById('btnLlamarEmergencia');
-    if(llamar){
-      llamar.addEventListener('click',()=>{
-        const c=cargarContactoEmergencia();
-        if(c) window.location.href='tel:'+c.telefono;
-      });
-    }
-
-    const borrar=document.getElementById('btnBorrarEmergencia');
-    if(borrar){
-      borrar.addEventListener('click',()=>{
-        localStorage.removeItem(CONFIG.emergencyContactKey);
-        mostrarContactoEmergencia();
-      });
-    }
-  }
-
-  function registrarContactoEmergencia(){
-    const nombre=prompt('Nombre del contacto de emergencia:');
-    if(!nombre||!nombre.trim())return;
-
-    const telefono=prompt('Número de teléfono del contacto:');
-    if(!telefono||!telefono.trim())return;
-
-    const limpio=telefono.trim().replace(/[^0-9+]/g,'');
-    if(limpio.length<7){
-      alert('El número parece demasiado corto. Verifícalo.');
       return;
     }
 
-    guardarContactoEmergencia({
-      nombre:nombre.trim(),
-      telefono:limpio,
-      actualizado:new Date().toISOString()
-    });
+    const d=
+      registro.dictamen||{};
 
-    mostrarContactoEmergencia();
-  }
+    const herramientas=
+      registro.herramientas||[];
 
+    contenidoEmergente.innerHTML=`
 
-  // ==================================================
-  // 👥 MIS PERSONAS
-  // ==================================================
-  btnMisPersonas.addEventListener(
-    'click',
-    () => {
-      mostrarMisPersonas();
-    }
-  );
+      <h2>📊 ANÁLISIS COMPLETO</h2>
 
-});
-</script>
-</body>
-</html>
+      <div class="tarjeta-resultado-analisis">
+
+        <h3>🧠 DICTAMEN DE XOLO</h3>
+
+        <div class="estado-resultado ${escapeHtml(d.nivel||'neutral')}">
+          ${escapeHtml(d.texto||'NO DISPONIBLE')}
+        </div>
+
+        <p>
+          🎯 Confianza:
+          <strong>
+            ${escapeHtml(d.confianza||'NO DISPONIBLE')}
+          </strong>
+        </p>
+
+        <p>
+          🕒 Fecha:
+          ${escapeHtml(registro.fechaLocal||'NO DISPONIBLE')}
+        </p>
+
+        <p>
+          🆔 Identificador:
+          ${escapeHtml(registro.id||'NO DISPONIBLE')}
+        </p>
+
+        <p>
+          ⚙️ Versión:
+          ${escapeHtml(registro.version||'NO DISPONIBLE')}
+        </p>
+
+      </div>
+
+      <div class="tarjeta-resultado-analisis">
+
+        <h3>📝 EXPLICACIÓN FINAL</h3>
+
+        <div class="detalle-herramienta">
+          <div>
+            ${escapeHtml(
+              d.explicacionFinal||
+              'NO DISPONIBLE'
+            )}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tarjeta-resultado-analisis">
+
+        <h3>🎙️ MEDICIONES DEL ANÁLISIS</h3>
+
+        <div class="detalle-herramienta">
+
+          <div>
+            ⏱️ Duración:
+            ${escapeHtml(String(registro.mediciones?.duracionTotal??'NO DISPONIBLE'))} s
+          </div>
+
+          <div>
+            🔊 Energía promedio:
+            ${escapeHtml(String(registro.mediciones?.energiaPromedio??'NO DISPONIBLE'))}
+          </div>
+
+          <div>
+            ⚡ Cambios bruscos:
+            ${escapeHtml(String(registro.mediciones?.cambiosBruscosDetectados??'NO DISPONIBLE'))}
+          </div>
+
+          <div>
+            ⏸️ Cantidad de pausas:
+            ${escapeHtml(String(registro.mediciones?.cantidadPausas??'NO DISPONIBLE'))}
+          </div>
+
+          <div>
+            🧩 Fragmentos:
+            ${escapeHtml(String(registro.fragmentosUtilizados??'NO DISPONIBLE'))}
+          </div>
+
+          <div>
+            📈 Muestras acústicas:
+            ${escapeHtml(String(registro.muestrasAcusticas??'NO DISPONIBLE'))}
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="tarjeta-resultado-analisis">
+
+        <h3>🧰 RESULTADOS DE TODAS LAS HERRAMIENTAS</h3>
+
+        ${
+          herramientas.length
+          ?
+          herramientas.map(h=>`
+
+            <div class="detalle-herramienta">
+
+              <strong>
+                ${escapeHtml(h.nombre||h.id||'Herramienta')}
+              </strong>
+
+              <div>
+                🆔 ID:
+                ${escapeHtml(h.id||'NO DISPONIBLE')}
+              </div>
+
+              <div>
+                🧩 Tipo:
+                ${escapeHtml(h.tipo||'NO DISPONIBLE')}
+              </div>
+
+              <div>
+                ⚙️ Disponible:
+                ${h.disponible?'SÍ':'NO'}
+              </div>
+
+              <div>
+                ▶️ Ejecutada:
+                ${h.ejecutado?'SÍ':'NO'}
